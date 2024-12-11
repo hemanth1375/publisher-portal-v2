@@ -1,0 +1,839 @@
+<div class="container">
+    <form [formGroup]="formGroupService">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>HTTP Server Settings</h3>
+            </div>
+            <div class="col-sm-12">
+            <mat-accordion [multi]="true" >
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div class="col-sm-12 col-md-6">
+                                    <label for="name" class="form-label">Name</label>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <label for="port" class="form-label">Port</label>
+                                </div>
+                            </div> 
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <input type="text" class="input-size form-control" id="name" formControlName="name"
+                                        [class.is-invalid]="formGroupService.get('name')?.invalid" />
+                                    <div *ngIf="formGroupService.get('name')?.invalid" class="text-danger">
+                                        name is required !
+                                    </div>
+                                    <div class="form-text">A friendly name, title, date, version or any other short description
+                                        that helps you recognize this configuration when reporting to your metrics and traces
+                                        systems.</div>
+                                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <input type="number" class="input-size form-control" id="port" formControlName="port"
+                                        [class.is-invalid]="formGroupService.get('port')?.invalid" />
+                                    <div *ngIf="formGroupService.get('port')?.invalid" class="text-danger">
+                                        port is required !
+                                    </div>
+                                    <div class="form-text">Port where KrakenD listens to connections, defaults to 8080.</div>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    <h3>Hosts (Upstream services or backends)</h3>
+                                </div>
+                                <div>
+                                    <mat-slide-toggle class="example-margin" color="blue" formControlName="isgRPCActive"></mat-slide-toggle>
+                                </div>
+                            </div>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4">
+                            <label for="host" class="form-label">Add here the hosts KrakenD can use as upstream services
+                                to retrieve the data.</label>
+                             <input type="text" class="input-size form-control" id="name" formControlName="host"/> 
+                            <div class="d-flex gap-2">
+                                <input type="text" class="form-control" id="host" formControlName="host">
+                                <button type="button" class="btn btn-outline-primary"
+                                    (click)="addParameter('host')">Add</button>
+                            </div>
+                            <div class="form-text">The address where KrakenD connects to. Some valid examples can be
+                                https://myapi, amqp://host, 192.0.2.1:25, my.service.tld. When using gRPC use the syntax
+                                host:port</div>
+                            <div class="mt-3 d-flex">
+                                <button *ngFor="let item of hostArray; let i = index" class="parameter-item">
+                                    {{ item }}<mat-icon (click)="removeParameter(i,'host')"
+                                        class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="hostRadio" id="staticAddress">
+                                <label class="form-check-label" for="staticAddress">
+                                    Static address resolution (default)
+                                </label>
+                                <div class="form-text">99% of the times you will use static resolution.</div>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="hostRadio" id="dns">
+                                <label class="form-check-label" for="dns">
+                                    DNS SRV
+                                </label>
+                                <div class="form-text">When there is a DNS entry of the type SRV that specifies the
+                                    address, port, and weight of each service.</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="sanitize" checked>
+                                <label class="form-check-label" for="sanitize">
+                                    Disable sanitize
+                                </label>
+                                <div class="form-text">Check only when the functionality must skip protocol checking.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    <h3>Debug Endpoints</h3>
+                                </div>
+                                <div>
+                                    <mat-slide-toggle class="example-margin" color="blue" formControlName="isgRPCActive"></mat-slide-toggle>
+                                </div>
+                            </div>
+
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="col-sm-12 col-md-4">
+                        <p>Debug endpoints enable additional endpoints that help you troubleshoot different scenarios.
+                        </p>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="enableDebug" checked>
+                            <label class="form-check-label" for="enableDebug">
+                                Enable /__debug/ endpoint
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="enableEcho" checked>
+                            <label class="form-check-label" for="enableEcho">
+                                Enable /__echo/ endpoint
+                            </label>
+                        </div>
+                    </div>
+                </mat-expansion-panel>    
+                <mat-expansion-panel >
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    <div class="d-flex justify-content-between toggle-header">
+                                        <div>
+                                            <h3>gRPC Catalog</h3>
+                                        </div>
+                                        <div>
+                                            <mat-slide-toggle class="example-margin" color="blue" formControlName="isgRPCActive"></mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            @if (formGroupService.value.isgRPCActive) {
+                                <div class="col-sm-12 col-md-6">
+                                    <label for="directory" class="form-label">Directory or File</label>
+                                    <!-- <input type="text" class="input-size form-control" id="name" formControlName="host"/> -->
+                                    <div class="d-flex gap-2">
+                                        <input type="text" class="form-control" id="directory" formControlName="directory">
+                                        <button type="button" class="btn btn-outline-primary"
+                                            (click)="addParameter('directory')">Add</button>
+                                    </div>
+                                    <div class="form-text">The paths to the different .pb files you want to load, or the paths to
+                                        directories containing .pb files. Relative paths point to /etc/krakend by default.</div>
+                                    <div class="mt-3 d-flex">
+                                        <button *ngFor="let item of directoryArray; let i = index" class="parameter-item">
+                                            {{ item }}<mat-icon (click)="removeParameter(i,'directory')"
+                                                class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                                }@else {
+                                <p>Mark this option to enable TLS in the listening port.</p>
+                                }
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    <h3>Default Timeouts and TTL</h3>
+                                </div>
+                                <div>
+                                    <mat-slide-toggle class="example-margin" color="blue" formControlName="isgRPCActive"></mat-slide-toggle>
+                                </div>
+                            </div>
+
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <p>All settings below are used across all backends unless overridden explicitly in each endpoint</p>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4">
+                            <label for="backendTimeout" class="form-label">Backend Timeout</label>
+                            <input type="text" class="input-size form-control" id="backendTimeout"
+                                formControlName="backendTimeout"
+                                [class.is-invalid]="formGroupService.get('backendTimeout')?.invalid && formGroupService.get('backendTimeout')?.touched" />
+                            <div class="invalid-feedback"
+                                *ngIf="formGroupService.get('backendTimeout')?.errors?.['pattern'] && formGroupService.get('backendTimeout')?.touched">
+                                Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                            </div>
+                            <div class="form-text">Default timeout for all connections against your backends, including the time
+                                spent in the whole pipe. This value can be overridden later on specific endpoints.</div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <label for="defaultCache" class="form-label">Default Cache TTL</label>
+                            <input type="text " class="input-size form-control" id="defaultCache" formControlName="defaultCache"
+                                [class.is-invalid]="formGroupService.get('defaultCache')?.invalid && formGroupService.get('defaultCache')?.touched" />
+                            <div class="invalid-feedback"
+                                *ngIf="formGroupService.get('defaultCache')?.errors?.['pattern'] && formGroupService.get('defaultCache')?.touched">
+                                Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                            </div>
+                            <div class="form-text">Value must be an integer expressing the number of seconds
+                                The time the service considers the origin is still valid. Applies to GET requests only. The
+                                service does not cache anything but expedites the headers for proxies to do the caching (e.g., a
+                                Varnish server, CDN, etc.).</div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <label for="httpReadTimeout" class="form-label">Http Read Timeout</label>
+                            <input type="text" class="input-size form-control" id="httpReadTimeout"
+                                formControlName="httpReadTimeout"
+                                [class.is-invalid]="formGroupService.get('httpReadTimeout')?.invalid && formGroupService.get('httpReadTimeout')?.touched" />
+                            <div class="invalid-feedback"
+                                *ngIf="formGroupService.get('httpReadTimeout')?.errors?.['pattern'] && formGroupService.get('httpReadTimeout')?.touched">
+                                Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                            </div>
+                            <div class="form-text">Maximum duration for reading the entire HTTP request, including the body.
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <label for="httpWriteTimeout" class="form-label">Http Write Timeout</label>
+                            <input type="text" class="input-size form-control" id="httpWriteTimeout"
+                                formControlName="httpWriteTimeout"
+                                [class.is-invalid]="formGroupService.get('httpWriteTimeout')?.invalid && formGroupService.get('httpWriteTimeout')?.touched" />
+                            <div class="invalid-feedback"
+                                *ngIf="formGroupService.get('httpWriteTimeout')?.errors?.['pattern'] && formGroupService.get('httpWriteTimeout')?.touched">
+                                Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                            </div>
+                            <div class="form-text">Maximum duration before timing-out writes of the response.</div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <label for="httpIdleTimeout" class="form-label">Http Idle Timeout</label>
+                            <input type="text" class="input-size form-control" id="httpIdleTimeout"
+                                formControlName="httpIdleTimeout"
+                                [class.is-invalid]="formGroupService.get('httpIdleTimeout')?.invalid && formGroupService.get('httpIdleTimeout')?.touched" />
+                            <div class="invalid-feedback"
+                                *ngIf="formGroupService.get('httpIdleTimeout')?.errors?.['pattern'] && formGroupService.get('httpIdleTimeout')?.touched">
+                                Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                            </div>
+                            <div class="form-text">Maximum amount of time to wait for the next request when keepalives are
+                                enabled.</div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <label for="httpReadHeaderTimeout" class="form-label">Http Read Header Timeout</label>
+                            <input type="text" class="input-size form-control" id="httpReadHeaderTimeout"
+                                formControlName="httpReadHeaderTimeout"
+                                [class.is-invalid]="formGroupService.get('httpReadHeaderTimeout')?.invalid && formGroupService.get('httpReadHeaderTimeout')?.touched" />
+                            <div class="invalid-feedback"
+                                *ngIf="formGroupService.get('httpReadHeaderTimeout')?.errors?.['pattern'] && formGroupService.get('httpReadHeaderTimeout')?.touched">
+                                Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                            </div>
+                            <div class="form-text">Maximum time spent to read headers</div>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    <h3>Options</h3>
+                                </div>
+                                <div>
+                                    <mat-slide-toggle class="example-margin" color="blue" formControlName="isgRPCActive"></mat-slide-toggle>
+                                </div>
+                            </div>
+
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4">
+                            <label for="defaultOutputEncoding" class="form-label">Default Output encoding</label>
+                            <select name="" class="form-select" id="defaultOutputEncoding"
+                                formControlName="defaultOutputEncoding">
+                                <option value="json">JSON</option>
+                                <option value="negotiate">Negotiate content</option>
+                                <option value="string">String (text/plain)</option>
+                                <option value="no-op">No-op (just proxy)</option>
+                            </select>
+                            <div class="form-text">JSON Encoding used by default in all KrakenD endpoints unless changed per
+                                endpoint.</div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="nonRestfulResource" checked
+                                    formControlName="nonRestfulResource">
+                                <label class="form-check-label" for="nonRestfulResource">
+                                    Allow non-RESTful resource naming
+                                </label>
+                                <div class="form-text">By default KrakenD only works with RESTful URL patterns against backends.
+                                    Enable this option if backends aren't RESTful, e.g.: /url.&#123;some_variable&#125;.json.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="serverSequential"
+                                    formControlName="serverSequential">
+                                <label class="form-check-label" for="serverSequential">
+                                    Start the server sequentially
+                                </label>
+                                <div class="form-text">A sequential start registers all async agents in order when you run the
+                                    server, allowing you to read the starting logs chronologically. Defaults to false.</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="enableDebugOptions"
+                                    formControlName="enableDebugOptions">
+                                <label class="form-check-label" for="enableDebugOptions">
+                                    Enable the /__debug/ endpoint
+                                </label>
+                                <div class="form-text">Enable the /__debug/ endpoint where you can send requests of all sorts
+                                    and see them echoed in the logs.</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    <h3>JWK Shared Cache</h3>
+                                </div>
+                                <div>
+                                    <mat-slide-toggle class="example-margin" color="blue" formControlName="isJwkSharedActive" (change)="onToggleChangeJwk()"></mat-slide-toggle>
+                                </div>
+                            </div>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                        @if (!formGroupService.value.isJwkSharedActive) {
+                            <p>If you have a lot of endpoints, each of them will need to retrieve the JWK URL to cache it. You can
+                                add a shared JWK cache where one endpoint call will enable the cache for another one using the same
+                                origin URL.</p>
+                            }
+                        @else {
+                        <!-- <h3 class="main-heading">JWK Shared Cache</h3> -->
+                        <div class="col-sm-12 col-md-4">
+                            <label for="sharedCacheDuration" class="form-label">Shared Cache Duration</label>
+                            <input type="text" class="input-size form-control" id="sharedCacheDuration"
+                                formControlName="sharedCacheDuration"
+                                [class.is-invalid]="formGroupService.get('sharedCacheDuration')?.invalid && formGroupService.get('sharedCacheDuration')?.touched" />
+                            <div class="form-text">The cache duration in seconds for the JWK client retrieving the jwk_url. The
+                                endpoint must enable the cache option in order to use this cache. The time you set here depends
+                                on your key rotation time.</div>
+                        </div>
+                        }
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    <h3>Gzip Compression</h3>
+                                </div>
+                            </div>
+
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="row">
+                        <p>Gzip compression is enabled by default. Only on Enterprise edition.</p>
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="gzipCompression"
+                                    formControlName="disablegZip">
+                                <label class="form-check-label" for="gzipCompression">
+                                    Disable Gzip compression even when clients requests it.
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    <h3>Enable Https</h3>
+                                </div>
+                                <div>
+                                    <mat-slide-toggle formControlName="isEnableHttpsActive"></mat-slide-toggle>
+                                </div>
+                            </div>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    @if(!formGroupService.value.isEnableHttpsActive){
+                        <p>Mark this option to enable TLS in the listening port.</p>
+                        }@else{
+                        <div class="col-sm-12 col-md-6">
+                            <label for="publicKey" class="form-label">Public Key</label>
+                            <input type="text" class="input-size form-control" id="publicKey" formControlName="publicKey" />
+                            <div class="form-text">Absolute path to the public key, or relative to the current working directory
+                                (CWD)</div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label for="privateKey" class="form-label">Private Key</label>
+                            <input type="text" class="input-size form-control" id="privateKey" formControlName="privateKey" />
+                            <div class="form-text">Absolute path to the public key, or relative to the current working directory
+                                (CWD)</div>
+                        </div>
+                        }
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    <h3>URL Rewrite</h3>
+                                </div>
+                                <div>
+                                    <mat-slide-toggle formControlName="isUrlRewriteActive"></mat-slide-toggle>
+                                </div>
+                            </div>
+
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    @if(!formGroupService.value.isUrlRewriteActive){
+                        <p>The url-rewrite plugin allows you to define a set of URLs or regular expressions that are handled by
+                            an endpoint of your choice.</p>
+                        }@else{
+                        <div class="row">
+                            <div class="col-sm-12 col-md-2">
+                                <label for="literalMatch" class="form-label">Literal Match</label>
+                                <input type="text" class="input-size form-control" id="literalMatch"
+                                    formControlName="literalMatch" />
+                                <div class="form-text">The literal match takes precedence and is checked first. If the requested
+                                    URL is exactly the one defined in the map, then the redirection happens.</div>
+                            </div>
+                            <div class="col-sm-12 col-md-2">
+                                <label for="literalReplacement" class="form-label">Literal Replacement</label>
+                                <input type="text" class="input-size form-control" id="literalReplacement"
+                                    formControlName="literalReplacement" />
+                                <div class="form-text">The literal replacement, the final URL the match will become.</div>
+                            </div>
+                            <div class="col-sm-12 col-md-2">
+                                <button class="btn btn-outline-primary" (click)="addParameter('literalMatch')">Add</button>
+                            </div>
+        
+                            <div class="col-sm-12 col-md-2">
+                                <label for="regexpMatch" class="form-label">Regexp Match</label>
+                                <input type="text" class="input-size form-control" id="regexpMatch"
+                                    formControlName="regexpMatch" />
+                                <div class="form-text">The regexp expressions are checked in sequence when there are no literal
+                                    matches.</div>
+                            </div>
+                            <div class="col-sm-12 col-md-2">
+                                <label for="endpointReplacement" class="form-label">Endpoint Replacement</label>
+                                <input type="text" class="input-size form-control" id="endpointReplacement"
+                                    formControlName="endpointReplacement" />
+                                <div class="form-text">You can use the capturing groups (e.g: /hello/$&#123;1&#125;) here.</div>
+                            </div>
+                            <div class="col-sm-12 col-md-2">
+                                <button class="btn btn-outline-primary" (click)="addParameter('regExpMatch')">Add</button>
+                            </div>
+        
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 mt-3 d-flex">
+                                <button *ngFor="let attr of objectMap | keyvalue" class="parameter-item">
+                                    {{ attr.key }} -> {{attr.value}}<mat-icon
+                                        (click)="removeParameter(attr.key ,'literalMatch')"
+                                        class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                </button>
+                            </div>
+                            <div class="col-sm-12 col-md-6 mt-3 d-flex">
+                                <button *ngFor="let attr of regExpObjectMap | keyvalue" class="parameter-item">
+                                    {{ attr.key }} -> {{attr.value}}<mat-icon (click)="removeParameter(attr.key ,'regExpMatch')"
+                                        class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        }
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    <h3>Virtualhost</h3>
+                                </div>
+                                <div>
+                                    <mat-slide-toggle formControlName="isVirtualHostActive"></mat-slide-toggle>
+                                </div>
+                            </div>
+
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    @if(!formGroupService.value.isVirtualHostActive){
+                        <p>Run different configurations of KrakenD endpoints based on the host accessing the server.</p>
+                        }@else{
+                        <div class="col-sm-12 col-md-6">
+                            <label for="virtualHost" class="form-label">Hosts</label>
+                            <!-- <input type="text" class="input-size form-control" id="name" formControlName="host"/> -->
+                            <div class="d-flex gap-2">
+                                <input type="text" class="form-control" id="virtualHost" formControlName="virtualHost">
+                                <button type="button" class="btn btn-outline-primary"
+                                    (click)="addParameter('virtualHost')">Add</button>
+                            </div>
+                            <div class="form-text">All recognized virtual hosts by KrakenD must be listed here. The values
+                                declared here must match the content of the Host header when passed by the client.</div>
+                            <div class="mt-3 d-flex">
+                                <button *ngFor="let host of virtualHostArray; let i = index" class="parameter-item">
+                                    {{ host }}<mat-icon (click)="removeParameter(i,'virtualHost')"
+                                        class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        }
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    <h3>GeoIp</h3>
+                                </div>
+                                <div>
+                                    <mat-slide-toggle formControlName="isGeoIpActive"></mat-slide-toggle>
+                                </div>
+                            </div>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    @if(!formGroupService.value.isGeoIpActive){
+                        <p>Load Maxmind's GeoIP2 City database (commercial and free versions) and enrich all KrakenD calls to
+                            your backends with geographical data.</p>
+                        }@else{
+                        <div class="col-sm-12 col-md-6">
+                            <label for="databasePath" class="form-label">Database Path</label>
+                            <input type="text" class="input-size form-control" id="databasePath"
+                                formControlName="databasePath" />
+                            <div class="form-text">The path in the filesystem containing the database in GeoIP2 Binary (.mmdb)
+                                format. Relative to the working dir or absolute path.</div>
+        
+                        </div>
+                        }
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    <h3>Static server</h3>
+                                </div>
+                                <div>
+                                    <mat-slide-toggle formControlName="isStaticServerActive"></mat-slide-toggle>
+                                </div>
+                            </div>
+
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    @if(!formGroupService.value.isStaticServerActive){
+                        <p>It works similarly to a regular web server; it loads content from the disk and presents it to the
+                            users for a given path.</p>
+                        }@else{
+                        <div class="col-sm-12 col-md-4">
+                            <label for="staticServerPath" class="form-label">Path</label>
+                            <input type="text" class="input-size form-control" id="staticServerPath"
+                                formControlName="staticServerPath" />
+                            <div class="form-text">The folder in the filesystem containing the static files. Relative to the
+                                working dir where KrakenD config is (e.g.: ./assets) or absolute (e.g.: /etc/krakend/assets).
+                            </div>
+        
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <label for="staticServerPrefix" class="form-label">Prefix</label>
+                            <input type="text" class="input-size form-control" id="staticServerPrefix"
+                                formControlName="staticServerPrefix" />
+                            <div class="form-text">This is the beginning (prefix) of all URLs that are resolved using this
+                                plugin. All matching URLs won’t be passed to the router, meaning that they are not considered
+                                endpoints. Make sure you are not overwriting valid endpoints. When the prefix is /, then all
+                                traffic is served as static and you must declare a prefix under skip (e.g.: /api) to match
+                                endpoints.</div>
+        
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="directoryList"
+                                    formControlName="directoryList">
+                                <label class="form-check-label" for="directoryList">
+                                    Directory Listing
+                                </label>
+                                <div class="form-text">Allow users to browse the directory contents.
+                                </div>
+                            </div>
+                        </div>
+                        }
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    <h3>Rate Limiting</h3>
+                                </div>
+                                <div>
+                                    <mat-slide-toggle formControlName="isRateLimitingActive" (change)="onToggleChangeRateLimit()"></mat-slide-toggle>
+                                </div>
+                            </div>
+
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    @if(!formGroupService.value.isRateLimitingActive){
+                        <p>Puts a limit on the maximum number of requests users can do globally to the service.</p>
+                        }@else{
+                        <div class="col-sm-12 col-md-4">
+                            <label for="rateLimit" class="form-label">Rate Limit</label>
+                            <input type="number" class="input-size form-control" id="rateLimit" formControlName="rateLimit"
+                                [class.is-invalid]="formGroupService.get('rateLimit')?.invalid && formGroupService.get('rateLimit')?.touched" />
+                            <div class="form-text">Maximum requests you want to let the service handle in the specified time
+                                (every). Leave 0 for no default limit.</div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <label for="every" class="form-label">Every</label>
+                            <input type="text" class="input-size form-control" id="every" formControlName="every" />
+                            <div class="form-text">Time window where this rate limit applies.</div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <label for="capacity" class="form-label">Capacity</label>
+                            <input type="number" class="input-size form-control" id="capacity" formControlName="capacity"
+                                [class.is-invalid]="formGroupService.get('capacity')?.invalid && formGroupService.get('capacity')?.touched" />
+                            <div class="form-text">Number of tokens you can store in the Token Bucket. Traduces into maximum
+                                concurrent requests all users can do.</div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <label for="defaultUserQuota" class="form-label">Default user quota</label>
+                            <input type="number" class="input-size form-control" id="defaultUserQuota"
+                                formControlName="defaultUserQuota"
+                                [class.is-invalid]="formGroupService.get('defaultUserQuota')?.invalid && formGroupService.get('defaultUserQuota')?.touched" />
+                            <div class="form-text">Maximum requests per second you want to allow to each different API user. Use
+                                0 for no limitation.</div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <label for="uniqueIdentifier" class="form-label">A Unique user identified by</label>
+                            <div><mat-radio-group aria-label="Select an option" formControlName="uniqueStrategy">
+                                    <!-- <mat-radio-button value="ip">Its Originating Ip</mat-radio-button>
+                                    <mat-radio-button value="header">A header</mat-radio-button> -->
+                                </mat-radio-group>
+                            </div>
+                            @if(this.formGroupService.get('uniqueStrategy')?.value === 'header'){
+                            <div>
+                                <input type="text" class="form-control" formControlName="headerValue" />
+                            </div>
+                            }
+        
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <label for="clientCapacity" class="form-label">Client Capacity</label>
+                            <input type="number" class="input-size form-control" id="clientCapacity"
+                                formControlName="clientCapacity"
+                                [class.is-invalid]="formGroupService.get('clientCapacity')?.invalid && formGroupService.get('clientCapacity')?.touched" />
+                            <div class="form-text">Number of tokens you can store in the Token Bucket for each individual user.
+                                Traduces into maximum concurrent requests KrakenD will accept for the connected user.</div>
+                        </div>
+                        }
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    <h3>HTTP Client settings (Advanced)</h3>
+                                </div>
+                                <div>
+                                    <mat-slide-toggle formControlName="isHttpClientSetAdv"></mat-slide-toggle>
+                                </div>
+                            </div>
+
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    @if(!formGroupService.value.isHttpClientSetAdv){
+                        <!-- <p>Puts a limit on the maximum number of requests users can do globally to the service.</p> -->
+                        }@else{
+                        <p>These are specific settings to deal with the HTTP client used to query your backends. You usually
+                            don't need to set any of these values</p>
+                        <h3>Timeouts</h3>
+                        <div class="col-sm-12 d-flex gap-3 mb-3">
+        
+                            <div class="col-sm-12 col-md-4">
+                                <label for="httpClientSetAdvConnTimeout" class="form-label">IDLE Connection Timeout</label>
+                                <input type="text" class="input-size form-control" id="httpClientSetAdvConnTimeout"
+                                    formControlName="httpClientSetAdvConnTimeoutForm"
+                                    [class.is-invalid]="formGroupService.get('httpClientSetAdvConnTimeoutForm')?.invalid && formGroupService.get('httpClientSetAdvConnTimeoutForm')?.touched">
+                                <div class="invalid-feedback"
+                                    *ngIf="formGroupService.get('httpClientSetAdvConnTimeoutForm')?.errors?.['pattern'] && formGroupService.get('httpClientSetAdvConnTimeoutForm')?.touched">
+                                    Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                                </div>
+                                <div class="form-text">Maximum amount of time an idle (keep-alive) connection will remain idle
+                                    before closing itself. Zero means no limit
+                                </div>
+                            </div>
+        
+                            <div class="col-sm-12 col-md-4">
+                                <label for="httpClientSetAdvHeaderTimeout" class="form-label">Response Header Timeout</label>
+                                <input type="text" class="input-size form-control" id="httpClientSetAdvHeaderTimeout"
+                                    formControlName="httpClientSetAdvHeaderTimeoutForm"
+                                    [class.is-invalid]="formGroupService.get('httpClientSetAdvHeaderTimeoutForm')?.invalid && formGroupService.get('httpClientSetAdvHeaderTimeoutForm')?.touched" />
+                                <div class="invalid-feedback"
+                                    *ngIf="formGroupService.get('httpClientSetAdvHeaderTimeoutForm')?.errors?.['pattern'] && formGroupService.get('httpClientSetAdvHeaderTimeoutForm')?.touched">
+                                    Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                                </div>
+                                <div class="form-text">Time to wait for a server's response headers after fully writing the
+                                    request. This time does not include the time to read the response body.</div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <label for="httpClientSetAdvContinueTimeout" class="form-label">Expect Continue Timeout</label>
+                                <input type="text" class="input-size form-control" id="httpClientSetAdvContinueTimeout"
+                                    formControlName="httpClientSetAdvContinueTimeoutForm"
+                                    [class.is-invalid]="formGroupService.get('httpClientSetAdvContinueTimeoutForm')?.invalid && formGroupService.get('httpClientSetAdvContinueTimeoutForm')?.touched" />
+                                <div class="invalid-feedback"
+                                    *ngIf="formGroupService.get('httpClientSetAdvContinueTimeoutForm')?.errors?.['pattern'] && formGroupService.get('httpClientSetAdvContinueTimeoutForm')?.touched">
+                                    Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                                </div>
+                                <div class="form-text">Time to wait for a server's first response headers after fully writing
+                                    the request headers if the request has an "Expect: 100-continue" header. Zero means no
+                                    timeout</div>
+                            </div>
+                        </div>
+        
+                        <hr>
+                        <h3>Connections</h3>
+                        <div class="col-sm-12 d-flex gap-3 mb-3">
+                            <div class="col">
+                                <!-- Column 1 content -->
+                                <label for="httpClientSetAdvMaxIdleConn" class="form-label">Maximum IDLE connections</label>
+                                <input type="text" class="input-size form-control" id="httpClientSetAdvMaxIdleConn"
+                                    formControlName="httpClientSetAdvMaxIdleConnForm">
+                                <div class="form-text">Maximum number of idle (keep-alive) connections across all hosts. 0 means
+                                    no limit.
+                                </div>
+                            </div>
+                            <div class="col">
+                                <!-- Column 2 content -->
+                                <label for="httpClientSetAdvMaxIdleConnPerHost" class="form-label">Maximum IDLE connections per
+                                    host</label>
+                                <input type="text" class="input-size form-control" id="httpClientSetAdvMaxIdleConnPerHost"
+                                    formControlName="httpClientSetAdvMaxIdleConnPerHostForm">
+                                <div class="form-text">Maximum number of IDLE connections that you allow per-host. Defaults to
+                                    250.
+                                </div>
+                            </div>
+                            <div class="col">
+                                <!-- Column 3 content -->
+                                <input class="form-check-input" type="checkbox" value="" id="httpClientSetAdvAllowInsecureConns"
+                                    checked formControlName="httpClientSetAdvAllowInsecureConnsForm">&nbsp;
+                                <label class="form-check-label" for="httpClientSetAdvAllowInsecureConns">
+                                    Allow insecure connections
+                                </label>
+                                <div class="form-text">E.g.: when using self-signed certificates
+                                </div>
+                            </div>
+                            <div class="col">
+                                <!-- Column 4 content -->
+                                <input class="form-check-input" type="checkbox" value="" id="httpClientSetAdvDisableKeepAlives"
+                                    checked formControlName="httpClientSetAdvDisableKeepAlivesForm">&nbsp;
+                                <label class="form-check-label" for="httpClientSetAdvDisableKeepAlives">
+                                    Disable Keep-Alives
+                                </label>
+                                <div class="form-text">If set prevents re-use of TCP connections between different HTTP request
+                                </div>
+                            </div>
+                            <div class="col">
+                                <!-- Column 5 content -->
+                                <input class="form-check-input" type="checkbox" value="" id="httpClientSetAdvDisableCompression"
+                                    checked formControlName="httpClientSetAdvDisableCompressionForm">&nbsp;
+                                <label class="form-check-label" for="httpClientSetAdvDisableCompression">
+                                    Disable Compression
+                                </label>
+                                <div class="form-text">If set, prevents the Transport from requesting compression with an
+                                    "Accept-Encoding: gzip" request header.
+                                </div>
+                            </div>
+                        </div>
+        
+                        <hr>
+                        <h3>Dial settings</h3>
+                        <div class="col-sm-12 d-flex gap-3 mb-3">
+        
+                            <div class="col-sm-12 col-md-4">
+                                <label for="httpClientSetAdvDialerTimeout" class="form-label">Dialer Timeout</label>
+                                <input type="text" class="input-size form-control" id="httpClientSetAdvDialerTimeout"
+                                    formControlName="httpClientSetAdvDialerTimeoutForm" placeholder="0s"
+                                    [class.is-invalid]="formGroupService.get('httpClientSetAdvDialerTimeoutForm')?.invalid && formGroupService.get('httpClientSetAdvDialerTimeoutForm')?.touched">
+                                <div class="invalid-feedback"
+                                    *ngIf="formGroupService.get('httpClientSetAdvDialerTimeoutForm')?.errors?.['pattern'] && formGroupService.get('httpClientSetAdvDialerTimeoutForm')?.touched">
+                                    Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                                </div>
+                                <div class="form-text">Maximum amount of time a dial will wait for a connect to complete
+                                </div>
+                            </div>
+        
+                            <div class="col-sm-12 col-md-4">
+                                <label for="httpClientSetAdvDialerFallerDelay" class="form-label">Dialer Fallback Delay</label>
+                                <input type="text" class="input-size form-control" id="httpClientSetAdvDialerFallerDelay"
+                                    formControlName="httpClientSetAdvDialerFallerDelayForm" placeholder="0s"
+                                    [class.is-invalid]="formGroupService.get('httpClientSetAdvDialerFallerDelayForm')?.invalid && formGroupService.get('httpClientSetAdvDialerFallerDelayForm')?.touched" />
+                                <div class="invalid-feedback"
+                                    *ngIf="formGroupService.get('httpClientSetAdvDialerFallerDelayForm')?.errors?.['pattern'] && formGroupService.get('httpClientSetAdvDialerFallerDelayForm')?.touched">
+                                    Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                                </div>
+                                <div class="form-text">Length of time to wait before spawning a fallback connection. If zero, a
+                                    default delay of 300ms is used.</div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <label for="httpClientSetAdvDialerKeepAlive" class="form-label">Dialer Keep-Alive</label>
+                                <input type="text" class="input-size form-control" id="httpClientSetAdvDialerKeepAlive"
+                                    formControlName="httpClientSetAdvDialerKeepAliveForm" placeholder="0s"
+                                    [class.is-invalid]="formGroupService.get('httpClientSetAdvDialerKeepAliveForm')?.invalid && formGroupService.get('httpClientSetAdvDialerKeepAliveForm')?.touched" />
+                                <div class="invalid-feedback"
+                                    *ngIf="formGroupService.get('httpClientSetAdvDialerKeepAliveForm')?.errors?.['pattern'] && formGroupService.get('httpClientSetAdvDialerKeepAliveForm')?.touched">
+                                    Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                                </div>
+                                <div class="form-text">Keep-alive period for an active network connection. If zero, keep-alives
+                                    are not enabled.</div>
+                            </div>
+                        </div>
+                        }
+                </mat-expansion-panel>
+            </mat-accordion>
+
+
+            
+        
+           
+            <div class="col-sm-12 mt-3">
+                <!-- <button mat-raised-button (click)="submitForm()">Submit</button> -->
+                <button class="btn btn-primary" (click)="emitValue()">Save</button>
+            </div>
+        </div>
+    </div>
+</form>
+</div>

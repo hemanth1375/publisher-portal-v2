@@ -1,0 +1,63 @@
+.main-heading{
+    font-weight: 500;
+}
+
+
+  .parameter-item mat-icon {
+    font-size: 16px;
+  } 
+
+  .toggle-header{
+    width: 100%;
+  }
+
+  .input-con{
+    background-color: rgba(255, 255, 255, 1);
+    height: auto;
+    padding: 30px;
+    border: none; /* Remove default border */
+    border-radius: 10px; /* Smooth rounded corners */
+    box-shadow: 0 4px 6px rgba(214, 181, 181, 0.1); /* Subtle shadow */
+    transition: transform 0.2s, box-shadow 0.2s; /* Smooth animation */
+}
+
+.parameter-item {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    background-color: white;
+    color: black;
+    border-radius:8px;
+    border: 2px solid rgba(151, 71, 255, 1);
+    padding: 0px 12px 0px 12px;
+  }
+  .feature{
+    background-color: rgba(255, 255, 255, 1);
+    height: auto;
+    padding: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.32); /* Remove default border */
+    border-radius: 10px; /* Smooth rounded corners */
+    
+  }
+  
+  .static-text-area {
+    background-color: black;
+    width: 80%;
+    color: white;
+  }
+
+  .custom-textarea {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #252525;
+    color: gold;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 10px;
+    line-height: 1.5;
+    white-space: pre; /* Ensure formatting like indentation is preserved */
+    overflow: auto; /* Enable scrolling if content exceeds height */
+    resize: vertical; /* Allow resizing vertically */
+  }
+
+
+  
