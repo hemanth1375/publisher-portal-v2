@@ -34,6 +34,8 @@ export class GatewaysHttpsecurityComponent {
   httpSecurityClickjackProtectToolTip="Offers server-side partial protection against clickjacking when set to true, by adding the header X-Frame-Options: DENY."
   httpSecurityHPKPToolTip="Allows HTTPS websites to resist impersonation by attackers using mis-issued or otherwise fraudulent certificates."
   httpSecuritySniffingToolTip="When set prevents Internet Explorer from MIME-sniffing a response away from the declared content-type. This also applies to Google Chrome, when downloading extensions. Sets sX-Content-Type-Options: nosniff"
+  browserCrossSiteScriptingToolTip="When set adds the header X-XSS-Protection: 1; mode=block"
+  basicAuthHtpasswdPathToolTip="Absolute Path to the htpasswd filename (recommended) or relative ./ to the workdir."
   onToggleChangeStaticResponse(event: any, id: any) {
     console.log('id', id);
     (this as any)[id] = event.checked;

@@ -19,7 +19,6 @@
                                   <div class="form-check form-switch">
                                       <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" formControlName="isCorsActive">
                                     </div>
-                                  <!-- <mat-slide-toggle formControlName="isCorsActive"></mat-slide-toggle> -->
                               </div>
                           </mat-panel-title>
                       </mat-expansion-panel-header>
@@ -37,23 +36,7 @@
                             </div>
                   
                           </div>
-                          <!-- <div class="row mb-2">
-                            <label for="corsAllowedOrigins" class="form-label">Allowed origins</label>
-                            <div class="col-sm-12 d-flex">
-                              <input type="text" class="form-control input-size input-with-button" id="corsAllowedOrigins"
-                                formControlName="corsAllowedOriginsForm" placeholder="https://example.com">
-                              <button type="button" class="btn btn-info button-with-input"
-                                (click)="addParameter('corsAllowedOriginsForm')">+</button>
-                            </div>
-                            <div id="corsAllowedOriginsHelp" class="form-text">Add those origins you would like to accept. Or use * for
-                              any origin.</div>
-                            <div class="mt-3 d-flex">
-                              <button *ngFor="let attr of corsAllowedOriginsArray; let i = index" class="parameter-item">
-                                {{ attr }}<mat-icon (click)="removeParameter(i,'corsAllowedOriginsForm')"
-                                  class="d-flex align-items-center justify-content-end">close</mat-icon>
-                              </button>
-                            </div>
-                          </div> -->
+              
                           <div class="row gap-3 mb-3 p-2">
                             <div class="input-con d-flex gap-2 flex-column">
                                 <div class="row align-items-end">
@@ -71,8 +54,6 @@
                                                       d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                               </svg></button>
                                       </div>
-                                      <!-- <div id="corsAllowedOriginsHelp" class="form-text">Add those origins you would like to accept. Or use * for
-                                        any origin.</div> -->
                                       <div class="col-sm-12 d-flex mt-3">
                                         <button *ngFor="let attr of corsAllowedOriginsArray; let i = index" class="parameter-item">
                                             {{ attr }}<mat-icon (click)="removeParameter(i,'corsAllowedOriginsForm')"
@@ -85,21 +66,6 @@
 
                        
                           <div class="row  mb-4 d-flex">
-                            <!-- <div class="col-sm-12 col-md-6"> -->
-                              <!-- <label for="corsAllowedHeaders" class="form-label">Allowed headers</label>
-                              <div class="col-sm-12 d-flex">
-                                <input type="text" class="form-control input-size input-with-button" id="corsAllowedHeaders"
-                                  formControlName="corsAllowedHeadersForm" placeholder="e.g: Accept-Language">
-                                <button type="button" class="btn btn-info button-with-input"
-                                  (click)="addParameter('corsAllowedHeadersForm')">+</button>
-                              </div>
-                              <div id="corsAllowedHeadersHelp" class="form-text">Only the headers added here will be allowed</div>
-                              <div class="mt-3 d-flex">
-                                <button *ngFor="let attr of corsAllowedHeadersArray; let i = index" class="parameter-item">
-                                  {{ attr }}<mat-icon (click)="removeParameter(i,'corsAllowedHeadersForm')"
-                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                </button>
-                              </div> -->
                               <div class="col-sm-12 col-md-6 ">
                                 <div class="input-con d-flex gap-2 flex-column">
                                     <div class="row align-items-end">
@@ -117,8 +83,7 @@
                                                           d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                                   </svg></button>
                                           </div>
-                                          <!-- <div id="corsAllowedOriginsHelp" class="form-text">Add those origins you would like to accept. Or use * for
-                                            any origin.</div> -->
+                          
                                           <div class="col-sm-12 d-flex mt-3">
                                             <button *ngFor="let attr of corsAllowedHeadersArray; let i = index" class="parameter-item">
                                                 {{ attr }}<mat-icon (click)="removeParameter(i,'corsAllowedHeadersForm')"
@@ -128,24 +93,7 @@
                                     </div>
                                 </div>
                           </div>
-                            <!-- </div> -->
-                            
-                            <!-- <div class="col-sm-12 col-md-6"> -->
-                              <!-- <label for="corsExposeHeaders" class="form-label">Expose headers</label>
-                              <div class="col-sm-12 d-flex">
-                                <input type="text" class="form-control input-size input-with-button" id="corsExposeHeaders"
-                                  formControlName="corsExposeHeadersForm" placeholder="e.g: Accept-Language">
-                                <button type="button" class="btn btn-info button-with-input"
-                                  (click)="addParameter('corsExposeHeadersForm')">+</button>
-                              </div>
-                              <div id="corsExposeHeadersHelp" class="form-text">Headers that are safe to expose to the API of a CORS API
-                                specification</div>
-                              <div class="mt-3 d-flex">
-                                <button *ngFor="let attr of corsExposeHeadersArray; let i = index" class="parameter-item">
-                                  {{ attr }}<mat-icon (click)="removeParameter(i,'corsExposeHeadersForm')"
-                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                </button>
-                              </div> -->
+                     
                               <div class="col-sm-12 col-md-6">
                                 <div class="input-con d-flex gap-2 flex-column">
                                     <div class="row align-items-end">
@@ -163,8 +111,7 @@
                                                           d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                                   </svg></button>
                                           </div>
-                                          <!-- <div id="corsAllowedOriginsHelp" class="form-text">Add those origins you would like to accept. Or use * for
-                                            any origin.</div> -->
+                                         
                                           <div class="col-sm-12 d-flex mt-3">
                                             <button *ngFor="let attr of corsExposeHeadersArray; let i = index" class="parameter-item">
                                                 {{ attr }}<mat-icon (click)="removeParameter(i,'corsExposeHeadersForm')"
@@ -183,10 +130,7 @@
                                 <div class="checkbox-text">Allow credentials  &nbsp; <i class="bi bi-info-circle"
                                   [matTooltip]=allowedcredentialsToolTip></i></div>
                               </div>
-                              <!-- <div class="form-text" id="corsAllowCredentialsHelp">
-                                When requests can include user credentials like
-                                cookies,
-                                HTTP authentication or client side SSL certificates</div> -->
+                      
                             </div>
                             <div class="col-sm-12 col-md-6">
                               <label for="corsMaxAge" class="form-label">Max age  &nbsp; <i class="bi bi-info-circle"
@@ -199,10 +143,7 @@
                                   *ngIf="formGroupHttpSecurity.get('corsMaxAgeForm')?.errors?.['pattern'] && formGroupHttpSecurity.get('corsMaxAgeForm')?.touched">
                                   Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
                                 </div>
-                              </div>
-                  
-                              <!-- <div id="corsMaxAgeHelp" class="form-text">For how long the response can be cached</div> -->
-                  
+                              </div>                                 
                             </div>
                           </div>
                           }
@@ -227,22 +168,7 @@
                           }@else{
                           <div class="row d-flex mb-3">
                             <div class="col-sm-12 col-md-6">
-                              <!-- <label for="botDetectorAllow" class="form-label">Allow</label>
-                              <div class="d-flex">
-                                <input type="text" id="botDetectorAllow" class="form-control input-size input-with-button"
-                                  formControlName="botDetectorAllowForm" placeholder="MyAndroidClient/1.0">
-                                <button type="button" class="btn btn-info button-with-input"
-                                  (click)="addParameter('botDetectorAllowForm')">+</button>
-                              </div>
-                              <div class="form-text" id="botDetectorAllowHelp">An array with EXACT MATCHES of trusted user agents that can
-                                <br> connect.
-                              </div>
-                              <div class="mt-3 d-flex">
-                                <button *ngFor="let attr of botDetectorAllowArray; let i = index" class="parameter-item">
-                                  {{ attr }}<mat-icon (click)="removeParameter(i,'botDetectorAllowForm')"
-                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                </button>
-                              </div> -->
+                             
                               <div class="input-con d-flex gap-2 flex-column">
                                 <div class="row align-items-end">
                                         <div class="col-sm-8">
@@ -259,8 +185,7 @@
                                                       d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                               </svg></button>
                                       </div>
-                                      <!-- <div id="corsAllowedOriginsHelp" class="form-text">Add those origins you would like to accept. Or use * for
-                                        any origin.</div> -->
+                              
                                       <div class="col-sm-12 d-flex mt-3">
                                         <button *ngFor="let attr of botDetectorAllowArray; let i = index" class="parameter-item">
                                             {{ attr }}<mat-icon (click)="removeParameter(i,'botDetectorAllowForm')"
@@ -271,21 +196,7 @@
                             </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
-                              <!-- <label for="botDetectorDeny" class="form-label">Deny</label>
-                              <div class="d-flex">
-                                <input type="text" id="botDetectorDeny" class="form-control input-size input-with-button"
-                                  formControlName="botDetectorDenyForm" placeholder="axios/0.17.1">
-                                <button class="btn btn-info button-with-input" type="button"
-                                  (click)="addParameter('botDetectorDenyForm')">+</button>
-                              </div>
-                              <div class="form-text" id="botDetectorDenyHelp">An array of EXACT MATCHES of undesired bots, to reject immediately.
-                                </div>
-                              <div class="mt-3 d-flex">
-                                <button *ngFor="let attr of botDetectorDenyArray; let i = index" class="parameter-item">
-                                  {{ attr }}<mat-icon (click)="removeParameter(i,'botDetectorDenyForm')"
-                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                </button>
-                              </div> -->
+                          
                               <div class="input-con d-flex gap-2 flex-column">
                                 <div class="row align-items-end">
                                         <div class="col-sm-8">
@@ -302,8 +213,7 @@
                                                       d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                               </svg></button>
                                       </div>
-                                      <!-- <div id="corsAllowedOriginsHelp" class="form-text">Add those origins you would like to accept. Or use * for
-                                        any origin.</div> -->
+                                     
                                       <div class="col-sm-12 d-flex mt-3">
                                         <button *ngFor="let attr of botDetectorDenyArray; let i = index" class="parameter-item">
                                             {{ attr }}<mat-icon (click)="removeParameter(i,'botDetectorDenyForm')"
@@ -317,21 +227,6 @@
                   
                           </div>
                           <div class="row mb-3">
-                            <!-- <label for="botDetectorPatterns" class="form-label">Patterns</label>
-                            <div class="d-flex">
-                              <input type="text" name="" id="botDetectorPatterns" class="form-control input-size input-with-button"
-                                formControlName="botDetectorPatternsForm" placeholder="(facebookexternalhit)/.*">
-                              <button type="button" class="btn btn-info button-with-input"
-                                (click)="addParameter('botDetectorPatternsForm')">+</button>
-                            </div>
-                            <div class="form-text" id="botDetectorPatternsHelp">An array with all the <b>regular expressions</b> that  define bots. Matching bots are rejected.
-                             </div>
-                            <div class="mt-3 d-flex">
-                              <button *ngFor="let attr of botDetectorPatternsArray; let i = index" class="parameter-item">
-                                {{ attr }}<mat-icon (click)="removeParameter(i,'botDetectorPatternsForm')"
-                                  class="d-flex align-items-center justify-content-end">close</mat-icon>
-                              </button>
-                            </div> -->
                             <div class="input-con d-flex gap-2 flex-column">
                               <div class="row align-items-end">
                                       <div class="col-sm-4">
@@ -348,8 +243,6 @@
                                                     d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                             </svg></button>
                                     </div>
-                                    <!-- <div id="corsAllowedOriginsHelp" class="form-text">Add those origins you would like to accept. Or use * for
-                                      any origin.</div> -->
                                     <div class="col-sm-12 d-flex mt-3">
                                       <button *ngFor="let attr of botDetectorPatternsArray; let i = index" class="parameter-item">
                                           {{ attr }}<mat-icon (click)="removeParameter(i,'botDetectorPatternsForm')"
@@ -366,8 +259,7 @@
                                 [matTooltip]=botDetectorCacheSizeToolTip></i></label>
                               <input type="text" id="botDetectorCacheSize" class="form-control input-size"
                                 formControlName="botDetectorCacheSizeForm" placeholder="1000">
-                              <!-- <div class="form-text">Number of user agents cached to speed up repetitive bot  detection. Use 0 for no  cache.
-                               </div> -->
+                         
                             </div>
                             <div class="col-sm-12 col-md-6">
                               <div class="d-flex">
@@ -375,8 +267,7 @@
                                 <div class="checkbox-text">Empty user agents are bots  &nbsp; <i class="bi bi-info-circle"
                                   [matTooltip]=emptyUsersAgentsToolTip></i></div>
                               </div>
-                              <!-- <div id="botDetectorEmptyUsersHelp" class="form-text">Whether to consider an empty user-agent a bot (and reject it) <br> or  not.
-                              </div> -->
+                         
                             </div>
                   
                           </div>
@@ -402,21 +293,6 @@
                           }@else{
                           <div class="row mb-3 d-flex">
                             <div class="col-sm-12 col-md-6">
-                              <!-- <label for="multipleIdentityProviderOrigins" class="form-label">Identity Provider origins</label>
-                              <div class="d-flex">
-                                <input type="text" id="multipleIdentityProviderOrigins" class="input-size form-control input-with-button"
-                                  formControlName="multipleIdentityProviderOriginsForm" placeholder="http://foo.bar/public_keys">
-                                <button class="btn btn-info button-with-input" type="button"
-                                  (click)="addParameter('multipleIdentityProviderOriginsForm')">+</button>
-                              </div>
-                              <div class="form-text" id="multipleIdentityProviderOriginsForm">The list of all JWK URLs recognized as valid Identity Providers by the <br> gateway.
-                                </div>
-                              <div class="mt-3 d-flex">
-                                <button *ngFor="let attr of multipleIdentityProviderOriginsArray; let i = index" class="parameter-item">
-                                  {{ attr }}<mat-icon (click)="removeParameter(i,'multipleIdentityProviderOriginsForm')"
-                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                </button>
-                              </div> -->
                               <div class="input-con d-flex gap-2 flex-column">
                                 <div class="row align-items-end">
                                         <div class="col-sm-8">
@@ -433,8 +309,6 @@
                                                       d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                               </svg></button>
                                       </div>
-                                      <!-- <div id="corsAllowedOriginsHelp" class="form-text">Add those origins you would like to accept. Or use * for
-                                        any origin.</div> -->
                                       <div class="col-sm-12 d-flex mt-3">
                                         <button *ngFor="let attr of multipleIdentityProviderOriginsArray; let i = index" class="parameter-item">
                                             {{ attr }}<mat-icon (click)="removeParameter(i,'multipleIdentityProviderOriginsForm')"
@@ -483,21 +357,6 @@
                           }@else{
                           <div class="row d-flex mb-3">
                             <div class="col-sm-12 col-md-6">
-                              <!-- <label for="ipFilterCIDR" class="form-label">CIDR</label>
-                              <div class="d-flex">
-                                <input type="text" class="form-control input-size input-with-button" id="ipFilterCIDR"
-                                  formControlName="ipFilterCIDRForm" placeholder="192.168.0.0/24">
-                                <button class="btn btn-info button-with-input" type="button"
-                                  (click)="addParameter('ipFilterCIDRForm')">+</button>
-                              </div>
-                              <div class="form-text" id="ipFilterCIDRHelp">The CIDR blocks (list of IPs) you want to allow or deny. <br>
-                                Examples: 192.168.0.0/24, 172.17.2.56/32, <br> 127.0.0.1</div>
-                              <div class="mt-3 d-flex">
-                                <button *ngFor="let attr of ipFilterCIDRArray; let i = index" class="parameter-item">
-                                  {{ attr }}<mat-icon (click)="removeParameter(i,'ipFilterCIDRForm')"
-                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                </button>
-                              </div> -->
                               <div class="input-con d-flex gap-2 flex-column">
                                 <div class="row align-items-end">
                                         <div class="col-sm-8">
@@ -514,8 +373,7 @@
                                                       d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                               </svg></button>
                                       </div>
-                                      <!-- <div id="corsAllowedOriginsHelp" class="form-text">Add those origins you would like to accept. Or use * for
-                                        any origin.</div> -->
+      
                                       <div class="col-sm-12 d-flex mt-3">
                                         <button *ngFor="let attr of ipFilterCIDRArray; let i = index" class="parameter-item">
                                             {{ attr }}<mat-icon (click)="removeParameter(i,'ipFilterCIDRForm')"
@@ -527,22 +385,6 @@
                               
                             </div>
                             <div class="col-sm-12 col-md-6">
-                              <!-- <label for="ipFilterTrustedProxies" class="form-label">Trusted Proxies</label>
-                              <div class="d-flex">
-                                <input type="text" class="form-control input-size input-with-button" id="ipFilterTrustedProxies"
-                                  formControlName="ipFilterTrustedProxiesForm" placeholder="10.0.0.0/16">
-                                <button class="btn btn-info button-with-input" type="button"
-                                  (click)="addParameter('ipFilterTrustedProxiesForm')">+</button>
-                              </div>
-                              <div class="form-text" id="ipFilterTrustedProxiesHelp">A custom list of all the recognized
-                                machines/balancers that <br> proxy the client to your application. This list is used to avoid <br>
-                                spoofing when trying to get the real IP of the client.</div>
-                              <div class="mt-3 d-flex">
-                                <button *ngFor="let attr of ipFilterTrustedProxiesArray; let i = index" class="parameter-item">
-                                  {{ attr }}<mat-icon (click)="removeParameter(i,'ipFilterTrustedProxiesForm')"
-                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                </button>
-                              </div> -->
                               <div class="input-con d-flex gap-2 flex-column">
                                 <div class="row align-items-end">
                                         <div class="col-sm-8">
@@ -559,8 +401,6 @@
                                                       d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                               </svg></button>
                                       </div>
-                                      <!-- <div id="corsAllowedOriginsHelp" class="form-text">Add those origins you would like to accept. Or use * for
-                                        any origin.</div> -->
                                       <div class="col-sm-12 d-flex mt-3">
                                         <button *ngFor="let attr of ipFilterTrustedProxiesArray; let i = index" class="parameter-item">
                                             {{ attr }}<mat-icon (click)="removeParameter(i,'ipFilterTrustedProxiesForm')"
@@ -574,21 +414,6 @@
                           </div>
                           <div class="row d-flex mb-3">
                             <div class="col-sm-12 col-md-6">
-                              <!-- <label for="ipFilterClientIPHeaders" class="form-label">Client IP Headers</label>
-                              <div class="d-flex">
-                                <input type="text" class="form-control input-size input-with-button" id="ipFilterClientIPHeaders"
-                                  formControlName="ipFilterClientIPHeadersForm" placeholder="X-Forwarded-For">
-                                <button class="btn btn-info button-with-input" type="button"
-                                  (click)="addParameter('ipFilterClientIPHeadersForm')">+</button>
-                              </div>
-                              <div class="form-text" id="ipFilterClientIPHeadersHelp">A custom ordered list of all headers that might
-                                contain the <br> real IP of the client. The first matching IP in the list will be <br> used</div>
-                              <div class="mt-3 d-flex">
-                                <button *ngFor="let attr of ipFilterClientIPHeadersArray; let i = index" class="parameter-item">
-                                  {{ attr }}<mat-icon (click)="removeParameter(i,'ipFilterClientIPHeadersForm')"
-                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                </button>
-                              </div> -->
                               <div class="input-con d-flex gap-2 flex-column">
                                 <div class="row align-items-end">
                                         <div class="col-sm-8">
@@ -605,8 +430,6 @@
                                                       d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                               </svg></button>
                                       </div>
-                                      <!-- <div id="corsAllowedOriginsHelp" class="form-text">Add those origins you would like to accept. Or use * for
-                                        any origin.</div> -->
                                       <div class="col-sm-12 d-flex mt-3">
                                         <button *ngFor="let attr of ipFilterClientIPHeadersArray; let i = index" class="parameter-item">
                                             {{ attr }}<mat-icon (click)="removeParameter(i,'ipFilterClientIPHeadersForm')"
@@ -623,8 +446,6 @@
                                 <div class="checkbox-text">Allow mode  &nbsp; <i class="bi bi-info-circle"
                                   [matTooltip]=allowModeToolTip></i></div>
                               </div>
-                              <!-- <div class="form-text" id="ipFilterAllowModeHelp">Check to only allow connections in the CIDR list. Uncheck to  deny all IPs from the list.
-                               </div> -->
                             </div>
                   
                           </div>
@@ -650,23 +471,6 @@
                           }@else{
                           <div class="row">
                             <div class="row mb-3">
-                              <!-- <label for="httpSecurityAllowedHosts" class="form-label">Allowed hosts</label>
-                              <div class="d-flex">
-                                <input type="text" id="httpSecurityAllowedHosts" class="form-control input-size input-with-button"
-                                  formControlName="httpSecurityAllowedHostsForm" placeholder="hostname:port">
-                                <button class="btn btn-info button-with-input" id="httpSecurityAllowedHosts"
-                                  (click)="addParameter('httpSecurityAllowedHostsForm')"><b>+</b>Add host</button>
-                              </div>
-                              <div class="form-text" id="httpSecurityAllowedHostsHelp">
-                                List of fully qualified domain names that are allowed, along with the origin port. Format: hostname:port.
-                                When the list is empty accepts any host name to connect.
-                              </div>
-                              <div class="mt-3 d-flex">
-                                <button *ngFor="let attr of httpSecurityAllowedHostsArray; let i = index" class="parameter-item">
-                                  {{ attr }}<mat-icon (click)="removeParameter(i,'httpSecurityAllowedHostsForm')"
-                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                </button>
-                              </div> -->
                               <div class="input-con d-flex gap-2 flex-column">
                                 <div class="row align-items-end">
                                         <div class="col-sm-4">
@@ -683,8 +487,6 @@
                                                       d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                               </svg></button>
                                       </div>
-                                      <!-- <div id="corsAllowedOriginsHelp" class="form-text">Add those origins you would like to accept. Or use * for
-                                        any origin.</div> -->
                                       <div class="col-sm-12 d-flex mt-3">
                                         <button *ngFor="let attr of httpSecurityAllowedHostsArray; let i = index" class="parameter-item">
                                             {{ attr }}<mat-icon (click)="removeParameter(i,'httpSecurityAllowedHostsForm')"
@@ -716,45 +518,11 @@
                                     formControlName="httpSecuritySSLOptPortForm" placeholder="port">
                                 </div>
                               </div>
-                              <!-- <div class="form-text">If set to true all HTTP requests are redirected to HTTPS. If the hostname used to redirect to https differs from the current host, specify it in the box, otherwise leave it blank.
-                                </div> -->
+                     
                   
                             </div>
 
                             <div class="row mb-3">
-                              <!-- <div class="d-flex mb-3 align-items-end">
-                                <div class="col-sm-12 col-md-5">
-                                  <label for="httpSecuritySSLProxyHeader" class="form-label">
-                                    SSL Proxy header</label>
-                                  <input type="text" id="httpSecuritySSLProxyHeader" class="form-control input-size"
-                                    formControlName="httpSecuritySSLProxyHeaderForm" placeholder="X-Forwarded-Proto">
-                                </div>
-                                <div class="col-sm-12 col-md-5">
-                                  <label for="httpSecurityHeaderValue" class="form-label">
-                                    Header value</label>
-                                  <input type="text" id="httpSecurityHeaderValue" class="form-control input-size"
-                                    formControlName="httpSecurityHeaderValueForm" placeholder="https">
-                                </div>
-                                <div class="col-sm-12 col-md-2">
-                                  <button class="btn btn-info" type="button"
-                                    (click)="addParameter('httpSecurityHeaderAndHearValue')"><b>+</b>Add header</button>
-                                </div>
-                              </div>
-                              <div *ngFor="let attr of objectMap | keyvalue" class="row mb-3 d-flex align-items-center">
-                                <div class="col-sm-12 col-md-4">
-                                  {{attr.key}}
-                                </div>
-                                <div class="col-sm-12 col-md-4">
-                                  {{attr.value}}
-                                </div>
-                                <div class="col-sm-12 col-md-4">
-                                  <button type="button" class="btn btn-dark delete-btn"
-                                    (click)="removeParameter(attr.key ,'httpSecurityHeaderAndHearValue')"><b>X</b></button>
-                                </div>
-                              </div>
-                              <div class="form-text">SSLProxyHeaders is set of header keys with associated values that would indicate a
-                                valid https request. Useful when using Nginx, e.g: "X-Forwarded-Proto": "https"</div>
-                                -->
                                 <div class="input-con d-flex gap-2 flex-column">
                                   <div class="row align-items-end">
                                           <div class="col-sm-12 col-md-4">
@@ -776,14 +544,6 @@
                                                         d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                                 </svg></button>
                                         </div>
-                                        <!-- <div id="corsAllowedOriginsHelp" class="form-text">Add those origins you would like to accept. Or use * for
-                                          any origin.</div> -->
-                                        <!-- <div class="row mb-3 d-flex align-items-center">
-                                          <button *ngFor="let attr of objectMap | keyvalue; let i = index" class="parameter-item">
-                                              {{ attr }}<mat-icon (click)="removeParameter(i,'corsAllowedOriginsForm')"
-                                                  class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                          </button>
-                                      </div> -->
                                   </div>
                                   <div *ngFor="let attr of objectMap | keyvalue" class="row mb-3 d-flex align-items-center">
                                     <div class="col-sm-12 col-md-4">
@@ -801,14 +561,7 @@
                             </div>
                             <div class="row mb-3">
                               <label for="httpSecurityHSTS" class="form-label">HTTP Strict Transport Security (HSTS)  &nbsp; <i class="bi bi-info-circle"
-                                [matTooltip]=httpSecurityHSTSToolTip></i></label>
-                              <!-- <div id="httpSecurityHSTS" class="form-text">HSTS is a web security policy mechanism which helps to protect
-                                websites against protocol downgrade attacks and cookie hijacking. It allows web servers to declare that
-                                web browsers (or other complying user agents) should only interact with it using secure HTTPS connections,
-                                and never via the insecure HTTP protocol. When used the incoming links with http will be converted to
-                                https before accessing the server.</div> -->
-                                
-                  
+                                [matTooltip]=httpSecurityHSTSToolTip></i></label>                  
                             </div>
                   
                             <div class="input-group mb-3">
@@ -827,8 +580,7 @@
                                 <div class="checkbox-text">Include also subdomains &nbsp; <i class="bi bi-info-circle"
                                   [matTooltip]=includeAlsoSubdomains></i></div>
                               </div>
-                              <!-- <div class="form-text">If this value is set to true, the includeSubdomains directive will be appended to the Strict-Transport-Security header.
-                                </div> -->
+                        
                             </div>
                             <div class="row mt-3 gap-2">
                               <label for="httpSecurityClickjackProtect" class="form-label" style="font-size: large;">Clickjacking &nbsp; <i class="bi bi-info-circle"
@@ -838,8 +590,7 @@
                                   formControlName="httpSecurityClickjackProtectForm">
                                 <div class="checkbox-text">Enable clickjacking protection</div>
                               </div>
-                              <!-- <div class="form-text">Offers server-side partial protection against clickjacking when set to true, by adding the header X-Frame-Options: DENY.
-                               </div> -->
+                        
                             </div>
                             <div class="row mt-3 gap-2">
                               <!-- <label for="httpSecurityHPKP" class="form-label">HTTP Public Key Pinning (HPKP)</label> -->
@@ -861,8 +612,6 @@
                                   formControlName="httpSecurityHPKPForm"
                                   placeholder="pin-sha256=&quot;base64==&quot;; max-age=expireTime [; includeSubDomains][; report-uri=&quot;reportURI&quot;]">
                               </div>
-                              <!-- <div class="form-text" id="httpSecurityHPKPHelp">Allows HTTPS websites to resist impersonation by attackers using mis-issued or otherwise fraudulent certificates.
-                              </div> -->
                             </div>
                             <div class="row mt-3 gap-2">
                               <label for="httpSecuritySniffing" class="form-label">Sniffing &nbsp; <i class="bi bi-info-circle"
@@ -871,17 +620,14 @@
                                 <input type="checkbox" class="input-size1" formControlName="httpSecuritySniffingForm">
                                 <div class="checkbox-text">MIME-sniffing prevention</div>
                               </div>
-                              <!-- <div class="form-text">When set prevents Internet Explorer from MIME-sniffing a response away from the
-                                declared content-type. This also applies to Google Chrome, when downloading extensions. Sets
-                                X-Content-Type-Options: nosniff</div> -->
+                
                             </div>
                             <div class="row mt-3 gap-2">
                               <label for="httpSecurityXSSProtection" class="form-label">Cross-site scripting (XSS) protection</label>
                               <div class="d-flex" id="httpSecurityXSSProtection">
                                 <input type="checkbox" class="input-size1" formControlName="httpSecurityXSSProtectionForm">
-                                <div class="checkbox-text">Browser cross-site scripting (XSS) filter</div>
-                              </div>
-                              <div class="form-text">When set adds the header X-XSS-Protection: 1; mode=block
+                                <div class="checkbox-text">Browser cross-site scripting (XSS) filter  &nbsp; <i class="bi bi-info-circle"
+                                  [matTooltip]=browserCrossSiteScriptingToolTip></i></div>
                               </div>
                             </div>
                             <div class="row mt-3 gap-2">
@@ -917,13 +663,11 @@
                           }@else{
                           <div class="row gap-2">
                             <label for="basicAuthHtpasswd">Remember to mark which endpoints need basic auth in their configuration</label>
-                  
                             <div class="col-sm-12" id="basicAuthHtpasswd">
-                              <label for="basicAuthHtpasswdPath" class="form-label">Htpasswd path</label>
+                              <label for="basicAuthHtpasswdPath" class="form-label">Htpasswd path  &nbsp; <i class="bi bi-info-circle"
+                                [matTooltip]=basicAuthHtpasswdPathToolTip></i></label>
                               <input type="text" name="" id="basicAuthHtpasswdPath" class="form-control input-size"
                                 formControlName="basicAuthHtpasswdPathForm" placeholder="/etc/krakend/.htpasswd">
-                              <div class="form-text">Absolute Path to the htpasswd filename (recommended) or relative ./ to the workdir.
-                              </div>
                             </div>
                           </div>                  
                           }                
