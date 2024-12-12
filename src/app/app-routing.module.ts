@@ -18,6 +18,7 @@ import { ResponseManipulationComponent } from './response-manipulation/response-
 import { ConnectivityComponent } from './connectivity/connectivity.component';
 import { OpenapiComponent } from './openapi/openapi.component';
 import { GatewayServiceSettingsComponent } from './gateway-service-settings/gateway-service-settings.component';
+import { GatewayTelemetryComponent } from './gateway-telemetry/gateway-telemetry.component';
 
 const routes: Routes = [
   {path:"apis",component:ApicardsComponent,children:[
@@ -39,7 +40,8 @@ const routes: Routes = [
     {path:"creategateway",component:CreategatewayComponent},
     {path:"viewgateway/:id", component:ViewgatewayComponent,children:[
       {path:"dashboard",component:GatewayDashboardComponent},
-      {path:"service",component:GatewayServiceSettingsComponent}
+      {path:"service",component:GatewayServiceSettingsComponent},
+      {path:"telemetry",component:GatewayTelemetryComponent}
     ]}
   ]},
   { path: '', redirectTo: '/apis', pathMatch: 'full' }

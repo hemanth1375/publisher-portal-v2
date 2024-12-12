@@ -59,5 +59,9 @@
     resize: vertical; /* Allow resizing vertically */
   }
 
+  .custom-switch {
+    width: 2.2rem; /* Adjust the width */
+    height: 1.1rem; /* Adjust the height */
+}
 
   

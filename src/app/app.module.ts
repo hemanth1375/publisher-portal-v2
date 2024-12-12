@@ -43,6 +43,7 @@ import { ResponseManipulationComponent } from './response-manipulation/response-
 import { ConnectivityComponent } from './connectivity/connectivity.component';
 import { OpenapiComponent } from './openapi/openapi.component';
 import { GatewayServiceSettingsComponent } from './gateway-service-settings/gateway-service-settings.component';
+import { GatewayTelemetryComponent } from './gateway-telemetry/gateway-telemetry.component';
 
 // keycloak
 function initializeKeycloak(keycloak: KeycloakService){
@@ -92,7 +93,8 @@ function initializeKeycloak(keycloak: KeycloakService){
     ResponseManipulationComponent,
     ConnectivityComponent,
     OpenapiComponent,
-    GatewayServiceSettingsComponent
+    GatewayServiceSettingsComponent,
+    GatewayTelemetryComponent
   ],
   imports: [
     BrowserModule,

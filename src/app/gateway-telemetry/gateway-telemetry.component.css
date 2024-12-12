@@ -1,0 +1,26 @@
+.heading-with-toggle h3 {
+    margin: 0px;
+  }
+
+  .chck_fture_text p{
+    margin-bottom: 0px;
+  }
+  
+  .parameter-item {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    border: none;
+  }
+
+  .custom-switch {
+    width: 2.2rem; /* Adjust the width */
+    height: 1.1rem; /* Adjust the height */
+}
+
+.toggle-header{
+  width: 100%;
+}
