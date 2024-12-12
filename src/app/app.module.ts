@@ -44,6 +44,7 @@ import { ConnectivityComponent } from './connectivity/connectivity.component';
 import { OpenapiComponent } from './openapi/openapi.component';
 import { GatewayServiceSettingsComponent } from './gateway-service-settings/gateway-service-settings.component';
 import { GatewayTelemetryComponent } from './gateway-telemetry/gateway-telemetry.component';
+import { GatewaysHttpsecurityComponent } from './gateways-httpsecurity/gateways-httpsecurity.component';
 
 // keycloak
 function initializeKeycloak(keycloak: KeycloakService){
@@ -94,7 +95,8 @@ function initializeKeycloak(keycloak: KeycloakService){
     ConnectivityComponent,
     OpenapiComponent,
     GatewayServiceSettingsComponent,
-    GatewayTelemetryComponent
+    GatewayTelemetryComponent,
+    GatewaysHttpsecurityComponent
   ],
   imports: [
     BrowserModule,
