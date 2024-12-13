@@ -39,8 +39,8 @@ export class ParameterForwardingComponent implements OnInit{
         console.log(res)
         const data:any = res;
         
-        this.parameterArray= data?.input_query_strings;
-        this.parameterHeaderArray=data?.input_headers
+        this.parameterArray= data?.input_query_strings ?? [];
+        this.parameterHeaderArray=data?.input_headers ?? [];
         this.parameterForm.patchValue({
           input_parameter: '',
           input_header: '',

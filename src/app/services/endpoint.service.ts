@@ -7,10 +7,10 @@ import { urls } from '../../urls';
 })
 export class EndpointService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  addParameterForwarding(endpointId:any, body:any){
-    const url = urls.addParametersByEndpoint+`?endpointId=${endpointId}`;
+  addParameterForwarding(endpointId: any, body: any) {
+    const url = urls.addParametersByEndpoint + `?endpointId=${endpointId}`;
     // const headers = {
     //   "endpointId":endpointId
     // }
@@ -20,19 +20,34 @@ export class EndpointService {
     return this.http.post(url, body);
   }
 
-  addThrottling(endpointId:any,body:any){
-    const url = urls.addThrottling+`?endpointId=${endpointId}`;
+  addUpdateThrottling(endpointId: any, body: any) {
+    const url = urls.addUpdateThrottling + `?endpointId=${endpointId}`;
     return this.http.post(url, body);
   }
 
-  addPolicies(endpointId:any,body:any){
-    const url = urls.addPolicies+`?endpointId=${endpointId}`;
+  addResponse(endpointId: any, body: any) {
+    const url = urls.addResponse +`?endpointId=${endpointId}`;
     return this.http.post(url, body);
   }
 
-  getEndpointById(endpointId:any){
-    const url = urls.getEndpoint+`?endpointId=${endpointId}`;
+  addPolicies(endpointId: any, body: any) {
+    const url = urls.addPolicies + `?endpointId=${endpointId}`;
+    return this.http.post(url, body);
+  }
+
+  getEndpointById(endpointId: any) {
+    const url = urls.getEndpoint + `?endpointId=${endpointId}`;
     return this.http.get(url);
+  }
+
+  addConnectivity(endpointId: any, body: any) {
+    const url = urls.addConnectivity + `?endpointId=${endpointId}`;
+    return this.http.post(url, body);
+  }
+
+  addOpenApi(endpointId: any, body: any) {
+    const url = urls.addOpenAPI + `?endpointId=${endpointId}`;
+    return this.http.post(url, body);
   }
 
 }

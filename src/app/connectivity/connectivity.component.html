@@ -1,6 +1,6 @@
 <div class="container">
     <form [formGroup]="formGroup1">
-        <div class="row p-2">
+        <div class="row">
             <div class="col-sm-12">
                 <h3>Connectivity Options</h3>
             </div>
@@ -9,17 +9,8 @@
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                <div class="d-flex justify-content-between toggle-header">
-                                    <div>
                                         Concurrent Calls  &nbsp; <i
                                         class="bi bi-info-circle" [matTooltip]=conCallsToolTip ></i>
-                                    </div>
-                                    <div>
-                                        <mat-slide-toggle class="example-margin" color="blue"
-                                            formControlName="concurrentCalls">
-                                        </mat-slide-toggle>
-                                    </div>
-                                </div>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div class="mb-3 col-sm-6">
@@ -195,7 +186,7 @@
                                         <div class="d-flex align-items-center">
                                             <input type="checkbox" id="notifyConnectionEvent" class="me-2"
                                                 formControlName="returnErr">
-                                            <h3 class="mb-0">Notify the connection event</h3>
+                                            <h3 class="mb-0">Return error details</h3>
                                         </div>
             
                                         <p>Provides an error &#123;"error":"reason here" &#125; to the client when KrakenD was
@@ -209,7 +200,7 @@
                 </mat-accordion>
 
                 <div class="col-sm-12 mt-3">
-                    <!-- <button class="btn btn-primary" (click)="submit()">Save</button> -->
+                    <button class="btn btn-primary" (click)="submit()">Save</button>
                 </div>
             </div>
         </div>

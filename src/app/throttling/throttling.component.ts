@@ -38,6 +38,7 @@ export class ThrottlingComponent implements OnInit {
   trustedProxiesArray: any[] = [];
   clientIPHeadersArray: any[] = [];
   endpointId: any;
+  endPointData:any;
 
   constructor(private formBuilder: FormBuilder, private endpointService: EndpointService, private route: ActivatedRoute) {
     this.formGroupThrottling = this.formBuilder.group({
@@ -77,16 +78,41 @@ export class ThrottlingComponent implements OnInit {
     this.endpointService.getEndpointById(this.endpointId).subscribe({
       next: (res) => {
         console.log(res)
-        const data: any = res;
+        this.endPointData=res;
 
-        // this.parameterArray= data?.input_query_strings;
-        // this.parameterHeaderArray=data?.input_headers
-        // this.parameterForm.patchValue({
-        //   input_parameter: '',
-        //   input_header: '',
-        //   input_query_strings:data?.input_query_strings,
-        //   input_headers:data?.input_headers
-        // })
+        if(this.endPointData){
+          this.cidrArray=this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["ip-filter"]?.CIDR ?? [];
+          this.trustedProxiesArray=this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["ip-filter"]?.trusted_proxies ?? [];
+          this.clientIPHeadersArray=this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["ip-filter"]?.client_ip_headers ?? [];
+        }
+
+        this.formGroupThrottling.patchValue({
+          rateLimit: this.endPointData?.extra_config?.["qos/ratelimit/router"]?.max_rate,
+          tokenizer: this.endPointData?.extra_config?.["plugin/http-server"]?.["redis-ratelimit"]?.tokenizer,
+          burst: this.endPointData?.extra_config?.["plugin/http-server"]?.["redis-ratelimit"]?.burst,
+          timeout: this.endPointData?.timeout,
+          cacheTtl: this.endPointData?.cache_ttl,
+          // cidr: [''],
+          cidrArrayValue: this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["ip-filter"]?.CIDR ?? [],
+          // trustedProxies: [''],
+          trustedProxiesArrayValue:  this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["ip-filter"]?.trusted_proxies ?? [],
+          // clientIpHeaders: [''],
+          clientIPHeadersArrayValue: this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["ip-filter"]?.client_ip_headers ?? [],
+          allowModeActive: this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["ip-filter"]?.allow,
+          every:this.endPointData?.extra_config?.["qos/ratelimit/router"]?.every,
+          capacity: this.endPointData?.extra_config?.["qos/ratelimit/router"]?.capacity,
+          defaultUserQuota: this.endPointData?.extra_config?.["qos/ratelimit/router"]?.client_max_rate,
+          clientCapacity:this.endPointData?.extra_config?.["qos/ratelimit/router"]?.client_capacity,
+          address: this.endPointData?.extra_config?.["plugin/http-server"]?.["redis-ratelimit"]?.host,
+          rate:  this.endPointData?.extra_config?.["plugin/http-server"]?.["redis-ratelimit"]?.rate,
+          periods:  this.endPointData?.extra_config?.["plugin/http-server"]?.["redis-ratelimit"]?.period,
+          tokenizerField:  this.endPointData?.extra_config?.["plugin/http-server"]?.["redis-ratelimit"]?.tokenizer_field,
+          isIpFilterActive: !!this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.name.includes("ip-filter"),
+          isEndPointRateLimitEnabledActive: !!this.endPointData?.extra_config?.["qos/ratelimit/router"],
+          isRedisRateLimitEnabledActive: !!this.endPointData?.extra_config?.["plugin/http-server"]?.name.includes("redis-ratelimit")
+        })
+
+        console.log(this.endPointData);
       }
     })
   }
@@ -137,6 +163,7 @@ export class ThrottlingComponent implements OnInit {
       "throttling":{
       ...(this.formGroupThrottling.value?.isEndPointRateLimitEnabledActive && {
         "qos/ratelimit/router": {
+          ...(!!this.endPointData?.extra_config?.["qos/ratelimit/router"] && {"id":this.endPointData?.extra_config?.["qos/ratelimit/router"]?.id}),
           ...(this.formGroupThrottling.value?.rateLimit && { "max_rate": this.formGroupThrottling.value?.rateLimit }),
           ...(this.formGroupThrottling.value?.defaultUserQuota && { "client_max_rate": this.formGroupThrottling.value?.defaultUserQuota }),
           "strategy": "ip",
@@ -147,28 +174,32 @@ export class ThrottlingComponent implements OnInit {
       }),
       ...(this.formGroupThrottling.value?.isRedisRateLimitEnabledActive && {
         "plugin/http-server": {
+          ...(!!this.endPointData?.extra_config?.["plugin/http-server"] && {"id":this.endPointData?.extra_config?.["plugin/http-server"]?.id}),
           "name": [
             this.formGroupThrottling.value?.isRedisRateLimitEnabledActive && "redis-ratelimit"
           ].filter(Boolean),
           ...(this.formGroupThrottling.value?.isRedisRateLimitEnabledActive && {
             "redis-ratelimit": {
+              ...(!!this.endPointData?.extra_config?.["plugin/http-server"]?.["redis-ratelimit"] && {"id":this.endPointData?.extra_config?.["plugin/http-server"]?.["redis-ratelimit"]?.id}),
               ...(this.formGroupThrottling.value?.address && { "host": this.formGroupThrottling.value?.address }),
               ...(this.formGroupThrottling.value?.tokenizer && { "tokenizer": this.formGroupThrottling.value?.tokenizer }),
               ...(this.formGroupThrottling.value?.burst && { "burst": this.formGroupThrottling.value?.burst }),
               ...(this.formGroupThrottling.value?.rate && { "rate": this.formGroupThrottling.value?.rate }),
               ...(this.formGroupThrottling.value?.periods && { "period": this.formGroupThrottling.value?.periods }),
-              ...(this.formGroupThrottling.value?.tokenizerField && { "tokenizerField": this.formGroupThrottling.value?.tokenizerField })
+              ...(this.formGroupThrottling.value?.tokenizerField && { "tokenizer_field": this.formGroupThrottling.value?.tokenizerField })
             }
           })
         }
       }),
       ...(this.formGroupThrottling.value?.isIpFilterActive && {
+        ...(!!this.endPointData?.extra_config?.["plugin/req-resp-modifier"] && {"id":this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.id}),
         "plugin/req-resp-modifier": {
           "name": [
             this.formGroupThrottling.value?.isIpFilterActive && "ip-filter"
           ].filter(Boolean),
           ...(this.formGroupThrottling.value?.isIpFilterActive && {
             "ip-filter": {
+              ...(!!this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["ip-filter"] && {"id":this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["ip-filter"].id}),
               ...(this.formGroupThrottling.value?.allowModeActive && { "allow": this.formGroupThrottling.value?.allowModeActive }),
               ...(this.formGroupThrottling.value?.clientIPHeadersArrayValue.length != 0 && { "client_ip_headers": this.formGroupThrottling.value?.clientIPHeadersArrayValue }),
               ...(this.formGroupThrottling.value?.cidrArrayValue.length != 0 && { "CIDR": this.formGroupThrottling.value?.cidrArrayValue }),
@@ -186,7 +217,7 @@ export class ThrottlingComponent implements OnInit {
 
     console.log(body);
 
-    this.endpointService.addThrottling(this.endpointId,body).subscribe({
+    this.endpointService.addUpdateThrottling(this.endpointId,body).subscribe({
       next:(res)=>{
         console.log("added", res);
       },

@@ -17,6 +17,7 @@ export class PoliciesComponent implements OnInit{
   formGroupPolicies: FormGroup;
   jsonValue: any;
   endpointId: any;
+  endPointData:any;
     
   parameterArraySecReqPolicy: any = [];
   parameterArraySecResPolicy: any = [];
@@ -36,11 +37,15 @@ export class PoliciesComponent implements OnInit{
       enableDebug: [false],
       autoJoinPolicies: [false],
       disableMacros: [false],
+
       resSchemaValErrorMsg: [null],
       resSchemaValErrorStCode: [null],
+      
+
       secReqPolicyArrayValue: [[]],
       secResPolicyArrayValue: [[]],
       jwtReqPolicyArrayValue: [[]],
+
       isSpFilterActive:[false],
       isRequestSchValidatorActive:[false],
       isResponseSchValidatorActive:[false],
@@ -128,38 +133,59 @@ export class PoliciesComponent implements OnInit{
       console.log('Parent ID:', this.endpointId);
     });
 
-    // this.formGroupPolicies.patchValue({
-    //   secReqPolicyArrayValue:this.formData?.extra_config?.["security/policies"]?.req?.policies,
-    //   secReqErrorBody:this.formData?.extra_config?.["security/policies"]?.req?.error?.body,
-    //   secReqErrorStCode:this.formData?.extra_config?.["security/policies"]?.req?.error?.status,
-    //   // securityReqPolicy: [null],
-    //   secReqErrorContentType:this.formData?.extra_config?.["security/policies"]?.req?.error?.content_type ,
-    //   // securityResPolicy: [null],
-    //   secResErrorStCode: this.formData?.extra_config?.["security/policies"]?.resp?.error?.status,
-    //   secResErrorBody: this.formData?.extra_config?.["security/policies"]?.resp?.error?.body,
-    //   secResErrorContentType: this.formData?.extra_config?.["security/policies"]?.resp?.error?.content_type,
-    //   jwtReqPolicy: '',
-    //   enableDebug: this.formData?.extra_config?.["security/policies"]?.debug,
-    //   autoJoinPolicies: this.formData?.extra_config?.["security/policies"]?.auto_join_policies,
-    //   disableMacros: this.formData?.extra_config?.["security/policies"]?.disable_macros,
-    //   resSchemaValErrorMsg: this.formData?.extra_config?.["plugin/req-resp-modifier"]?.["response-schema-validator"]?.error?.body,
-    //   resSchemaValErrorStCode: this.formData?.extra_config?.["plugin/req-resp-modifier"]?.["response-schema-validator"]?.error?.status,
-    //   secResPolicyArrayValue: this.formData?.extra_config?.["security/policies"]?.resp?.policies,
-    //   jwtReqPolicyArrayValue: this.formData?.extra_config?.["security/policies"]?.jwt?.policies,
-    //   isSpFilterActive:!!this.formData?.extra_config?.["security/policies"],
-    //   isRequestSchValidatorFiltrActive:!!this.formData?.extra_config?.["validation/json-schema"],
-    //   isRequestSchValidatorActive:!!this.formData?.extra_config?.["plugin/req-resp-modifier"]?.name?.includes("response-schema-validator"),
-    //   reqJSONSchema:this.formData?.extra_config?.["validation/json-schema"],
-    //   resJSONSchema:this.formData?.extra_config?.["plugin/req-resp-modifier"]?.["response-schema-validator"]?.schema
-    // })
+    this.endpointService.getEndpointById(this.endpointId).subscribe({
+      next:(res)=>{
+        console.log(res);
+        this.endPointData = res;
+
+        if(this.endPointData){
+          this.parameterArraySecReqPolicy=this.endPointData?.extra_config?.["security/policies"]?.req?.policies ?? [];
+          this.parameterArraySecResPolicy=this.endPointData?.extra_config?.["security/policies"]?.resp?.policies ?? [];
+          this.parameterArrayJwtValReqPolicy=this.endPointData?.extra_config?.["security/policies"]?.jwt?.policies ?? [];
+        }
+
+        this.formGroupPolicies.patchValue({
+          secReqPolicyArrayValue:this.endPointData?.extra_config?.["security/policies"]?.req?.policies,
+          secReqErrorBody:this.endPointData?.extra_config?.["security/policies"]?.req?.error?.body,
+          secReqErrorStCode:this.endPointData?.extra_config?.["security/policies"]?.req?.error?.status,
+          secReqErrorContentType:this.endPointData?.extra_config?.["security/policies"]?.req?.error?.content_type,
+          secResPolicyArrayValue: this.endPointData?.extra_config?.["security/policies"]?.resp?.policies,
+          secResErrorStCode: this.endPointData?.extra_config?.["security/policies"]?.resp?.error?.status,
+          secResErrorBody: this.endPointData?.extra_config?.["security/policies"]?.resp?.error?.body,
+          secResErrorContentType: this.endPointData?.extra_config?.["security/policies"]?.resp?.error?.content_type,
+          jwtReqPolicyArrayValue: this.endPointData?.extra_config?.["security/policies"]?.jwt?.policies,
+
+          enableDebug: this.endPointData?.extra_config?.["security/policies"]?.debug,
+          autoJoinPolicies: this.endPointData?.extra_config?.["security/policies"]?.auto_join_policies,
+          disableMacros: this.endPointData?.extra_config?.["security/policies"]?.disable_macros,
 
 
+          resSchemaValErrorMsg: this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["response-schema-validator"]?.error?.body,
+          resSchemaValErrorStCode: this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["response-schema-validator"]?.error?.status,
+
+          isSpFilterActive:!!this.endPointData?.extra_config?.["security/policies"],
+
+          isRequestSchValidatorActive:!!this.endPointData?.extra_config?.["validation/json-schema"],
+
+          isResponseSchValidatorActive:!!this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.name?.includes("response-schema-validator"),
+
+          reqJSONSchema:JSON.stringify(this.endPointData?.extra_config?.["validation/json-schema"],  null, 2),
+
+          resJSONSchema: JSON.stringify(this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["response-schema-validator"]?.schema,  null, 2)
+        })
+        
+      },
+      error:(err)=>{
+        console.error(err);
+      }
+    });
   }
 
   submit(){    
     const body = {
       ...(this.formGroupPolicies.value?.isSpFilterActive && {
         "security/policies": {
+          ...(!!this.endPointData?.extra_config?.["security/policies"] && {"id":this.endPointData?.extra_config?.["security/policies"]?.id}),
           "req": {
             "policies": this.formGroupPolicies.value?.secReqPolicyArrayValue,
             "error": {
@@ -187,11 +213,13 @@ export class PoliciesComponent implements OnInit{
 
       ...((this.formGroupPolicies.value?.isResponseSchValidatorActive) && {
         "plugin/req-resp-modifier": {
+          ...(!!this.endPointData?.extra_config?.["plugin/req-resp-modifier"] && {"id":this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.id}),
           "name": [
             this.formGroupPolicies.value?.isResponseSchValidatorActive && "response-schema-validator",
           ].filter(Boolean),
           ...(this.formGroupPolicies.value?.isResponseSchValidatorActive && {
             "response-schema-validator": {
+              ...(!!this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["response-schema-validator"] && {"id":this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["response-schema-validator"].id}),
               "error": {
                 "status": this.formGroupPolicies.value?.resSchemaValErrorStCode,
                 "body": this.formGroupPolicies.value?.resSchemaValErrorMsg
@@ -204,14 +232,17 @@ export class PoliciesComponent implements OnInit{
       ...(this.formGroupPolicies.value?.isRequestSchValidatorActive &&{"validation/json-schema": this.formGroupPolicies.value?.reqJSONSchema ? JSON.parse(this.formGroupPolicies.value?.reqJSONSchema) :null}),
     };
     
-    this.endpointService.addPolicies(this.endpointId, body).subscribe({
-      next:(res)=>{
-        console.log(res)
-      },
-      error:(err)=>{
-        console.error(err)
-      }
-    })
+
+    console.log(body);
+    
+    // this.endpointService.addPolicies(this.endpointId, body).subscribe({
+    //   next:(res)=>{
+    //     console.log(res)
+    //   },
+    //   error:(err)=>{
+    //     console.error(err)
+    //   }
+    // })
 
 
   }

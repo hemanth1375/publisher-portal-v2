@@ -16,6 +16,9 @@ export const urls={
     getEndpoint:host+"/krakend/endpoint/getEndpoint",
     updateBackend:host+"/krakend/endpoint/backend/updateBackendOfEndpoint",
     addParametersByEndpoint: host+"/krakend/endpoint/addParameterForwarding",
-    addThrottling: host + "/krakend/endpoint/addOrUpdateThrottling",
-    addPolicies:host +"/krakend/endpoint/addOrUpdatePolices"
+    addUpdateThrottling: host + "/krakend/endpoint/addOrUpdateThrottling",
+    addResponse: host + "/krakend/endpoint/addOrUpdateResponseManipulation",
+    addPolicies:host +"/krakend/endpoint/addOrUpdatePolices",
+    addConnectivity : host + "/krakend/endpoint/addOrUpdateConnectivityOptions",
+    addOpenAPI:host +"/krakend/endpoint/addOrUpdateOpenApi"
 }
