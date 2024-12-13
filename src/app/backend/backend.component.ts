@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MainService } from '../services/main.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommunicationService } from '../services/communication.service';
 
 @Component({
   selector: 'app-backend',
@@ -72,7 +73,43 @@ export class BackendComponent {
   enableDebugConn_tooltip="shows useful information in the logs with DEBUG level about the input received and the body generated. Do not enable in production."
   pathConn_tooltip="The Content-Type that you are coding in the template. Defaults to application/json";
   connectWebProxy_tooltip="The proxy address used to forward the traffic. The address must contain the protocol and the port."
-  redirectConn_tooltip="Check if you don't want KrakenD to follow redirects and let <br> the consuming user to receive the 30x status code."
+  redirectConn_tooltip="Check if you don't want KrakenD to follow redirects and let <br> the consuming user to receive the 30x status code.";
+  restToGraphType_tooltip="The type of query you are declaring.";
+  restToGraphName_tooltip="A meaningful and explicit name for your operation, required in multi-operation documents and for helpful debugging and server-side logging.";
+  restToGraphQueryPath_tooltip="Path to the file containing the query. This file is loaded during startup and never checked again, if it changes KrakenD will be unaware of it.";
+  restToGraphInlineQuery_tooltip="An inline GraphQL query you want to send to the server. Use this attribute for simple and inline queries, use query_path instead for larger queries. Use escaping when needed.";
+  restToGraphvarValue_tooltip="A dictionary defining all the variables sent to the GraphQL server. You can use {placeholders} to inject parameters from the endpoint URL. In the example above, the GraphQL server receives a variable user with the {user_id} declared in the endpoint. The dictionary can have any nesting level you need, but nested variables cannot contain {placeholders}."
+  amqpConsName_tooltip="The name of the queue you want to connect to";
+  amqpConExchange_tooltip="The entity name where messages are <br> sent for routing";
+  amqpConoperationType_tooltip="The type of query you are declaring.";
+  amqpRoutKeys_tooltip="List of all the routing keys or pattern to bind the queue to the exchange";
+  amqpConPrefetch_tooltip="Specifies a prefetch window in terms of whole messages";
+  amqpConDurable_tooltip="Durable exchanges survive broker restart (persist to disk) whereas transient exchanges do not";
+  amqpConNoLocal_tooltip="The server will not send messages to the connection that published them.";
+  awsLambdaFunc_tooltip="Name of the lambda function as saved in the AWS service. Leave EMPTY if taken from a parameter.";
+  awsLambdaFuncParam_tooltip="When the lambda function name comes in a {placeholder} inside the endpoint.";
+  awsLambdaRegion_tooltip="The AWS identifier region (e.g.: us-east-1, eu-west-2, etc.)";
+  awsMaxRetries_tooltip="Maximum times you want to execute the function until you have a successful response.";
+  awsLambdaEndpoint_tooltip="An optional parameter to customize the Lambda endpoint to call. Useful when Localstack is used for testing.";
+  restToGrpcReqNameCon_tooltip="Defines the naming convention used to format the data.";
+  restToGrpcResNameCon_tooltip="Defines the naming convention used to format the data.";
+  restToGrpcUserReqBody_tooltip="Enables the use of the sent body to fill the gRPC request.";
+  restToGrpcAllowInsecure_tooltip="Allow untrusted certificates in development stage.";
+  restToGrpcRemoveUnset_tooltip="When the response has missing fields from the  definition, they are returned with default values. Setting this flag to true removes those fields from the response, while setting it to false or not setting it, returns all the fields in the definition.";
+  restToGrpcEnumasString_tooltip="Enum types are returned as numeric values (flag set to false). Set this flag to true to return the string representation of the enum value. For instance, an enum representing allergies, such as ['NUTS', 'MILK', ' SOY', 'WHEAT'] would return a value SOY when this flag is true, or 2 when false.";
+  restToGrpcTimestampAsString_tooltip="Well-known Timestamp types (google.protobuf.Timestamp) are returned as a struct containing fields with seconds and nanos fields (flag set to false). Setting this flag to true transforms the timestamps into a string representation in RFC3999 format.";
+  restToGrpcDurationAsString_tooltip="Well-known Duration types (google.protobuf.Duration) are returned as a struct containing fields with seconds and nanos fields (flag set to false). Setting this flag to true transforms the timestamps into a string representation in seconds.";
+  restToGrpcDisableQuery_tooltip="When checked it does not use URL parameters or query strings to fill the gRPC payload to send. If you don't set request body, there will be no input used for the gRPC message (it's fine if you want an empty message)";
+  restToGrpcInputMap_tooltip="A dictionary that converts the user input into a different field during the backend request.";
+  pubSubType_tooltip="Click on a subscription_url type to load an example URL.";
+  pubSubUrl_tooltip="The subscription URL. See the pub/sub documentation for all supported protocols";
+  pubSubPublisherType_tooltip="Click on a subscription_url type to load an example URL.";
+  pubSubPublisherUrl_tooltip="The subscription URL. See the pub/sub documentation for all supported protocols";
+  amqpProName_tooltip="The name of the queue you want to connect to";
+  amqpProExchange_tooltip="The entity name where messages are sent for routing";
+  amqpProBackoffst_tooltip="When the connection to your event source gets interrupted for whatever reason, KrakenD keeps trying to reconnect after a delay";
+  amqpProDurable_tooltip="Durable exchanges survive broker restart whereas transient exchanges do not";
+  
 
   panelOpenState = false;
   mainUrl:any;
@@ -132,17 +169,16 @@ export class BackendComponent {
   formArray: FormArray; // Holds a FormGroup for each panel
   items: any[] = []; // Items from the backend
 
-  constructor(private fb: FormBuilder, private http: HttpClient,private mainSer:MainService,private route:ActivatedRoute) {
+  constructor(private fb: FormBuilder, private http: HttpClient,private mainSer:MainService,private route:ActivatedRoute,private router:Router,private communucationSer:CommunicationService) {
     this.itemsRes = [
       { name: 'Deny' },
       { name: 'Allow' },
     ];
     this.formArray = this.fb.array([]);
     // response manipulation
-    this.formArray.controls.forEach((_, index) => {
-      this.applyDynamicLogic(index);
-      // this.patchRenamingObj(index,)
-    });
+    // this.formArray.controls.forEach((_, index) => {
+    //   this.applyDynamicLogic(index);
+    // });
   }
   // patchRenamingObj(formGroupIndex: number, renamingObj: Record<string, string>) {
   //   // Convert renamingObj (object) to array of key-value pairs
@@ -156,15 +192,15 @@ export class BackendComponent {
   //   this.getFormGroup(formGroupIndex).get('objectMapValue')?.setValue(mapArray);
   // }
   
-  applyDynamicLogic(index: number): void {
-    const formGroup = this.getFormGroup(index);
+  applyDynamicLogic(group:any,index: number): void {
+    // const formGroup = this.getFormGroup(index);
   
     // Disable 'path' field initially
-    formGroup.get('path')?.disable();
+    group.get('path')?.disable();
   
     // Watch 'isCollection' changes and enable/disable 'rootObject'
-    formGroup.get('isCollection')?.valueChanges.subscribe((isChecked) => {
-      const rootObjectControl = formGroup.get('rootObject');
+    group.get('isCollection')?.valueChanges.subscribe((isChecked:any) => {
+      const rootObjectControl = group.get('rootObject');
       if (isChecked) {
         rootObjectControl?.disable();
       } else {
@@ -172,19 +208,7 @@ export class BackendComponent {
       }
     });
   
-    // Watch 'bodyEditor' changes and toggle 'template' and 'path'
-    formGroup.get('bodyEditor')?.valueChanges.subscribe((value) => {
-      const bodyEditorControl = formGroup.get('template');
-      const pathControl = formGroup.get('path');
-  
-      if (value === 'bodyeditor') {
-        bodyEditorControl?.enable();
-        pathControl?.disable();
-      } else if (value === 'external') {
-        bodyEditorControl?.disable();
-        pathControl?.enable();
-      }
-    });
+    
   }
   
 endpointId:any;
@@ -206,9 +230,10 @@ endpointId:any;
       // Fetch items only after the endpointId is set
       if (this.endpointId) {
         this.fetchItemsFromBackend();
-        
+       
       }
     });
+    
   }
   
 
@@ -222,7 +247,7 @@ endpointId:any;
   initializeFormGroups() {
     this.items.forEach((item,index) => {
       console.log(item);
-      
+   
       const group = this.fb.group({
         id: [item.id],
         extraConfigId:[item?.extra_config?.id],
@@ -236,7 +261,7 @@ endpointId:any;
       decodeAs:[item?.encoding],
       staticUrl:[item?.extra_config?.['backend/static-filesystem']?.path],
       directory_Listing:[item?.extra_config?.['backend/static-filesystem']?.directory_listing],
-      bodyEditor:[item?.bodyEditor],
+      bodyEditor:[item?.extra_config?.['modifier/body-generator']?.path ?"external":"bodyeditor"],
       template:[item?.extra_config?.['modifier/body-generator']?.template],
       contentType:[item?.extra_config?.['modifier/body-generator']?.content_type],
       debug:[item?.extra_config?.['modifier/body-generator']?.debug],
@@ -264,7 +289,7 @@ endpointId:any;
       expression:[item?.extra_config?.["modifier/jmespath"]?.expr],
 
 
-      // bodyEditorResponse:[item.bodyEditorResponse],
+      bodyEditorResponse:[item.bodyEditorResponse],
       templateResponse:[item?.extra_config?.["modifier/response-body-generator"]?.template],
       contentTypeResponse:[item?.extra_config?.["modifier/response-body-generator"]?.content_type],
       debugResponse:[item?.extra_config?.["modifier/response-body-generator"]?.debug],
@@ -341,7 +366,7 @@ endpointId:any;
       isPublicPublisherActive:[!!item.extra_config?.["backend/pubsub/publisher"]],
       isAMQPproducerActive:[!!item.extra_config?.["backend/amqp/producer"]],
     
-      // bodyEditorConnect:[item.bodyEditorConnect],
+      bodyEditorConnect:[item.bodyEditorConnect],
       templateConnect:[item?.extra_config?.["backend/soap"]?.template],
       contentTypeConnect:[item?.extra_config?.["backend/soap"]?.content_type],
       debugConnect:[item?.extra_config?.["backend/soap"]?.debug],
@@ -402,6 +427,8 @@ endpointId:any;
       amqpProducerBackoffStrategyForm: [item?.extra_config?.["backend/amqp/producer"]?.backoff_strategy],
       amqpProducerDurableForm: [item?.extra_config?.["backend/amqp/producer"]?.durable]
       });
+      this.subscribeToValueChanges(group,index);
+       this.applyDynamicLogic(group,index);
       this.formArray.push(group);
       this.hostArray.push(item.host??[])
       this.parameterArraySecReqPolicy.push(item?.extra_config?.["security/policies"]?.req?.policies ??[]),
@@ -417,9 +444,58 @@ endpointId:any;
       this.objectMapsConnectRestToGraph.push(new Map<string, string>());
       this.patchRenamingConnectRestToGraphObj(index, item?.extra_config?.["backend/graphql"]?.variables);
       // this.faltMapArr[index].push(item?.extra_config?.proxy?.flatmap_filter)
-      this.faltMapArr.push(new Array<any>());
-      this.patchFlatMapArray(index,item?.extra_config?.proxy?.flatmap_filter ??[])
+      this.faltMapArr.push(item?.extra_config?.proxy?.flatmap_filter ??[]);
+      // this.patchFlatMapArray(index,item?.extra_config?.proxy?.flatmap_filter ??[])
     });
+  }
+  subscribeToValueChanges(group:any,index:any): void {
+   
+    console.log(this.formArray.controls.length);
+    
+    // this.formArray.controls.map((group, index) => {
+      // console.log(group,index);
+      // const group=this.getFormGroup(index)
+      // bodyeditor
+      group.get('bodyEditor')?.valueChanges.subscribe((value:any) => {
+        console.log(`Value changed in FormGroup at index ${index}:`, value);
+        const bodyEditorControl = group.get('template');
+      const pathControl = group.get('path');
+  
+      if (value === 'bodyeditor') {
+        bodyEditorControl?.enable();
+        pathControl?.disable();
+      } else if (value === 'external') {
+        bodyEditorControl?.disable();
+        pathControl?.enable();
+      }
+      });
+      group.get('bodyEditorResponse')?.valueChanges.subscribe((value:any) => {
+        console.log(`Value changed in FormGroup at index ${index}:`, value);
+        const bodyEditorControl = group.get('templateResponse');
+        const pathControl = group.get('pathResponse');
+    
+        if (value === 'bodyeditorResponse') {
+          bodyEditorControl?.enable();
+          pathControl?.disable();
+        } else if (value === 'externalResponse') {
+          bodyEditorControl?.disable();
+          pathControl?.enable();
+        }
+      });
+      group.get('bodyEditorConnect')?.valueChanges.subscribe((value:any) => {
+        console.log(`Value changed in FormGroup at index ${index}:`, value);
+        const bodyEditorControl = group.get('templateConnect');
+        const pathControl = group.get('pathConnect');
+    
+        if (value === 'bodyeditorConnect') {
+          bodyEditorControl?.enable();
+          pathControl?.disable();
+        } else if (value === 'externalConnect') {
+          bodyEditorControl?.disable();
+          pathControl?.enable();
+        }
+      });
+    // });
   }
 showBackend:boolean=true;
   addPanel() {
@@ -438,7 +514,7 @@ showBackend:boolean=true;
       decodeAs: null,
       staticUrl: null,
       directory_Listing: false,
-      bodyEditor: '',
+      bodyEditor: 'bodyeditor',
       template: '',
       contentType: '',
       debug: false,
@@ -467,7 +543,7 @@ showBackend:boolean=true;
       expression:'',
 
 
-      bodyEditorResponse:'',
+      bodyEditorResponse:'bodyeditorResponse',
       templateResponse:'',
       contentTypeResponse:'',
       debugResponse:false,
@@ -544,7 +620,7 @@ showBackend:boolean=true;
       isPublicPublisherActive:false,
       isAMQPproducerActive:false,
     
-      bodyEditorConnect:'',
+      bodyEditorConnect:'bodyeditorConnect',
       templateConnect:'',
       contentTypeConnect:'',
       debugConnect:false,
@@ -623,7 +699,7 @@ showBackend:boolean=true;
       decodeAs:[null],
       staticUrl:[null],
       directory_Listing:[false],
-      bodyEditor:[''],
+      bodyEditor:['bodyeditor'],
       template:[''],
       contentType:[''],
       debug:[false],
@@ -651,7 +727,7 @@ showBackend:boolean=true;
       expression:[''],
 
 
-      bodyEditorResponse:[''],
+      bodyEditorResponse:['bodyeditorResponse'],
       templateResponse:[''],
       contentTypeResponse:[''],
       debugResponse:[false],
@@ -728,7 +804,7 @@ showBackend:boolean=true;
       isPublicPublisherActive:[false],
       isAMQPproducerActive:[false],
     
-      bodyEditorConnect:[''],
+      bodyEditorConnect:['bodyeditorConnect'],
       templateConnect:[''],
       contentTypeConnect:[''],
       debugConnect:[false],
@@ -780,8 +856,25 @@ showBackend:boolean=true;
       amqpProducerBackoffStrategyForm: [null],
       amqpProducerDurableForm: [null]
     });
+    this.mainHost=null;
+    this.mainUrl=null;
+    this.mainMethod=null;
     this.formArray.push(newGroup);
-    this.applyDynamicLogic(this.formArray.length - 1);
+    this.hostArray[this.formArray.length - 1]=[];
+    this.parameterArraySecReqPolicy[this.formArray.length - 1]=[];
+    this.parameterArraySecResPolicy[this.formArray.length-1]=[];
+    this.parameterArrayJwtValReqPolicy[this.formArray.length-1]=[];
+    this.amqpRoutingKeysArray[this.formArray.length-1]=[];
+   
+    this.objectMaps.push(new Map<string, string>());
+    this.objectMapsAuth.push(new Map<string, string>());
+    this.objectMapsConnect.push(new Map<string, string>());
+    this.objectMapsConnectRestToGraph.push(new Map<string, string>());
+    this.faltMapArr[this.formArray.length-1]=[];
+    // this.objectMaps[this.formArray.length-1].set(new Map<string, string>())
+    this.subscribeToValueChanges(newGroup,this.formArray.length - 1)
+    this.applyDynamicLogic(newGroup,this.formArray.length - 1);
+    console.log(this.objectMaps);
   }
   
   saveBackend(index: number) {
@@ -856,8 +949,8 @@ const backendBody=
       ...(data?.audience &&{"audience": data?.audience})
     }}),
     ...(data?.isNtlmAuthActive &&{"auth/ntlm": {
-      "user": "g",
-      "password": "yu"
+      "user": data?.user,
+      "password": data?.password
     }}),
     ...(data?.isSecPolicyActive &&{"security/policies": {
       "req": { 
@@ -949,7 +1042,16 @@ const backendBody=
             }}),
             "proxy": {
               "flatmap_filter": data?.flatmapFilterArr
-            }
+            },
+            ...(data.isAMQPconsumerActive &&{"backend/amqp/consumer": {
+              ...(data.amqpConsumerQueueNameForm &&{"name": data.amqpConsumerQueueNameForm}),
+              ...(data.amqpConsumerExchangeForm &&{"exchange": data.amqpConsumerExchangeForm}),
+              ...(data.amqpConsumerBackOffStratgyForm &&{"backoff_strategy": data.amqpConsumerBackOffStratgyForm}),
+              ...(data.amqpConsumerDurableForm &&{"durable": data.amqpConsumerDurableForm}),
+              ...(data.amqpRoutingKeysArray &&{"routing_key": data.amqpRoutingKeysArray}),
+              ...(data.amqpConsumerPrefetchCntForm &&{"prefetch_count": data.amqpConsumerPrefetchCntForm}),
+              ...(data.amqpConsumerNoLocalForm &&{"no_local": data.amqpConsumerNoLocalForm})
+            }})
       },
       "target": null,
       "method": data?.method,
@@ -961,16 +1063,17 @@ const backendBody=
   
 }
 console.log(backendBody);
-// this.mainSer.addBackend(this.endpointId,backendBody).subscribe({
-//   next:(res:any)=>{
-//     console.log(res);
-//     this.fetchItemsFromBackend();
-//   },
-//   error:(err:any)=>{
-//     console.log(err);
+this.mainSer.addBackend(this.endpointId,backendBody).subscribe({
+  next:(res:any)=>{
+    console.log(res);
+    // this.fetchItemsFromBackend();
+    this.router.navigate([`apis/viewapi/${this.endpointId}/overview`])
+  },
+  error:(err:any)=>{
+    console.log(err);
     
-//   }
-// })
+  }
+})
 
     // this.http.post('https://api.example.com/items', data).subscribe((response: any) => {
     //   this.items[index] = { ...data, id: response.id, isNew: false }; // Update item with ID and mark as not new
@@ -1054,8 +1157,8 @@ const backendBody={
   ...(data?.audience &&{"audience": data?.audience})
 }}),
 ...(data?.isNtlmAuthActive &&{"auth/ntlm": {
-  "user": "g",
-  "password": "yu"
+  "user": data?.user,
+  "password": data?.password
 }}),
 ...(data?.isSecPolicyActive &&{"security/policies": {
   "req": { 
@@ -1090,10 +1193,10 @@ const backendBody={
     }}),
     ...(data?.isRestToSoapActive &&{"backend/soap": {
       "@comment": null,
-      "template": "",
-  "content_type": data?.contentTypeRestToSoap,
-  "debug": data?.enableDebugRestToSoap,
-      "path": data?.pathRestToSoapForm
+      ...(data?.bodyEditorConnect==='bodyeditorConnect' &&{"template": data?.templateConnect}),
+      ...(data?.contentTypeConnect &&{"content_type": data?.contentTypeConnect}),
+  ...(data?.debugConnect &&{"debug": data?.debugConnect}),
+  ...(data?.bodyEditorConnect==='externalConnect' &&{"path": data?.pathConnect})
     }}),
     ...(data?.isrestToGRPCActive &&{"backend/grpc": {
       ...(data?.objectMapValueConnectRestToGraph &&{"input_mapping": inputMapObjConnectRestToGrpc}),
@@ -1116,24 +1219,47 @@ const backendBody={
       ...(data?.staticUrl &&{"path": data?.staticUrl})
     }}),
     ...(data?.isBodymanipulationActive &&{"modifier/body-generator": {
-  ...(data?.bodyEditor &&{"template": data?.bodyEditor}),
+  ...(data?.bodyEditor==='bodyeditor' &&{"template": data?.template}),
   ...(data?.contentType &&{"content_type": data?.contentType}),
   ...(data?.debug &&{"debug": data?.debug}),
-  ...(data?.path &&{"path": data?.path})
+  ...(data?.bodyEditor==='external' &&{"path": data?.path})
 }}),
 ...( data?.isMartianActive &&{"modifier/martian": data?.martianDslTextarea}),
 ...(data.AdvResManipulationActive &&{"modifier/jmespath": {
   "expr": data.expression
 }}),
 ...(data.resManiWithGoTemplActive &&{"modifier/response-body-generator": {
-  ...(data.contentType &&{"content_type": data.contentTypeResponse}),
-  ...(data.debug &&{"debug": data.debugResponse}),
-  ...(data.path &&{"path": data.pathResponse}),
-  ...(data.template &&{"template": data.templateResponse})
+  ...(data.contentTypeResponse &&{"content_type": data.contentTypeResponse}),
+  ...(data.debugResponse &&{"debug": data.debugResponse}),
+  ...(data.pathResponse &&{"path": data.pathResponse}),
+  ...(data.bodyEditorResponse==='bodteditorResponse' &&{"template": data.templateResponse})
+}}),
+...(data.isPublicSubscriberActive &&{"backend/pubsub/susbcriber": {
+  "subscription_url": data.publicSubSubscriptionURLForm
+}}),
+...(data.isPublicPublisherActive &&{"backend/pubsub/publisher": {
+  "topic_url": data.publicPubTopicURLForm
+}}),
+...(data.isAMQPproducerActive &&{"backend/amqp/producer": {
+  "exchange": data.amqpProducerExchangeForm,
+  "backoff_strategy":data.amqpProducerBackoffStrategyForm,
+  "durable": data.amqpProducerDurableForm,
+  // "mandatory": true,
+  // "immediate": false,
+  "name": data.amqpProducerQueueNameForm
 }}),
 "proxy": {
               "flatmap_filter": data?.flatmapFilterArr
-            }
+            },
+            ...(data.isAMQPconsumerActive &&{"backend/amqp/consumer": {
+              ...(data.amqpConsumerQueueNameForm &&{"name": data.amqpConsumerQueueNameForm}),
+              ...(data.amqpConsumerExchangeForm &&{"exchange": data.amqpConsumerExchangeForm}),
+              ...(data.amqpConsumerBackOffStratgyForm &&{"backoff_strategy": data.amqpConsumerBackOffStratgyForm}),
+              ...(data.amqpConsumerDurableForm &&{"durable": data.amqpConsumerDurableForm}),
+              ...(data.amqpRoutingKeysArray &&{"routing_key": data.amqpRoutingKeysArray}),
+              ...(data.amqpConsumerPrefetchCntForm &&{"prefetch_count": data.amqpConsumerPrefetchCntForm}),
+              ...(data.amqpConsumerNoLocalForm &&{"no_local": data.amqpConsumerNoLocalForm})
+            }})
   },
   // "target": null,
   "method": data?.method,
@@ -1147,7 +1273,16 @@ const backendBody={
 this.mainSer.updateBackend(backendId,backendBody).subscribe({
   next:(res:any)=>{
     console.log(res);
-    this.fetchItemsFromBackend();
+    // this.fetchItemsFromBackend();
+    this.router.navigate([`apis/viewapi/${this.endpointId}/overview`])
+    // this.communucationSer.updateShowParent(false);
+    // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+    //   this.router.navigate([
+    //     '/apis/viewapi',
+    //     this.endpointId, // Assuming 'apiId' is a dynamic route parameter
+    //     'backends'
+    //   ]);
+    // });
   },
   error:(err:any)=>{
     console.log(err);
@@ -1196,6 +1331,9 @@ this.mainSer.updateBackend(backendId,backendBody).subscribe({
     const queryParamsValue = this.getFormGroup(formIndex).get('host')?.value;
     
     if (queryParamsValue) {
+      if (!this.hostArray[formIndex]) {
+        this.hostArray[formIndex] = [];
+    }
       this.hostArray[formIndex].push(queryParamsValue);
       this.updateParametersArrayRequest(formIndex);
       this.getFormGroup(formIndex).get('host')?.reset();

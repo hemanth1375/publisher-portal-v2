@@ -3,11 +3,11 @@
     <div class="row mt-3 mb-3 row-size">
         <div class="d-flex  align-items-end add-backend">
           <div class="col-sm-3">
-            <label for="url" class="form-label">Host</label>
-            <input type="text" class="form-control" id="host" [(ngModel)]="mainHost">
+            <label for="mainHost" class="form-label">Host</label>
+            <input type="text" class="form-control" id="mainHost" [(ngModel)]="mainHost">
           </div>
             <div class="col-sm-3">
-                <label for="url" class="form-label">URL &nbsp; <svg
+                <label for="mainUrl" class="form-label">URL &nbsp; <svg
                     [matTooltip]=url_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                     fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
@@ -15,13 +15,13 @@
                         d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                 </svg></label>
                 
-                <input type="text" class="form-control" id="url" [(ngModel)]="mainUrl">
+                <input type="text" class="form-control" id="mainUrl" [(ngModel)]="mainUrl">
                 
                 
               </div>
               <div class="col-sm-3">
-                <label for="method" class="form-label">Method</label>
-                <select class="form-select" aria-label="Default select example" id="method" [(ngModel)]="mainMethod">
+                <label for="mainMethod" class="form-label">Method</label>
+                <select class="form-select" aria-label="Default select example" id="mainMethod" [(ngModel)]="mainMethod">
                   <option selected>Select Method</option>
                   <option value="GET">GET</option>
                   <option value="POST">POST</option>
@@ -94,8 +94,8 @@
                             <div class="hostname-div">
                               <!-- <input type="text" class="form-control" formControlName="host" /> -->
                               <div class="input-group mb-3">
-                                <input type="text" id="host" class="form-control" formControlName="host">
-                                <button class="btn btn-primary" type="button" id="button-addonHost"
+                                <input type="text" id="host{{i}}" class="form-control" formControlName="host">
+                                <button class="btn btn-primary" type="button" id="button-addonHostReq{{i}}"
                                     (click)="addParameterRequest(i)"><i class="bi bi-plus-lg"></i></button>
                             </div>
                               <!-- <button mat-raised-button class="addhost-btn mt-1" (click)="addParameterRequest(i)">Add host</button> -->
@@ -111,8 +111,8 @@
                           <div class="row mt-3">
                             <div class="col-sm-12 col-md-3">
                               <div class="mb-3">
-                                <label for="method" class="form-label">Method</label>
-                                <select class="form-select" aria-label="Default select example" id="method" formControlName="method">
+                                <label for="method{{i}}" class="form-label">Method</label>
+                                <select class="form-select" aria-label="Default select example" id="method{{i}}" formControlName="method">
                                   <option selected>Select Method</option>
                                   <option value="GET">GET</option>
                                   <option value="POST">POST</option>
@@ -124,27 +124,27 @@
                             </div>
                             <div class="col-sm-12 col-md-3">
                               <div class="mb-3">
-                                <label for="url" class="form-label">URL &nbsp; <svg
+                                <label for="url{{i}}" class="form-label">URL &nbsp; <svg
                                     [matTooltip]=url_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                                     <path
                                         d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                                 </svg></label>
-                                <input type="text" class="form-control" id="url" formControlName="endpointUrl">
+                                <input type="text" class="form-control" id="url{{i}}" formControlName="endpointUrl">
                                 
                               </div>
                             </div>
                             <div class="col-sm-12 col-md-3">
                               <div class="mb-3">
-                                <label for="decodeas" class="form-label">Decode as &nbsp; <svg
+                                <label for="decodeas{{i}}" class="form-label">Decode as &nbsp; <svg
                                     [matTooltip]=decodeas_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                                     <path
                                         d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                                 </svg></label>
-                                <select class="form-select" aria-label="Default select example" id="decodeas" formControlName="decodeAs">
+                                <select class="form-select" aria-label="Default select example" id="decodeas{{i}}" formControlName="decodeAs">
                                   <option selected>Select Format</option>
                                   <option value="json">JSON</option>
                                   <option value="xml">XML</option>
@@ -156,9 +156,9 @@
                             </div>
                             <div class="col-sm-12 col-md-3">
                               <div class="mb-3">
-                                <label class="form-label">Resolution</label>
+                                <label for="sanitization{{i}}" class="form-label">Resolution</label>
                                 <div class="form-check">
-                                  <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"
+                                  <input class="form-check-input" type="checkbox" value="" id="sanitization{{i}}"
                                     formControlName="sanitization">
                                   <label class="form-check-label" for="flexCheckChecked">
                                     Disable Sanitization &nbsp; <svg
@@ -186,7 +186,10 @@
                               <h3>Static Server</h3>
                             </div>
                             <div>
-                              <mat-slide-toggle color="blue" formControlName="isStaticServerActive"></mat-slide-toggle>
+                              <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="isStaticServerActive{{i}}" formControlName="isStaticServerActive">
+                              </div>
+                              <!-- <mat-slide-toggle color="blue" formControlName="isStaticServerActive"></mat-slide-toggle> -->
                             </div>
                           </div>
                           <div>
@@ -196,14 +199,14 @@
                             <div class="row">
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="staticUrl" class="form-label">URL &nbsp; <svg
+                                  <label for="staticUrl{{i}}" class="form-label">URL &nbsp; <svg
                                     [matTooltip]=staticUrl_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                                     <path
                                         d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                                 </svg></label>
-                                  <input type="text" class="form-control" id="staticUrl" formControlName="staticUrl"
+                                  <input type="text" class="form-control" id="staticUrl{{i}}" formControlName="staticUrl"
                                     placeholder="/etc/krakend/assets">
                                   
                                 </div>
@@ -212,9 +215,9 @@
                                 <div class="mb-3">
                                   <!-- <label class="form-label">Resolution</label> -->
                                   <div class="form-check mt-4">
-                                    <input class="form-check-input" type="checkbox" value="" id="directory"
+                                    <input class="form-check-input" type="checkbox" value="" id="directory{{i}}"
                                       formControlName="directory_Listing">
-                                    <label class="form-check-label" for="directory">
+                                    <label class="form-check-label" for="directory{{i}}">
                                       Directory Listing  &nbsp; <svg
                                       [matTooltip]=directory_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                       fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
@@ -240,34 +243,37 @@
                               <h3>Body Manipulation and Generation</h3>
                             </div>
                             <div>
-                              <mat-slide-toggle color="blue" formControlName="isBodymanipulationActive"></mat-slide-toggle>
+                              <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="isBodymanipulationActive{{i}}" formControlName="isBodymanipulationActive">
+                              </div>
+                              <!-- <mat-slide-toggle color="blue" formControlName="isBodymanipulationActive"></mat-slide-toggle> -->
                             </div>
                           </div>
                   
                           @if(getFormGroup(i).value.isBodymanipulationActive){
                           <div class="row">
                             <div class="col-md-5 col-sm-12 form-check form-check-inline">
-                              <input class="form-check-input" type="radio" formControlName="bodyEditor" id="inlineRadio1"
+                              <input class="form-check-input" type="radio" formControlName="bodyEditor" id="inlineRadio1{{i}}"
                                 value="bodyeditor">
-                              <label class="form-check-label" for="inlineRadio1">Use the inline body editor</label>
+                              <label class="form-check-label" for="inlineRadio1{{i}}">Use the inline body editor</label>
                             </div>
                   
                             <div class="col-md-5 col-sm-12 form-check form-check-inline">
-                              <input class="form-check-input" type="radio" formControlName="bodyEditor" id="inlineRadio2"
+                              <input class="form-check-input" type="radio" formControlName="bodyEditor" id="inlineRadio2{{i}}"
                                 value="external">
-                              <label class="form-check-label" for="inlineRadio2">An external file</label>
+                              <label class="form-check-label" for="inlineRadio2{{i}}">An external file</label>
                             </div>
                           </div>
                   
                           <div class="col-sm-12">
-                            <label for="exampleFormControlTextarea1" class="form-label">Body Editor &nbsp; <svg
+                            <label for="templateTest{{i}}" class="form-label">Body Editor &nbsp; <svg
                                 [matTooltip]=bodyEditor_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                                 <path
                                     d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                             </svg></label>
-                            <textarea class="form-control fingerprint" id="exampleFormControlTextarea1" rows="3"
+                            <textarea class="form-control fingerprint" id="templateTest{{i}}" rows="3"
                               formControlName="template"></textarea>
                             <!-- <div class="form-text">The response body you will return to the end-user. You can introduce the variables
                               .resp_headers.xxx, .resp_headers.xxx (with no-op), .resp_status.xxx (with no-op), .resp_body.xxx,
@@ -276,26 +282,26 @@
                   
                           <div class="row mt-2">
                             <div class="col-sm-6">
-                              <label for="conType" class="form-label">Content Type &nbsp; <svg
+                              <label for="conType{{i}}" class="form-label">Content Type &nbsp; <svg
                                 [matTooltip]=contentType_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                                 <path
                                     d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                             </svg></label>
-                              <input type="text" id="conType" class="form-control" formControlName="contentType"
+                              <input type="text" id="conType{{i}}" class="form-control" formControlName="contentType"
                                 placeholder="application/json">
                               
                             </div>
                             <div class="col-sm-12 col-md-6">
-                                <label for="path" class="form-label">Path  &nbsp; <svg
+                                <label for="path{{i}}" class="form-label">Path  &nbsp; <svg
                                     [matTooltip]=path_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                                     <path
                                         d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                                 </svg></label>
-                                <input type="text" id="path" class="form-control" formControlName="path" placeholder="./file.tmpl.xml">
+                                <input type="text" id="path{{i}}" class="form-control" formControlName="path" placeholder="./file.tmpl.xml">
                                 
                               </div>
                             
@@ -305,8 +311,8 @@
                           <div class="col-sm-12 col-md-6 mt-2">
                             <!-- <mat-checkbox class="example-margin" formControlName="debug">Enable Debug</mat-checkbox> -->
                              <div class="form-check">
-                              <input class="form-check-input" formControlName="debug" type="checkbox" value="" id="debug">
-                              <label class="form-check-label" for="debug">
+                              <input class="form-check-input" formControlName="debug" type="checkbox" value="" id="debug{{i}}">
+                              <label class="form-check-label" for="debug{{i}}">
                                 Debug  &nbsp; <svg
                                 [matTooltip]=debug_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
@@ -334,7 +340,10 @@
                               <h3>Martian (Req/Resp static manipulation)</h3>
                             </div>
                             <div>
-                              <mat-slide-toggle color="blue" formControlName="isMartianActive"></mat-slide-toggle>
+                              <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="isMartianActive{{i}}" formControlName="isMartianActive">
+                              </div>
+                              <!-- <mat-slide-toggle color="blue" formControlName="isMartianActive"></mat-slide-toggle> -->
                             </div>
                           </div>
                   
@@ -380,23 +389,23 @@
                             </div>
                             <div class="row mb-3">
                               <div class="col-sm-6">
-                                <label for="rootObject" class="form-label">Root Object  &nbsp; <svg
+                                <label for="rootObject{{i}}" class="form-label">Root Object  &nbsp; <svg
                                     [matTooltip]=rootObj_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                                     <path
                                         d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                                 </svg></label>
-                                <input type="text" id="rootObject" class="form-control" formControlName="rootObject"
+                                <input type="text" id="rootObject{{i}}" class="form-control" formControlName="rootObject"
                                   placeholder="Leave blank to use all the reponse">
                                 
                               </div>
                               <div class="col-sm-6 menu-card">
                                 <label class="form-label">is it a collection?</label>
                                 <div class="form-check">
-                                  <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"
+                                  <input class="form-check-input" type="checkbox" value="" id="isCollectionId{{i}}"
                                     formControlName="isCollection">
-                                  <label class="form-check-label" for="flexCheckChecked">
+                                  <label class="form-check-label" for="isCollectionId{{i}}">
                                     Response is a array. &nbsp; <svg
                                     [matTooltip]=collection_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
@@ -437,9 +446,15 @@
                                 <div class="col-sm-6">
                                   <div class="mb-3">
                                     <div class="d-flex gap-2">
-                                      <input type="text" class="form-control" formControlName="deniedAttr" id="audience"
+                                      <!-- <input type="text" class="form-control" formControlName="deniedAttr" id="audience"
                                         aria-describedby="audience" placeholder="attribute_name">
-                                      <button type="button" class="btn btn-outline-primary" (click)="addParameter(i,'deniedAttr')">Add</button>
+                                      <button type="button" class="btn btn-outline-primary" (click)="addParameter(i,'deniedAttr')">Add</button> -->
+                                      <div class="input-group mb-3">
+                                        <input type="text" class="form-control" formControlName="deniedAttr" id="audienceDeny{{i}}"
+                                        aria-describedby="audience" placeholder="attribute_name">
+                                        <button class="btn btn-primary" type="button" id="button-addonHostDeny{{i}}"
+                                        (click)="addParameter(i,'deniedAttr')"><i class="bi bi-plus-lg"></i></button>
+                                    </div>
                                     </div>
                                     
                                   </div>
@@ -461,9 +476,15 @@
                                 <div class="col-sm-6">
                                   <div class="mb-3">
                                     <div class="d-flex gap-2">
-                                      <input type="text" class="form-control" formControlName="allowedAttr" id="audience"
+                                      <!-- <input type="text" class="form-control" formControlName="allowedAttr" id="audience"
                                         aria-describedby="audience" placeholder="attribute_name">
-                                      <button type="button" class="btn btn-outline-primary" (click)="addParameter(i,'allowedAttr')">Add</button>
+                                      <button type="button" class="btn btn-outline-primary" (click)="addParameter(i,'allowedAttr')">Add</button> -->
+                                      <div class="input-group mb-3">
+                                        <input type="text" class="form-control" formControlName="allowedAttr" id="audience{{i}}"
+                                        aria-describedby="audience" placeholder="attribute_name">
+                                        <button class="btn btn-primary" type="button" id="button-addonHostAllow{{i}}"
+                                        (click)="addParameter(i,'allowedAttr')"><i class="bi bi-plus-lg"></i></button>
+                                    </div>
                                     </div>
                                     
                                   </div>
@@ -481,14 +502,14 @@
                             }
                             <div class="row mb-3">
                               <div class="col-sm-6">
-                                <label for="rootObject" class="form-label">Wrapping Group &nbsp; <svg
+                                <label for="rootObjectWrap{{i}}" class="form-label">Wrapping Group &nbsp; <svg
                                     [matTooltip]=wrappingGroup_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                                     <path
                                         d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                                 </svg></label>
-                                <input type="text" id="rootObject" class="form-control" formControlName="wrappingGroup"
+                                <input type="text" id="rootObjectWrap{{i}}" class="form-control" formControlName="wrappingGroup"
                                   placeholder="my-group">
                                 
                               </div>
@@ -498,17 +519,17 @@
                                 <h4>Renaming <i class="bi bi-info-circle" [matTooltip]=renaming_tooltip></i></h4>
                               </div>
                               <div class="col-sm-12 col-md-4">
-                                <label for="rootObject" class="form-label">Original Object</label>
-                                <input type="text" class="form-control" formControlName="originalObj" id="originalObject"
+                                <label for="originalObject{{i}}" class="form-label">Original Object</label>
+                                <input type="text" class="form-control" formControlName="originalObj" id="originalObject{{i}}"
                                   aria-describedby="audience" placeholder="id_imported_user">
                               </div>
                               <div class="col-sm-12 col-md-4">
-                                <label for="rootObject" class="form-label">Renamed Object</label>
+                                <label for="renamedObject{{i}}" class="form-label">Renamed Object</label>
                                 
                                   <div class="input-group mb-3">
-                                    <input type="text" class="form-control" formControlName="renamedObj" id="renamedObject"
+                                    <input type="text" class="form-control" formControlName="renamedObj" id="renamedObject{{i}}"
                                   aria-describedby="audience" placeholder="id">
-                                    <button class="btn btn-primary" type="button" id="button-addonRenameObj"
+                                    <button class="btn btn-primary" type="button" id="button-addonRenameObj{{i}}"
                                     (click)="addParameter(i,'renaming')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                             height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -537,7 +558,10 @@
                                 <h3>Caching</h3>
                               </div>
                               <div>
-                                <mat-slide-toggle color="blue" #tokenValidation formControlName="isCachingActive"></mat-slide-toggle>
+                                <div class="form-check form-switch">
+                                  <input class="form-check-input" type="checkbox" role="switch" id="isCachingActive{{i}}" formControlName="isCachingActive">
+                                </div>
+                                <!-- <mat-slide-toggle color="blue" #tokenValidation formControlName="isCachingActive"></mat-slide-toggle> -->
                               </div>
                             </div>
                       
@@ -568,7 +592,10 @@
                                 <h3>Advance Response Manipulation (JMESPath)</h3>
                               </div>
                               <div>
-                                <mat-slide-toggle color="blue" formControlName="AdvResManipulationActive"></mat-slide-toggle>
+                                <div class="form-check form-switch">
+                                  <input class="form-check-input" type="checkbox" role="switch" id="AdvResManipulationActive{{i}}" formControlName="AdvResManipulationActive">
+                                </div>
+                                <!-- <mat-slide-toggle color="blue" formControlName="AdvResManipulationActive"></mat-slide-toggle> -->
                               </div>
                             </div>
                       
@@ -578,18 +605,16 @@
                             </div>
                       
                             <div class="col-sm-6">
-                              <label for="exp" class="form-label">Expression &nbsp; <svg
+                              <label for="exp{{i}}" class="form-label">Expression &nbsp; <svg
                                 [matTooltip]=expression_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                                 <path
                                     d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                             </svg></label>
-                              <input type="text" id="exp" class="form-control" formControlName="expression"
+                              <input type="text" id="exp{{i}}" class="form-control" formControlName="expression"
                                 placeholder="people[?age > `20`].[name, age]">
-                              <div id="expHelpBlock" class="form-text">
-                                JMESpath query to execute on returned results of /
-                              </div>
+                              
                             </div>
                       
                       
@@ -637,51 +662,54 @@
                                 <h3>Response Manipulation with Go templates</h3>
                               </div>
                               <div>
-                                <mat-slide-toggle color="blue" formControlName="resManiWithGoTemplActive"></mat-slide-toggle>
+                                <div class="form-check form-switch">
+                                  <input class="form-check-input" type="checkbox" role="switch" id="resManiWithGoTemplActive{{i}}" formControlName="resManiWithGoTemplActive">
+                                </div>
+                                <!-- <mat-slide-toggle color="blue" formControlName="resManiWithGoTemplActive"></mat-slide-toggle> -->
                               </div>
                             </div>
                       
                             @if (getFormGroup(i).value.resManiWithGoTemplActive) {
                             <div class="row">
                               <div class="col-md-5 col-sm-12 form-check form-check-inline">
-                                <input class="form-check-input" type="radio" formControlName="bodyEditor" id="inlineRadio1"
-                                  value="bodyeditor">
-                                <label class="form-check-label" for="inlineRadio1">Use the inline body editor</label>
+                                <input class="form-check-input" type="radio" formControlName="bodyEditorResponse" id="inlineRadio3{{i}}"
+                                  value="bodyeditorResponse">
+                                <label class="form-check-label" for="inlineRadio3{{i}}">Use the inline body editor</label>
                               </div>
                       
                               <div class="col-md-5 col-sm-12 form-check form-check-inline">
-                                <input class="form-check-input" type="radio" formControlName="bodyEditor" id="inlineRadio2" value="external">
-                                <label class="form-check-label" for="inlineRadio2">An external file</label>
+                                <input class="form-check-input" type="radio" formControlName="bodyEditorResponse" id="inlineRadio4{{i}}" value="externalResponse">
+                                <label class="form-check-label" for="inlineRadio4{{i}}">An external file</label>
                               </div>
                             </div>
                       
                             <div class="col-sm-8">
-                              <label for="exampleFormControlTextarea1" class="form-label">Body Editor &nbsp; <svg
+                              <label for="templateResponse{{i}}" class="form-label">Body Editor &nbsp; <svg
                                 [matTooltip]=bodyEditorRes_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                                 <path
                                     d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                             </svg></label>
-                              <textarea class="form-control fingerprint" id="exampleFormControlTextarea1" rows="3"
-                                formControlName="template"></textarea>
+                              <textarea class="form-control fingerprint" id="templateResponse{{i}}" rows="3"
+                                formControlName="templateResponse"></textarea>
                               </div>
                       
                             <div class="row">
                               <div class="col-sm-6">
-                                <label for="conType" class="form-label">Content Type &nbsp; <svg
+                                <label for="contentTypeResponse{{i}}" class="form-label">Content Type &nbsp; <svg
                                     [matTooltip]=contentTypeRes_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                                     <path
                                         d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                                 </svg></label>
-                                <input type="text" id="conType" class="form-control" formControlName="contentType"
+                                <input type="text" id="contentTypeResponse{{i}}" class="form-control" formControlName="contentTypeResponse"
                                   placeholder="application/json">
                                 
                               </div>
                               <div class="col-sm-6">
-                                <mat-checkbox class="example-margin" formControlName="debug">Enable Debug &nbsp; <svg
+                                <mat-checkbox class="example-margin" formControlName="debugResponse">Enable Debug &nbsp; <svg
                                     [matTooltip]=debudRes_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
@@ -694,14 +722,14 @@
                             </div>
                       
                             <div class="col-sm-6">
-                              <label for="path" class="form-label">Path &nbsp; <svg
+                              <label for="pathResponse{{i}}" class="form-label">Path &nbsp; <svg
                                 [matTooltip]=pathRes_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                                 <path
                                     d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                             </svg></label>
-                              <input type="text" id="path" class="form-control" formControlName="path" placeholder="./file.tmpl.xml">
+                              <input type="text" id="pathResponse{{i}}" class="form-control" formControlName="pathResponse" placeholder="./file.tmpl.xml">
                               
                             </div>
                       
@@ -720,19 +748,22 @@
                                 <h3>Regexp Content Replacer</h3>
                               </div>
                               <div>
-                                <mat-slide-toggle color="blue" formControlName="regexConReplacerActive"></mat-slide-toggle>
+                                <div class="form-check form-switch">
+                                  <input class="form-check-input" type="checkbox" role="switch" id="regexConReplacerActive{{i}}" formControlName="regexConReplacerActive">
+                                </div>
+                                <!-- <mat-slide-toggle color="blue" formControlName="regexConReplacerActive"></mat-slide-toggle> -->
                               </div>
                             </div>
                             @if (getFormGroup(i).value.regexConReplacerActive) {
                       
                             <div class="row align-items-center">
                               <div class="col-sm-4">
-                                <label for="findkey" class="form-label">Enter Key Name for Content Replacer <i class="bi bi-info-circle" [matTooltip]=contentReplacer_tooltip></i></label>
+                                <label for="findkey{{i}}" class="form-label">Enter Key Name for Content Replacer <i class="bi bi-info-circle" [matTooltip]=contentReplacer_tooltip></i></label>
                                 
                                   <div class="input-group mb-3">
-                                    <input type="text" id="findkey" class="form-control" formControlName="contentReplacerKey"
+                                    <input type="text" id="findkey{{i}}" class="form-control" formControlName="contentReplacerKey"
                                   placeholder="e.g., 'hem'">
-                                    <button class="btn btn-primary" type="button" id="button-addonConRep"
+                                    <button class="btn btn-primary" type="button" id="button-addonConRep{{i}}"
                                     (click)="createContentReplacerKey(i)">Create Key</button>
                                 </div>
                               </div>
@@ -749,14 +780,14 @@
                       
                       
                                   <div class="col-sm-3">
-                                    <label for="findkey" class="form-label">Key to replace <i class="bi bi-info-circle"[matTooltip]=keyToReplace_tooltip></i></label>
-                                    <input type="text" id="findkey" class="form-control" formControlName="find">
+                                    <label for="find{{i}}" class="form-label">Key to replace <i class="bi bi-info-circle"[matTooltip]=keyToReplace_tooltip></i></label>
+                                    <input type="text" id="find{{i}}" class="form-control" formControlName="find">
                                     
                                   </div>
                       
                                   <div class="col-sm-3">
-                                    <label for="replace" class="form-label">Replace by <i class="bi bi-info-circle" [matTooltip]=replaceBy_tooltip></i></label>
-                                    <input type="text" id="replace" class="form-control" formControlName="replace">
+                                    <label for="replace{{i}}" class="form-label">Replace by <i class="bi bi-info-circle" [matTooltip]=replaceBy_tooltip></i></label>
+                                    <input type="text" id="replace{{i}}" class="form-control" formControlName="replace">
                                     
                                   </div>
                       
@@ -788,8 +819,8 @@
                       
                             <div class="row gap-3">
                               <div class="col-sm-3">
-                                <label for="opType" class="form-label">Operation Type</label>
-                                <select class="form-select" aria-label="Default select example" formControlName="operationType" id="opType">
+                                <label for="opType{{i}}" class="form-label">Operation Type</label>
+                                <select class="form-select" aria-label="Default select example" formControlName="operationType" id="opType{{i}}">
                                   <option selected>Open this select menu</option>
                                   <option value="move">Move</option>
                                   <option value="del">Delete </option>
@@ -797,14 +828,14 @@
                                 </select>
                               </div>
                               <div class="col-sm-3">
-                                <label for="originlObj" class="form-label">Original Object</label>
-                                <input type="text" id="originlObj" class="form-control" aria-describedby="passwordHelpBlock"
+                                <label for="originlObj{{i}}" class="form-label">Original Object</label>
+                                <input type="text" id="originlObj{{i}}" class="form-control" aria-describedby="passwordHelpBlock"
                                   formControlName="flatmapOriginalObj" placeholder="object.*.uninteresting">
                               </div>
                               @if (!(getFormGroup(i).value.operationType === 'delete')) {
                               <div class="col-sm-3">
-                                <label for="targetObj" class="form-label">Target Object</label>
-                                <input type="text" id="targetObj" class="form-control" aria-describedby="passwordHelpBlock"
+                                <label for="targetObj{{i}}" class="form-label">Target Object</label>
+                                <input type="text" id="targetObj{{i}}" class="form-control" aria-describedby="passwordHelpBlock"
                                   formControlName="flatmapTargetObj" placeholder="object.*.new_element">
                               </div>
                               }
@@ -835,13 +866,16 @@
                                 <h3>Martian (Req/resp static manipulation)</h3>
                               </div>
                               <div>
-                                <mat-slide-toggle color="blue" formControlName="martianActive"></mat-slide-toggle>
+                                <div class="form-check form-switch">
+                                  <input class="form-check-input" type="checkbox" role="switch" id="martianActive{{i}}" formControlName="martianActive">
+                                </div>
+                                <!-- <mat-slide-toggle color="blue" formControlName="martianActive"></mat-slide-toggle> -->
                               </div>
                             </div>
                             @if (getFormGroup(i).value.martianActive) {
                             <div class="col-sm-8">
-                              <label for="exampleFormControlTextarea1" class="form-label">Body Editor <i class="bi bi-info-circle" [matTooltip]=bodyEditorMartian_tooltip></i></label>
-                              <textarea class="form-control fingerprint" id="exampleFormControlTextarea1" rows="3"
+                              <label for="martianTextarea{{i}}" class="form-label">Body Editor <i class="bi bi-info-circle" [matTooltip]=bodyEditorMartian_tooltip></i></label>
+                              <textarea class="form-control fingerprint" id="martianTextarea{{i}}" rows="3"
                                 formControlName="martian"></textarea>
                               </div>
                             }@else {
@@ -873,7 +907,10 @@
                                 <h3>Circuit Breaker</h3>
                               </div>
                               <div>
-                                <mat-slide-toggle color="blue" formControlName="isCircuitBreakerActive"></mat-slide-toggle>
+                                <div class="form-check form-switch">
+                                  <input class="form-check-input" type="checkbox" role="switch" id="isCircuitBreakerActive{{i}}" formControlName="isCircuitBreakerActive">
+                                </div>
+                                <!-- <mat-slide-toggle color="blue" formControlName="isCircuitBreakerActive"></mat-slide-toggle> -->
                               </div>
                             </div>
                     
@@ -885,29 +922,29 @@
                             <div class="row">
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="name" class="form-label">Name <i class="bi bi-info-circle" [matTooltip]=circuitName_tooltip></i></label>
-                                  <input type="text" class="form-control" id="name" formControlName="circuitBreakerName">
+                                  <label for="name{{i}}" class="form-label">Name <i class="bi bi-info-circle" [matTooltip]=circuitName_tooltip></i></label>
+                                  <input type="text" class="form-control" id="name{{i}}" formControlName="circuitBreakerName">
                                   
                                 </div>
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="maxerr" class="form-label">Maximum Errors <i class="bi bi-info-circle" [matTooltip]=maxErrors_tooltip></i></label>
-                                  <input type="number" class="form-control" id="maxerr" formControlName="maxError"
+                                  <label for="maxerr{{i}}" class="form-label">Maximum Errors <i class="bi bi-info-circle" [matTooltip]=maxErrors_tooltip></i></label>
+                                  <input type="number" class="form-control" id="maxerr{{i}}" formControlName="maxError"
                                     [class.is-invalid]="getFormGroup(i).get('maxError')?.invalid">
                                 </div>
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="inteval" class="form-label">Interval <i class="bi bi-info-circle" [matTooltip]=interval_tooltip></i></label>
-                                  <input type="number" class="form-control" id="interval" formControlName="interval"
+                                  <label for="inteval{{i}}" class="form-label">Interval <i class="bi bi-info-circle" [matTooltip]=interval_tooltip></i></label>
+                                  <input type="number" class="form-control" id="interval{{i}}" formControlName="interval"
                                     [class.is-invalid]="getFormGroup(i).get('interval')?.invalid">
                                 </div>
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="timeout" class="form-label">Timeout <i class="bi bi-info-circle" [matTooltip]=timeout_tooltip></i></label>
-                                  <input type="number" class="form-control" id="timeout" formControlName="timeout"
+                                  <label for="timeout{{i}}" class="form-label">Timeout <i class="bi bi-info-circle" [matTooltip]=timeout_tooltip></i></label>
+                                  <input type="number" class="form-control" id="timeout{{i}}" formControlName="timeout"
                                     [class.is-invalid]="getFormGroup(i).get('timeout')?.invalid">
                                 </div>
                               </div>
@@ -915,9 +952,9 @@
                                 <div class="mb-3">
                                   <!-- <label class="form-label">Resolution</label> -->
                                   <div class="form-check mt-4">
-                                    <input class="form-check-input" type="checkbox" value="" id="logState"
+                                    <input class="form-check-input" type="checkbox" value="" id="logState{{i}}"
                                       formControlName="logStatusChange">
-                                    <label class="form-check-label" for="logState">
+                                    <label class="form-check-label" for="logState{{i}}">
                                       Log state changes <i class="bi bi-info-circle" [matTooltip]=logStatusChange_tooltip></i>
                                     </label>
                                   </div>
@@ -935,7 +972,10 @@
                                 <h3>Proxy Rate limit</h3>
                               </div>
                               <div>
-                                <mat-slide-toggle color="blue" formControlName="isProxyRateLimitActive"></mat-slide-toggle>
+                                <div class="form-check form-switch">
+                                  <input class="form-check-input" type="checkbox" role="switch" id="isProxyRateLimitActive{{i}}" formControlName="isProxyRateLimitActive">
+                                </div>
+                                <!-- <mat-slide-toggle color="blue" formControlName="isProxyRateLimitActive"></mat-slide-toggle> -->
                               </div>
                             </div>
                             @if(!getFormGroup(i).value.isProxyRateLimitActive){
@@ -944,16 +984,16 @@
                             <div class="row">
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="maxRateLimit" class="form-label">MaxRateLimit <i class="bi bi-info-circle" [matTooltip]=maxRateLimit_tooltip></i></label>
-                                  <input type="number" class="form-control" id="maxRateLimit" formControlName="maxRateLimit"
+                                  <label for="maxRateLimit{{i}}" class="form-label">MaxRateLimit <i class="bi bi-info-circle" [matTooltip]=maxRateLimit_tooltip></i></label>
+                                  <input type="number" class="form-control" id="maxRateLimit{{i}}" formControlName="maxRateLimit"
                                     [class.is-invalid]="getFormGroup(i).get('maxRateLimit')?.invalid">
                                   
                                 </div>
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="every" class="form-label">Every <i class="bi bi-info-circle" [matTooltip]=everyThrot_tooltip></i></label>
-                                  <input type="text" class="form-control" id="every" formControlName="every"
+                                  <label for="every{{i}}" class="form-label">Every <i class="bi bi-info-circle" [matTooltip]=everyThrot_tooltip></i></label>
+                                  <input type="text" class="form-control" id="every{{i}}" formControlName="every"
                                     [class.is-invalid]="getFormGroup(i).get('every')?.invalid && getFormGroup(i).get('every')?.touched">
                                   <div class="invalid-feedback"
                                     *ngIf="getFormGroup(i).get('every')?.errors?.['pattern'] && getFormGroup(i).get('every')?.touched">
@@ -965,8 +1005,8 @@
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="capacity" class="form-label">Capacity(Burst size) <i class="bi bi-info-circle" [matTooltip]=capacityThrot_tooltip></i></label>
-                                  <input type="number" class="form-control" id="capacity" formControlName="capacity"
+                                  <label for="capacity{{i}}" class="form-label">Capacity(Burst size) <i class="bi bi-info-circle" [matTooltip]=capacityThrot_tooltip></i></label>
+                                  <input type="number" class="form-control" id="capacity{{i}}" formControlName="capacity"
                                     [class.is-invalid]="getFormGroup(i).get('capacity')?.invalid">
                                   
                                 </div>
@@ -1001,7 +1041,10 @@
                                 <h3>Auth: Client Credentials</h3>
                               </div>
                               <div>
-                                <mat-slide-toggle color="blue" formControlName="isAuthActive"></mat-slide-toggle>
+                                <div class="form-check form-switch">
+                                  <input class="form-check-input" type="checkbox" role="switch" id="isAuthActive{{i}}" formControlName="isAuthActive">
+                                </div>
+                                <!-- <mat-slide-toggle color="blue" formControlName="isAuthActive"></mat-slide-toggle> -->
                               </div>
                             </div>
                             @if(!getFormGroup(i).value.isAuthActive){
@@ -1011,28 +1054,28 @@
                             <div class="row">
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="clientId" class="form-label">CLIENT ID <i class="bi bi-info-circle" [matTooltip]=clientId_tooltip></i></label>
-                                  <input type="text" class="form-control" id="clientId" formControlName="clientId">
+                                  <label for="clientId{{i}}" class="form-label">CLIENT ID <i class="bi bi-info-circle" [matTooltip]=clientId_tooltip></i></label>
+                                  <input type="text" class="form-control" id="clientId{{i}}" formControlName="clientId">
                                   
                                 </div>
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="clientSecret" class="form-label">CLIENT SECRET <i class="bi bi-info-circle" [matTooltip]=clientSecret_tooltip></i></label>
-                                  <input type="text" class="form-control" id="clientSecret" formControlName="clientSecret">
+                                  <label for="clientSecret{{i}}" class="form-label">CLIENT SECRET <i class="bi bi-info-circle" [matTooltip]=clientSecret_tooltip></i></label>
+                                  <input type="text" class="form-control" id="clientSecret{{i}}" formControlName="clientSecret">
                                 </div>
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="tokenUrl" class="form-label">Token URL <i class="bi bi-info-circle" [matTooltip]=tokenUrl_tooltip></i></label>
-                                  <input type="text" class="form-control" id="tokenUrl" formControlName="tokenUrl">
+                                  <label for="tokenUrl{{i}}" class="form-label">Token URL <i class="bi bi-info-circle" [matTooltip]=tokenUrl_tooltip></i></label>
+                                  <input type="text" class="form-control" id="tokenUrl{{i}}" formControlName="tokenUrl">
                                   
                                 </div>
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="scopes" class="form-label">Scopes <i class="bi bi-info-circle" [matTooltip]=scopes_tooltip></i></label>
-                                  <input type="text" class="form-control" id="scopes" formControlName="scopes">
+                                  <label for="scopes{{i}}" class="form-label">Scopes <i class="bi bi-info-circle" [matTooltip]=scopes_tooltip></i></label>
+                                  <input type="text" class="form-control" id="scopes{{i}}" formControlName="scopes">
                                 </div>
                               </div>
                               <div class="row mb-3">
@@ -1041,7 +1084,7 @@
                                 </div>
                                 <div class="col-sm-12 col-md-4">
                                   <!-- <label for="rootObject" class="form-label">Original Object</label> -->
-                                  <input type="text" class="form-control" formControlName="endpointKey" id="endpointKey"
+                                  <input type="text" class="form-control" formControlName="endpointKey" id="endpointKey{{i}}"
                                     aria-describedby="audience" placeholder="name">
                                 </div>
                     
@@ -1050,9 +1093,9 @@
                                   <!-- <input type="text" class="form-control" formControlName="endpointValue" id="renamedObject"
                                     aria-describedby="audience" placeholder="value "> -->
                                     <div class="input-group mb-3">
-                                      <input type="text" class="form-control" formControlName="endpointValue" id="endpointValue"
+                                      <input type="text" class="form-control" formControlName="endpointValue" id="endpointValue{{i}}"
                                     aria-describedby="audience" placeholder="value ">
-                                      <button class="btn btn-primary" type="button" id="button-addonAddEndPar"
+                                      <button class="btn btn-primary" type="button" id="button-addonAddEndPar{{i}}"
                                       (click)="addParameterAuth(i,'endpoint_params')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                               height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                               <path fill-rule="evenodd"
@@ -1076,7 +1119,10 @@
                                 <h3>Google Cloud Service Account</h3>
                               </div>
                               <div>
-                                <mat-slide-toggle color="blue" formControlName="isGoogleCloudActive"></mat-slide-toggle>
+                                <div class="form-check form-switch">
+                                  <input class="form-check-input" type="checkbox" role="switch" id="isGoogleCloudActive{{i}}" formControlName="isGoogleCloudActive">
+                                </div>
+                                <!-- <mat-slide-toggle color="blue" formControlName="isGoogleCloudActive"></mat-slide-toggle> -->
                     
                               </div>
                             </div>
@@ -1086,8 +1132,8 @@
                             }@else{
                             <div class="col-sm-12 col-md-6">
                               <div class="mb-3">
-                                <label for="audience" class="form-label">Audience <i class="bi bi-info-circle" [matTooltip]=audienceAuth_tooltip></i></label>
-                                <input type="text" class="form-control" id="audience" formControlName="audience"
+                                <label for="audienceGoogle{{i}}" class="form-label">Audience <i class="bi bi-info-circle" [matTooltip]=audienceAuth_tooltip></i></label>
+                                <input type="text" class="form-control" id="audienceGoogle{{i}}" formControlName="audience"
                                   placeholder="https://hello-there.a.run.app">
                                
                               </div>
@@ -1099,7 +1145,10 @@
                                 <h3>NLTM Authentication</h3>
                               </div>
                               <div>
-                                <mat-slide-toggle color="blue" formControlName="isNtlmAuthActive"></mat-slide-toggle>
+                                <div class="form-check form-switch">
+                                  <input class="form-check-input" type="checkbox" role="switch" id="isNtlmAuthActive{{i}}" formControlName="isNtlmAuthActive">
+                                </div>
+                                <!-- <mat-slide-toggle color="blue" formControlName="isNtlmAuthActive"></mat-slide-toggle> -->
                               </div>
                             </div>
                             @if(!getFormGroup(i).value.isNtlmAuthActive){
@@ -1109,15 +1158,15 @@
                             }@else{
                             <div class="col-sm-12 col-md-6">
                               <div class="mb-3">
-                                <label for="user" class="form-label">User <i class="bi bi-info-circle" [matTooltip]=user_tooltip></i></label>
-                                <input type="text" class="form-control" id="user" formControlName="user">
+                                <label for="{{i}}" class="form-label">User <i class="bi bi-info-circle" [matTooltip]=user_tooltip></i></label>
+                                <input type="text" class="form-control" id="user{{i}}" formControlName="user">
                                 
                               </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                               <div class="mb-3">
-                                <label for="password" class="form-label">Password <i class="bi bi-info-circle" [matTooltip]=password_tooltip></i></label>
-                                <input type="password" class="form-control" id="password" formControlName="password">
+                                <label for="password{{i}}" class="form-label">Password <i class="bi bi-info-circle" [matTooltip]=password_tooltip></i></label>
+                                <input type="password" class="form-control" id="password{{i}}" formControlName="password">
                                 
                               </div>
                             </div>
@@ -1147,9 +1196,19 @@
                               </div>
                         
                               <hr class="mt-4">
-                        
+                              <div class="col-sm-12 heading-with-toggle d-flex align-items-center gap-2">
+                                <div>
+                                  <h3>Security Policies</h3>
+                                </div>
+                                <div>
+                                  <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="isSecPolicyActive{{i}}" formControlName="isSecPolicyActive">
+                                  </div>
+                                  <!-- <mat-slide-toggle color="blue" formControlName="isNtlmAuthActive"></mat-slide-toggle> -->
+                                </div>
+                              </div>
                               <div class="col-sm-12">
-                                <h3>Security Policies &nbsp;&nbsp;<mat-slide-toggle color="blue" formControlName="isSecPolicyActive"></mat-slide-toggle></h3>
+                                <!-- <h3>Security Policies &nbsp;&nbsp;<mat-slide-toggle color="blue" formControlName="isSecPolicyActive"></mat-slide-toggle></h3> -->
                                 <p>Implement all sorts of validations and user access control, from parameter compliance, to RBAC (Role-Based
                                   Access Control) and ABAC (Attribute-Based Access Control) strategies</p>
                                 @if(getFormGroup(i).value.isSecPolicyActive){
@@ -1157,7 +1216,7 @@
                                   <h3>Request Policies</h3>
                                   <div class="d-flex">
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="reqp1" class="form-label">Request Policies <i class="bi bi-info-circle" [matTooltip]=reqpolicies_tooltip></i></label>
+                                      <label for="reqp1{{i}}" class="form-label">Request Policies <i class="bi bi-info-circle" [matTooltip]=reqpolicies_tooltip></i></label>
                                       <!-- <p>Request Policies</p> -->
                                       <div class="d-flex align-items-center">
                                         <!-- <input id="reqp1" type="text" class="input-size me-2 form-control"
@@ -1165,9 +1224,9 @@
                                         
                                         <button type="button" class="btn btn-info" (click)="addParameterPolicies(i,'securityReqPolicy')">+</button> -->
                                         <div class="input-group input-size">
-                                          <input id="reqp1" type="text" class="form-control"
+                                          <input id="reqp1{{i}}" type="text" class="form-control"
                                           placeholder="req_params.DocId.startsWith('EU')" formControlName="securityReqPolicy">
-                                          <button class="btn btn-primary" type="button" id="button-addonSecPol"
+                                          <button class="btn btn-primary" type="button" id="button-addonSecPol{{i}}"
                                           (click)="addParameterPolicies(i,'securityReqPolicy')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                                   height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                                   <path fill-rule="evenodd"
@@ -1185,9 +1244,9 @@
                                       </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="errorStCode1" class="form-label">Error status code <i class="bi bi-info-circle" [matTooltip]=reqErrCode_tooltip></i></label>
+                                      <label for="errorStCode1{{i}}" class="form-label">Error status code <i class="bi bi-info-circle" [matTooltip]=reqErrCode_tooltip></i></label>
                         
-                                      <input id="errorStCode1" type="number" class="input-size form-control" formControlName="secReqErrorStCode"
+                                      <input id="errorStCode1{{i}}" type="number" class="input-size form-control" formControlName="secReqErrorStCode"
                                         placeholder="400" />
                                       <div class="form-text"></div>
                                     </div>
@@ -1201,14 +1260,14 @@
                                   <div class="d-flex">
                                     <div class="col-sm-12 col-md-6">
                                       <!-- <p>Error body</p> -->
-                                      <label for="errorBody1" class="form-label">Error body <i class="bi bi-info-circle" [matTooltip]=reqErrBody_tooltip></i></label>
-                                      <input id="errorBody1" type="text" class="input-size form-control" formControlName="secReqErrorBody"
+                                      <label for="errorBody1{{i}}" class="form-label">Error body <i class="bi bi-info-circle" [matTooltip]=reqErrBody_tooltip></i></label>
+                                      <input id="errorBody1{{i}}" type="text" class="input-size form-control" formControlName="secReqErrorBody"
                                         placeholder="Policies violated" />
                         
                                     </div>
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="errorContentType1" class="form-label">Error content type <i class="bi bi-info-circle" [matTooltip]=reqContentType_tooltip></i></label>
-                                      <input id="errorContentType1" type="text" class="input-size form-control"
+                                      <label for="errorContentType1{{i}}" class="form-label">Error content type <i class="bi bi-info-circle" [matTooltip]=reqContentType_tooltip></i></label>
+                                      <input id="errorContentType1{{i}}" type="text" class="input-size form-control"
                                         formControlName="secReqErrorContentType" placeholder="Text/Plain" />
                                       
                                     </div>
@@ -1220,16 +1279,16 @@
                                   <h3>Response Policies</h3>
                                   <div class="d-flex">
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="resP" class="form-label">Response Policies <i class="bi bi-info-circle" [matTooltip]=resPolicies_tooltip></i></label>
+                                      <label for="resP{{i}}" class="form-label">Response Policies <i class="bi bi-info-circle" [matTooltip]=resPolicies_tooltip></i></label>
                                       <div class="d-flex align-items-center">
                                         <!-- <input id="resP" type="text" class="input-size me-2 form-control" formControlName="securityResPolicy"
                                           placeholder="!isEmpty(resp_data.message)">
                                         
                                         <button type="button" class="btn btn-info" (click)="addParameterPolicies(i,'securityResPolicy')">+</button> -->
                                         <div class="input-group input-size">
-                                          <input id="resP" type="text" class="form-control" formControlName="securityResPolicy"
+                                          <input id="resP{{i}}" type="text" class="form-control" formControlName="securityResPolicy"
                                           placeholder="!isEmpty(resp_data.message)">
-                                          <button class="btn btn-primary" type="button" id="button-addonSecResPol"
+                                          <button class="btn btn-primary" type="button" id="button-addonSecResPol{{i}}"
                                           (click)="addParameterPolicies(i,'securityResPolicy')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                                   height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                                   <path fill-rule="evenodd"
@@ -1246,8 +1305,8 @@
                                       </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="errorStCode2" class="form-label">Error status code <i class="bi bi-info-circle" [matTooltip]=resErrCode_tooltip></i></label>
-                                      <input id="errorStCode2" type="number" class="input-size form-control" formControlName="secResErrorStCode"
+                                      <label for="errorStCode2{{i}}" class="form-label">Error status code <i class="bi bi-info-circle" [matTooltip]=resErrCode_tooltip></i></label>
+                                      <input id="errorStCode2{{i}}" type="number" class="input-size form-control" formControlName="secResErrorStCode"
                                         placeholder="400" />
                                       
                                     </div>
@@ -1260,16 +1319,16 @@
                                 <div>
                                   <div class="d-flex">
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="errorBody2" class="form-label">Error body <i class="bi bi-info-circle" [matTooltip]=resErrBody_tooltip></i></label>
-                                      <input id="errorBody2" type="text" class="input-size form-control" formControlName="secResErrorBody"
+                                      <label for="errorBody2{{i}}" class="form-label">Error body <i class="bi bi-info-circle" [matTooltip]=resErrBody_tooltip></i></label>
+                                      <input id="errorBody2{{i}}" type="text" class="input-size form-control" formControlName="secResErrorBody"
                                         placeholder="Policies violated" />
                                       
                         
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                         
-                                      <label for="errorContentType2" class="form-label">Error content type <i class="bi bi-info-circle" [matTooltip]=resErrContentType_tooltip></i></label>
-                                      <input id="errorContentType2" type="text" class="input-size form-control"
+                                      <label for="errorContentType2{{i}}" class="form-label">Error content type <i class="bi bi-info-circle" [matTooltip]=resErrContentType_tooltip></i></label>
+                                      <input id="errorContentType2{{i}}" type="text" class="input-size form-control"
                                         formControlName="secResErrorContentType" placeholder="Text/Plain" />
                                                               
                                     </div>
@@ -1289,9 +1348,9 @@
                                     
                                     <button type="button" class="btn btn-info" (click)="addParameterPolicies(i,'jwtReqPolicy')">+</button><br> -->
                                     <div class="input-group input-size">
-                                      <input id="reqp2" type="text" class="form-control"
+                                      <input id="reqp2{{i}}" type="text" class="form-control"
                                       placeholder="has(JWT.user_id) && 'legal' == JWT.department" formControlName="jwtReqPolicy" />
-                                      <button class="btn btn-primary" type="button" id="button-addonJwtPol"
+                                      <button class="btn btn-primary" type="button" id="button-addonJwtPol{{i}}"
                                       (click)="addParameterPolicies(i,'jwtReqPolicy')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                               height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                               <path fill-rule="evenodd"
@@ -1344,28 +1403,38 @@
                                 }
                               </div>
                               <hr class="mt-4">
-                        
+                              <div class="col-sm-12 heading-with-toggle d-flex align-items-center gap-2">
+                                <div>
+                                  <h3>Response schema validator</h3>
+                                </div>
+                                <div>
+                                  <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="isResSchValidatorActive{{i}}" formControlName="isResSchValidatorActive">
+                                  </div>
+                                  <!-- <mat-slide-toggle color="blue" formControlName="isNtlmAuthActive"></mat-slide-toggle> -->
+                                </div>
+                              </div>
                               <div class="col-sm-12">
-                                <h3>Response schema validator &nbsp;&nbsp;<mat-slide-toggle color="blue"
+                                <!-- <h3>Response schema validator &nbsp;&nbsp;<mat-slide-toggle color="blue"
                                     formControlName="isResSchValidatorActive"></mat-slide-toggle>
-                                </h3>
+                                </h3> -->
                                 <p>The response schema validator plugin adds a schema validation before the gateway returns the response to the
                                   end-user or before it's merged in the endpoint with the rest of the backends. </p>
                                 @if(getFormGroup(i).value.isResSchValidatorActive){
                                 <div class="col-sm-12 col-md-9">
-                                  <textarea name="" id="" class="static-text-area" formControlName="responseSchema">{}</textarea><br>
+                                  <textarea name="" id="responseSchema{{i}}" class="static-text-area" formControlName="responseSchema">{}</textarea><br>
                                   <p>Write your JSON schema directly in this field, with any number of fields or validations you need.</p>
                         
                                   <div class="d-flex col-sm-12">
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="errorMessage" class="form-label">Error Message <i class="bi bi-info-circle" [matTooltip]=errMessage_tooltip></i></label>
-                                      <input id="errorMessage" type="text" class="input-size form-control"
+                                      <label for="errorMessage{{i}}" class="form-label">Error Message <i class="bi bi-info-circle" [matTooltip]=errMessage_tooltip></i></label>
+                                      <input id="errorMessage{{i}}" type="text" class="input-size form-control"
                                         formControlName="resSchemaValErrorMsg" />
                                       
                                     </div>
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="errorStCode3" class="form-label">Error status code <i class="bi bi-info-circle" [matTooltip]=errStatusCode_tooltip></i></label>
-                                      <input id="errorStCode3" type="number" class="input-size form-control"
+                                      <label for="errorStCode3{{i}}" class="form-label">Error status code <i class="bi bi-info-circle" [matTooltip]=errStatusCode_tooltip></i></label>
+                                      <input id="errorStCode3{{i}}" type="number" class="input-size form-control"
                                         formControlName="resSchemaValErrorStCode" placeholder="500" />
                                     </div>
                         
@@ -1396,7 +1465,10 @@
                                     <h3>REST to SOAP</h3>
                                   </div>
                                   <div>
-                                    <mat-slide-toggle color="blue"  formControlName="isRestToSoapActive" ></mat-slide-toggle>
+                                    <div class="form-check form-switch">
+                                      <input class="form-check-input" type="checkbox" role="switch" id="isRestToSoapActive{{i}}" formControlName="isRestToSoapActive">
+                                    </div>
+                                    <!-- <mat-slide-toggle color="blue"  formControlName="isRestToSoapActive" ></mat-slide-toggle> -->
                                   </div>
                                 </div>
                                 @if(!getFormGroup(i).value.isRestToSoapActive){
@@ -1406,40 +1478,40 @@
                                 }@else{
                                   <div class="row">
                                     <div class="col-md-5 col-sm-12 form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" formControlName="bodyEditor" id="inlineRadio1"
-                                        value="bodyeditor">
-                                      <label class="form-check-label" for="inlineRadio1">Use the inline body editor</label>
+                                      <input class="form-check-input" type="radio" formControlName="bodyEditorConnect" id="inlineRadio5{{i}}"
+                                        value="bodyeditorConnect">
+                                      <label class="form-check-label" for="inlineRadio5{{i}}">Use the inline body editor</label>
                                     </div>
                             
                                     <div class="col-md-5 col-sm-12 form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" formControlName="bodyEditor" id="inlineRadio2" value="external">
-                                      <label class="form-check-label" for="inlineRadio2">An external file</label>
+                                      <input class="form-check-input" type="radio" formControlName="bodyEditorConnect" id="inlineRadio6{{i}}" value="externalConnect">
+                                      <label class="form-check-label" for="inlineRadio6{{i}}">An external file</label>
                                     </div>
                                   </div>
                             
                                   <div class="col-sm-8">
-                                    <label for="exampleFormControlTextarea1" class="form-label">Body Editor <i class="bi bi-info-circle" [matTooltip]=bodyEditConn_tooltip></i></label>
-                                    <textarea class="form-control fingerprint" id="exampleFormControlTextarea1" rows="3"
-                                      formControlName="template"></textarea>
+                                    <label for="templateConnect{{i}}" class="form-label">Body Editor <i class="bi bi-info-circle" [matTooltip]=bodyEditConn_tooltip></i></label>
+                                    <textarea class="form-control fingerprint" id="templateConnect{{i}}" rows="3"
+                                      formControlName="templateConnect"></textarea>
                                     
                                   </div>
                             
                                   <div class="row">
                                     <div class="col-sm-6">
-                                      <label for="conType" class="form-label">Content Type <i class="bi bi-info-circle" [matTooltip]=contentTypeConn_tooltip></i></label>
-                                      <input type="text" id="conType" class="form-control" formControlName="contentType">
+                                      <label for="contentTypeConnect{{i}}" class="form-label">Content Type <i class="bi bi-info-circle" [matTooltip]=contentTypeConn_tooltip></i></label>
+                                      <input type="text" id="contentTypeConnect{{i}}" class="form-control" formControlName="contentTypeConnect">
                                       
                                     </div>
                                     <div class="col-sm-6">
-                                      <mat-checkbox class="example-margin" formControlName="debug">Enable Debug <i class="bi bi-info-circle" [matTooltip]=enableDebugConn_tooltip></i></mat-checkbox>
+                                      <mat-checkbox class="example-margin" formControlName="debugConnect">Enable Debug <i class="bi bi-info-circle" [matTooltip]=enableDebugConn_tooltip></i></mat-checkbox>
                                       
                                     </div>
                             
                                   </div>
                             
                                   <div class="col-sm-6">
-                                    <label for="path" class="form-label">Path <i class="bi bi-info-circle" [matTooltip]=pathConn_tooltip></i></label>
-                                    <input type="text" id="path" class="form-control" formControlName="path">
+                                    <label for="pathConnect{{i}}" class="form-label">Path <i class="bi bi-info-circle" [matTooltip]=pathConn_tooltip></i></label>
+                                    <input type="text" id="pathConnect{{i}}" class="form-control" formControlName="pathConnect">
                                     
                                   </div>
                             
@@ -1454,7 +1526,10 @@
                                     <h3>HTTP client settings, no redirect, and web proxy</h3>
                                   </div>
                                   <div>
-                                    <mat-slide-toggle color="blue" formControlName="isHttpClientSettingActive"></mat-slide-toggle>
+                                    <div class="form-check form-switch">
+                                      <input class="form-check-input" type="checkbox" role="switch" id="isHttpClientSettingActive{{i}}" formControlName="isHttpClientSettingActive">
+                                    </div>
+                                    <!-- <mat-slide-toggle color="blue" formControlName="isHttpClientSettingActive"></mat-slide-toggle> -->
                                   </div>
                                 </div>
                                 @if(!getFormGroup(i).value.isHttpClientSettingActive){
@@ -1462,8 +1537,8 @@
                                 }@else{
                                 <div class="d-flex col-sm-12">
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="connectvWebProxy" class="form-label">Connect via Web Proxy <i class="bi bi-info-circle" [matTooltip]=connectWebProxy_tooltip></i></label>
-                                    <input type="text" class="input-size form-control" id="connectvWebProxy"
+                                    <label for="connectvWebProxy{{i}}" class="form-label">Connect via Web Proxy <i class="bi bi-info-circle" [matTooltip]=connectWebProxy_tooltip></i></label>
+                                    <input type="text" class="input-size form-control" id="connectvWebProxy{{i}}"
                                       formControlName="connectvWebProxyForm">
                                   </div>
                                   <div class="col-sm-12 col-md-6">
@@ -1485,7 +1560,10 @@
                                     <h3>REST to GraphQL</h3>
                                   </div>
                                   <div>
-                                    <mat-slide-toggle color="blue" formControlName="isRestToGraphqlActive"></mat-slide-toggle>
+                                    <div class="form-check form-switch">
+                                      <input class="form-check-input" type="checkbox" role="switch" id="isRestToGraphqlActive{{i}}" formControlName="isRestToGraphqlActive">
+                                    </div>
+                                    <!-- <mat-slide-toggle color="blue" formControlName="isRestToGraphqlActive"></mat-slide-toggle> -->
                                   </div>
                                 </div>
                                 @if(!getFormGroup(i).value.isRestToGraphqlActive){
@@ -1494,23 +1572,19 @@
                         
                                 <div class="d-flex col-sm-12 mb-3">
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="restTographQLOpType" class="form-label">Operation Type</label>
-                                    <select class="form-select input-size" id="restTographQLOpType" formControlName="restTographQLOpTypeForm">
+                                    <label for="restTographQLOpType{{i}}" class="form-label">Operation Type <i class="bi bi-info-circle" [matTooltip]=restToGraphType_tooltip></i></label>
+                                    <select class="form-select input-size" id="restTographQLOpType{{i}}" formControlName="restTographQLOpTypeForm">
                                       <option selected></option>
                                       <option value="query" selected>query</option>
                                       <option value="mutation">mutation</option>
                                     </select>
-                                    <div id="restToGraphqlOpTypeHelp" class="form-text">The type of query you are declaring.</div>
                                   </div>
                                   <div class="col-sm-12 col-md-6">
                         
-                                    <label for="restTographQLOpName" class="form-label">Operation Name</label>
-                                    <input type="text" class="input-size form-control" id="restTographQLOpName"
+                                    <label for="restTographQLOpName{{i}}" class="form-label">Operation Name <i class="bi bi-info-circle" [matTooltip]=restToGraphName_tooltip></i></label>
+                                    <input type="text" class="input-size form-control" id="restTographQLOpName{{i}}"
                                       formControlName="restToGraphqlOpNameForm">
                         
-                                    <div id="restTographQLOpNameHelp" class="form-text">Path to the file containing the query. This file is
-                                      loaded <br> during startup and never checked again, if it changes <br> KrakenD will be unaware of it.
-                                    </div>
                         
                                   </div>
                         
@@ -1518,19 +1592,15 @@
                         
                                 <div class="d-flex col-sm-12 mb-3">
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="restTographQLQueryPath" class="form-label">Query path</label>
-                                    <input type="text" class="input-size form-control" id="restTographQLQueryPath"
+                                    <label for="restTographQLQueryPath{{i}}" class="form-label">Query path <i class="bi bi-info-circle" [matTooltip]=restToGraphQueryPath_tooltip></i></label>
+                                    <input type="text" class="input-size form-control" id="restTographQLQueryPath{{i}}"
                                       formControlName="restTographQLQueryPathForm">
-                                    <div id="restTographQLQueryPathHelp" class="form-text"></div>
-                                  </div>
+                                    </div>
                                   <div class="col-sm-12 col-md-6">
                         
-                                    <label for="restTographQLInlineQuery" class="form-label">... or Inline Query</label>
-                                    <input type="text" class="input-size form-control" id="restTographQLInlineQuery"
+                                    <label for="restTographQLInlineQuery{{i}}" class="form-label">... or Inline Query <i class="bi bi-info-circle" [matTooltip]=restToGraphInlineQuery_tooltip></i></label>
+                                    <input type="text" class="input-size form-control" id="restTographQLInlineQuery{{i}}"
                                       formControlName="restTographQLInlineQueryForm">
-                                    <div id="restTographQLInlineQueryhelp" class="form-text">An inline GraphQL query you want to send to the
-                                      server. <br> Use this attribute for simple and inline queries, use <br> query_path instead for larger
-                                      queries. Use escaping when <br> needed.</div>
                         
                                   </div>
                         
@@ -1539,19 +1609,19 @@
                                 <div class="row align-items-end mb-3">
                         
                                   <div class="col-sm-12 col-md-4">
-                                    <label for="restTographQLVariable" class="form-label">Variable</label>
-                                    <input type="text" class="input-size form-control" id="restTographQLVariable"
+                                    <label for="restTographQLVariable{{i}}" class="form-label">Variable</label>
+                                    <input type="text" class="input-size form-control" id="restTographQLVariable{{i}}"
                                       formControlName="restTographQLVariable">
                                   </div>
                                   <div class="col-sm-12 col-md-4">
                         
-                                    <label for="restTographQLValue" class="form-label">Value</label>
+                                    <label for="restTographQLValue{{i}}" class="form-label">Value <i class="bi bi-info-circle" [matTooltip]=restToGraphvarValue_tooltip></i></label>
                                     <!-- <input type="text" class="input-size form-control me-4" id="restTographQLValue"
                                       formControlName="restTographQLValue"> -->
                                       <div class="input-group">
-                                        <input type="text" class="form-control" id="restTographQLValue"
+                                        <input type="text" class="form-control" id="restTographQLValue{{i}}"
                                       formControlName="restTographQLValue">
-                                        <button class="btn btn-primary" type="button" id="button-addonRestToGrQl"
+                                        <button class="btn btn-primary" type="button" id="button-addonRestToGrQl{{i}}"
                                         (click)="addParameterConnect(i,'restToGraphQLMap')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                                 height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd"
@@ -1575,13 +1645,7 @@
                                       (click)="removeParameterConnect(i,attr.key ,'restToGraphQLMap')"><b>X</b></button>
                                   </div>
                                 </div>
-                                <div id="restTographQLValueHelp" class="col-sm-12 form-text">A dictionary defining all the variables sent to the
-                                  GraphQL
-                                  server. You can use &#123;placeholders&#125; to inject parameters from the endpoint URL. In the example
-                                  above, the
-                                  GraphQL server receives a variable user with the &#123;user_id&#125; declared in the endpoint. The
-                                  dictionary can have
-                                  any nesting level you need, but nested variables cannot contain &#123;placeholders&#125;.</div>
+                                
                         
                                 }
                               </div>
@@ -1593,7 +1657,10 @@
                                     <h3>AMQP consumer</h3>
                                   </div>
                                   <div>
-                                    <mat-slide-toggle color="blue" formControlName="isAMQPconsumerActive"></mat-slide-toggle>
+                                    <div class="form-check form-switch">
+                                      <input class="form-check-input" type="checkbox" role="switch" id="isAMQPconsumerActive{{i}}" formControlName="isAMQPconsumerActive">
+                                    </div>
+                                    <!-- <mat-slide-toggle color="blue" formControlName="isAMQPconsumerActive"></mat-slide-toggle> -->
                                   </div>
                                 </div>
                                 @if(!getFormGroup(i).value.isAMQPconsumerActive){
@@ -1602,28 +1669,24 @@
                                 <div class="d-flex col-sm-12 mb-3">
                                   <div class="col-sm-12 col-md-4">
                         
-                                    <label for="amqpConsumerQueueName" class="form-label">Queue Name</label>
-                                    <input type="text" class="input-size form-control" id="amqpConsumerQueueName"
+                                    <label for="amqpConsumerQueueName{{i}}" class="form-label">Queue Name <i class="bi bi-info-circle" [matTooltip]=amqpConsName_tooltip></i></label>
+                                    <input type="text" class="input-size form-control" id="amqpConsumerQueueName{{i}}"
                                       formControlName="amqpConsumerQueueNameForm">
                         
-                                    <div id="amqpConsumerQueueNameHelp" class="form-text">The name of the queue you want to <br> connect to
-                                    </div>
+                                    
                         
                                   </div>
                                   <div class="col-sm-12 col-md-4">
                         
-                                    <label for="amqpConsumerExchange" class="form-label">Exchange</label>
-                                    <input type="text" class="input-size form-control" id="amqpConsumerExchange"
+                                    <label for="amqpConsumerExchange{{i}}" class="form-label">Exchange <i class="bi bi-info-circle" [matTooltip]=amqpConExchange_tooltip></i></label>
+                                    <input type="text" class="input-size form-control" id="amqpConsumerExchange{{i}}"
                                       formControlName="amqpConsumerExchangeForm">
                         
-                                    <div id="amqpConsumerExchangeHelp" class="form-text">The entity name where messages are <br> sent for
-                                      routing
-                                    </div>
                         
                                   </div>
                                   <div class="col-sm-12 col-md-4">
-                                    <label for="amqpConsumerBackOffStratgy" class="form-label">Operation Type</label>
-                                    <select class="form-select input-size" id="amqpConsumerBackOffStratgy"
+                                    <label for="amqpConsumerBackOffStratgy{{i}}" class="form-label">Operation Type <i class="bi bi-info-circle" [matTooltip]=amqpConoperationType_tooltip></i></label>
+                                    <select class="form-select input-size" id="amqpConsumerBackOffStratgy{{i}}"
                                       formControlName="amqpConsumerBackOffStratgyForm">
                                       <option selected>query</option>
                                       <option value="query">Linear - Delay time between attemps grows linearly</option>
@@ -1633,17 +1696,17 @@
                                       <option value="mutation">Fallback - Retry every 1 second</option>
                         
                                     </select>
-                                    <div id="restToGraphqlOpTypeHelp" class="form-text">The type of query you are declaring.</div>
+                                    
                                   </div>
                                 </div>
                                 <div class="d-flex col-sm-12 mb-3">
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="amqpConsumerRoutingKeys" class="form-label">Routing Keys</label>
+                                    <label for="amqpConsumerRoutingKeys{{i}}" class="form-label">Routing Keys <i class="bi bi-info-circle" [matTooltip]=amqpRoutKeys_tooltip></i></label>
                                     <div class="d-flex">
                                       <div class="input-group input-size">
-                                        <input type="text" class="form-control" id="amqpConsumerRoutingKeys"
+                                        <input type="text" class="form-control" id="amqpConsumerRoutingKeys{{i}}"
                                         formControlName="amqpConsumerRoutingKeysForm">
-                                        <button class="btn btn-primary" type="button" id="button-addonRoutKey"
+                                        <button class="btn btn-primary" type="button" id="button-addonRoutKey{{i}}"
                                         (click)="addParameterConnect(i,'amqpConsumerRoutingKeysForm')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                                 height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd"
@@ -1655,9 +1718,7 @@
                                       <button type="button" class="btn btn-info"
                                         (click)="addParameterConnect(i,'amqpConsumerRoutingKeysForm')">+</button> -->
                                     </div>
-                                    <div id="amqpConsumerRoutingKeysHelp" class="form-text">List of all the routing keys or pattern to bind the
-                                      queue to <br> the exchange
-                                    </div>
+                                   
                                     <div class="mt-3 d-flex">
                                       <button *ngFor="let attr of amqpRoutingKeysArray[i]; let j = index" class="parameter-item">
                                         {{ attr }}<mat-icon (click)="removeParameterConnect(i,j,'amqpConsumerRoutingKeysForm')"
@@ -1667,14 +1728,11 @@
                         
                                   </div>
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="amqpConsumerPrefetchCnt" class="form-label">Prefetch Count</label>
+                                    <label for="amqpConsumerPrefetchCnt{{i}}" class="form-label">Prefetch Count <i class="bi bi-info-circle" [matTooltip]=amqpConPrefetch_tooltip></i></label>
                                     <div class="d-flex">
-                                      <input type="number" class="input-size2 form-control" id="amqpConsumerPrefetchCnt"
+                                      <input type="number" class="input-size2 form-control" id="amqpConsumerPrefetchCnt{{i}}"
                                         formControlName="amqpConsumerPrefetchCntForm">
                                       <button class="fixed-button">msgs</button>
-                                    </div>
-                                    <div id="amqpConsumerPrefetchCntHelp" class="form-text">Specifies a prefetch window in terms of whole
-                                      messages
                                     </div>
                         
                                   </div>
@@ -1685,18 +1743,15 @@
                                   <div class="col-sm-12 col-md-6">
                                     <div class="d-flex">
                                       <input type="checkbox" class="input-size1" formControlName="amqpConsumerDurableForm">&nbsp;&nbsp;&nbsp;
-                                      <div class="checkbox-text">Durable</div>
+                                      <div class="checkbox-text">Durable <i class="bi bi-info-circle" [matTooltip]=amqpConDurable_tooltip></i></div>
                                     </div>
-                                    <div class="form-text">Durable exchanges survive broker restart (persist to disk) <br> whereas transient
-                                      exchanges do not</div>
                         
                                   </div>
                                   <div class="col-sm-12 col-md-6">
                                     <div class="d-flex">
                                       <input type="checkbox" class="input-size1" formControlName="amqpConsumerNoLocalForm">&nbsp;&nbsp;&nbsp;
-                                      <div class="checkbox-text">No-local</div>
+                                      <div class="checkbox-text">No-local <i class="bi bi-info-circle" [matTooltip]=amqpConNoLocal_tooltip></i></div>
                                     </div>
-                                    <div class="form-text">The server will not send messages to the connection that <br> published them.</div>
                         
                                   </div>
                         
@@ -1712,7 +1767,10 @@
                                     <h3>AWS Lambda</h3>
                                   </div>
                                   <div>
-                                    <mat-slide-toggle color="blue" formControlName="isAWSlambdaActive"></mat-slide-toggle>
+                                    <div class="form-check form-switch">
+                                      <input class="form-check-input" type="checkbox" role="switch" id="isAWSlambdaActive{{i}}" formControlName="isAWSlambdaActive">
+                                    </div>
+                                    <!-- <mat-slide-toggle color="blue" formControlName="isAWSlambdaActive"></mat-slide-toggle> -->
                                   </div>
                                 </div>
                                 @if(!getFormGroup(i).value.isAWSlambdaActive){
@@ -1720,50 +1778,40 @@
                                 }@else{
                                 <div class="col-sm-12 d-flex mb-3">
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="awsLambdaFunctionName" class="form-label">Function name</label>
-                                    <input type="text" class="input-size form-control" id="awsLambdaFunctionName"
+                                    <label for="awsLambdaFunctionName{{i}}" class="form-label">Function name <i class="bi bi-info-circle" [matTooltip]=awsLambdaFunc_tooltip></i></label>
+                                    <input type="text" class="input-size form-control" id="awsLambdaFunctionName{{i}}"
                                       formControlName="awsLambdaFunctionNameForm">
-                                    <div id="awsLambdaFunctionNameHelp" class="form-text">Name of the lambda function as saved in the AWS
-                                      service. <br> Leave EMPTY if taken from a parameter.</div>
                                   </div>
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="awsLambdaFunctionParamName" class="form-label">Function param name</label>
-                                    <input type="text" class="input-size form-control" id="awsLambdaFunctionParamName"
+                                    <label for="awsLambdaFunctionParamName{{i}}" class="form-label">Function param name <i class="bi bi-info-circle" [matTooltip]=awsLambdaFuncParam_tooltip></i></label>
+                                    <input type="text" class="input-size form-control" id="awsLambdaFunctionParamName{{i}}"
                                       formControlName="awsLambdaFunctionParamNameForm">
-                                    <div id="awsLambdaFunctionParamNameHelp" class="form-text">When the lambda function name comes in a
-                                      &#123;placeholder&#125; <br> inside the endpoint.</div>
                                   </div>
                         
                                 </div>
                                 <div class="col-sm-12 d-flex mb-3">
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="awsLambdaRegion" class="form-label">Region</label>
-                                    <input type="text" class="input-size form-control" id="awsLambdaRegion"
+                                    <label for="awsLambdaRegion{{i}}" class="form-label">Region <i class="bi bi-info-circle" [matTooltip]=awsLambdaRegion_tooltip></i></label>
+                                    <input type="text" class="input-size form-control" id="awsLambdaRegion{{i}}"
                                       formControlName="awsLambdaRegionForm">
-                                    <div id="awsLambdaRegionHelp" class="form-text">The AWS identifier region (e.g.: us-east-1, eu-west-2, etc.
-                                      )</div>
                                   </div>
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="awsLambdaMaxRetries" class="form-label">Max retries</label>
+                                    <label for="awsLambdaMaxRetries{{i}}" class="form-label">Max retries <i class="bi bi-info-circle" [matTooltip]=awsMaxRetries_tooltip></i></label>
                                     <div class="d-flex">
-                                      <input type="number" class="input-size2 form-control" id="awsLambdaMaxRetries"
+                                      <input type="number" class="input-size2 form-control" id="awsLambdaMaxRetries{{i}}"
                                         formControlName="awsLambdaMaxRetriesForm">
                                       <button class="fixed-button">retries</button>
                                     </div>
-                                    <div id="awsLambdaMaxRetriesHelp" class="form-text">Maximum times you want to execute the function until you
-                                      <br> have a successful response.
                                     </div>
                                   </div>
                         
                         
-                                </div>
+                                <!-- </div> -->
                         
                                 <div class="col-sm-12">
-                                  <label for="awsLambdaEndpoint" class="form-label">Endpoint</label>
-                                  <input type="text" class="input-size form-control" id="awsLambdaEndpoint"
+                                  <label for="awsLambdaEndpoint{{i}}" class="form-label">Endpoint <i class="bi bi-info-circle" [matTooltip]=awsLambdaEndpoint_tooltip></i></label>
+                                  <input type="text" class="input-size form-control" id="awsLambdaEndpoint{{i}}"
                                     formControlName="awsLambdaEndpointForm">
-                                  <div id="awsLambdaEndpointHelp" class="form-text">An optional parameter to customize the Lambda endpoint to
-                                    call. Useful when Localstack is used for testing.</div>
                         
                                 </div>
                                 }
@@ -1776,7 +1824,10 @@
                                     <h3>REST to gRPC</h3>
                                   </div>
                                   <div>
-                                    <mat-slide-toggle color="blue" formControlName="isrestToGRPCActive"></mat-slide-toggle>
+                                    <div class="form-check form-switch">
+                                      <input class="form-check-input" type="checkbox" role="switch" id="isrestToGRPCActive{{i}}" formControlName="isrestToGRPCActive">
+                                    </div>
+                                    <!-- <mat-slide-toggle color="blue" formControlName="isrestToGRPCActive"></mat-slide-toggle> -->
                                   </div>
                                 </div>
                                 @if(!getFormGroup(i).value.isrestToGRPCActive){
@@ -1789,27 +1840,23 @@
                                 </p>
                                 <div class="col-sm-12 d-flex mb-3">
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="restTogrpcReqNamingConvention" class="form-label">Request naming convention</label>
-                                    <select id="restTogrpcReqNamingConvention" class="form-select input-size"
+                                    <label for="restTogrpcReqNamingConvention{{i}}" class="form-label">Request naming convention <i class="bi bi-info-circle" [matTooltip]=restToGrpcReqNameCon_tooltip></i></label>
+                                    <select id="restTogrpcReqNamingConvention{{i}}" class="form-select input-size"
                                       formControlName="restTogrpcReqNamingConventionForm">
                                       <option selected></option>
                                       <option value="snake_case">snake_case</option>
                                       <option value="camelCase">camelCase</option>
                                     </select>
-                                    <div id="restTogrpcReqNamingConventionHelp" class="form-text">Defines the naming convention used to format
-                                      the data.</div>
                         
                                   </div>
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="restTogrpcResNamingConvention" class="form-label">Response naming convention</label>
-                                    <select id="restTogrpcResNamingConvention" class="form-select input-size"
+                                    <label for="restTogrpcResNamingConvention{{i}}" class="form-label">Response naming convention <i class="bi bi-info-circle" [matTooltip]=restToGrpcResNameCon_tooltip></i></label>
+                                    <select id="restTogrpcResNamingConvention{{i}}" class="form-select input-size"
                                       formControlName="restTogrpcResNamingConventionForm">
                                       <option selected></option>
                                       <option value="snake_case">snake_case</option>
                                       <option value="camelCase">camelCase</option>
                                     </select>
-                                    <div id="restTogrpcResNamingConventionHelp" class="form-text">Defines the naming convention used to format
-                                      the data.</div>
                         
                                   </div>
                         
@@ -1818,19 +1865,15 @@
                                   <div class="col-sm-12 col-md-6">
                                     <div class="d-flex">
                                       <input type="checkbox" class="input-size1" formControlName="restTogrpcUseReqBodyForm">&nbsp;&nbsp;&nbsp;
-                                      <div class="checkbox-text">Use request body</div>
+                                      <div class="checkbox-text">Use request body <i class="bi bi-info-circle" [matTooltip]=restToGrpcUserReqBody_tooltip></i></div>
                                     </div>
-                                    <div class="form-text" id="restTogrpcUseReqBodyHelp">Enables the use of the sent body to fill the gRPC
-                                      request.</div>
-                                  </div>
+                                    </div>
                                   <div class="col-sm-12 col-md-6">
                                     <div class="d-flex">
                                       <input type="checkbox" class="input-size1"
                                         formControlName="restTogrpcAllowInsecureConForm">&nbsp;&nbsp;&nbsp;
-                                      <div class="checkbox-text">Allow insecure connections</div>
+                                      <div class="checkbox-text">Allow insecure connections<i class="bi bi-info-circle" [matTooltip]=restToGrpcAllowInsecure_tooltip></i></div>
                                     </div>
-                                    <div class="form-text" id="restTogrpcAllowInsecureConHelp">Allow untrusted certificates in development
-                                      stage.</div>
                                   </div>
                         
                                 </div>
@@ -1839,22 +1882,14 @@
                                     <div class="d-flex">
                                       <input type="checkbox" class="input-size1"
                                         formControlName="restTogrpcRemoveUnsetValForm">&nbsp;&nbsp;&nbsp;
-                                      <div class="checkbox-text">Remove unset values</div>
+                                      <div class="checkbox-text">Remove unset values <i class="bi bi-info-circle" [matTooltip]=restToGrpcRemoveUnset_tooltip></i></div>
                                     </div>
-                                    <div class="form-text" id="restTogrpcRemoveUnsetValHelp">When the response has missing fields from the
-                                      definition,<br> they are returned with default values. Setting this flag to <br> true removes those fields
-                                      from the response, while setting <br> it to false or not setting it, returns all the fields in the <br>
-                                      definition.</div>
                                   </div>
                                   <div class="col-sm-12 col-md-6">
                                     <div class="d-flex">
                                       <input type="checkbox" class="input-size1" formControlName="restTogrpcEnumsAsStrgsForm">&nbsp;&nbsp;&nbsp;
-                                      <div class="checkbox-text">Enums as Strings</div>
+                                      <div class="checkbox-text">Enums as Strings <i class="bi bi-info-circle" [matTooltip]=restToGrpcEnumasString_tooltip></i></div>
                                     </div>
-                                    <div class="form-text" id="restTogrpcEnumsAsStrgsHelp">Enum types are returned as numeric values (flag set
-                                      to <br> false). Set this flag to true to return the string <br> representation of the enum value. For
-                                      instance, an enum <br> representing allergies, such as ['NUTS', 'MILK', ' SOY', <br> 'WHEAT'] would return
-                                      a value SOY when this flag is true,<br> or 2 when false.</div>
                                   </div>
                         
                                 </div>
@@ -1863,47 +1898,36 @@
                                     <div class="d-flex">
                                       <input type="checkbox" class="input-size1"
                                         formControlName="restTogrpcTimestmpAsStrgsForm">&nbsp;&nbsp;&nbsp;
-                                      <div class="checkbox-text">Timestamp as strings</div>
+                                      <div class="checkbox-text">Timestamp as strings <i class="bi bi-info-circle" [matTooltip]=restToGrpcTimestampAsString_tooltip></i></div>
                                     </div>
-                                    <div class="form-text" id="restTogrpcTimestmpAsStrgsHelp">Well-known Timestamp types <br> (<span
-                                        class="text-edit">google.protobuf.Timestamp</span>) are returned as a struct <br> containing fields with
-                                      seconds and nanos fields (flag set to <br> false). Setting this flag to true transforms the timestamps
-                                      <br> into a string representation in RFC3999 format.
-                                    </div>
+                                    
                                   </div>
                                   <div class="col-sm-12 col-md-6">
                                     <div class="d-flex">
                                       <input type="checkbox" class="input-size1"
                                         formControlName="restTogrpcDurationAsStrgsForm">&nbsp;&nbsp;&nbsp;
-                                      <div class="checkbox-text"> Duration as strings</div>
+                                      <div class="checkbox-text"> Duration as strings <i class="bi bi-info-circle" [matTooltip]=restToGrpcDurationAsString_tooltip></i></div>
                                     </div>
-                                    <div class="form-text" id="restTogrpcDurationAsStrgsHelp">Well-known Duration types
-                                      (google.protobuf.Duration) are <br> returned as a struct containing fields with seconds and <br> nanos
-                                      fields (flag set to false). Setting this flag to true <br> transforms the timestamps into a string
-                                      representation in <br> seconds.</div>
                                   </div>
                         
                                 </div>
                                 <div class="col-sm-12 mb-3">
                                   <div class="d-flex">
                                     <input type="checkbox" class="input-size1" formControlName="restTogrpcDisableQueryParamForm">
-                                    <div class="checkbox-text">Disable query parameters</div>
+                                    <div class="checkbox-text">Disable query parameters <i class="bi bi-info-circle" [matTooltip]=restToGrpcDisableQuery_tooltip></i></div>
                                   </div>
-                                  <div class="form-text" id="restTogrpcDisableQueryParamHelp">When checked it does not use URL parameters or
-                                    query strings to fill the gRPC payload to send. If you don't set request <br> body, there will be no input
-                                    used for the gRPC message (it's fine if you want an <span class="text-edit1">empty message</span>)</div>
                         
                                 </div>
                                 <div class="row align-items-end mb-3">
-                                  <h3 class="checkbox-text mb-3">Input Mapping</h3>
+                                  <h3 class="checkbox-text mb-3">Input Mapping <i class="bi bi-info-circle" [matTooltip]=restToGrpcInputMap_tooltip></i></h3>
                                   <div class="col-sm-12 col-md-4">
-                                    <label for="restTogprcInputMappingField">Field</label>
-                                    <input type="text" class="form-control input-size mt-2" id="restTogprcInputMappingField"
+                                    <label for="restTogprcInputMappingField{{i}}">Field</label>
+                                    <input type="text" class="form-control input-size mt-2" id="restTogprcInputMappingField{{i}}"
                                       formControlName="restTogprcInputMappingFieldForm">
                                   </div>
                                   <div class="col-sm-12 col-md-4">
-                                    <label for="restTogprcInputMappingMapAs">Map as</label>
-                                    <input type="text" class="form-control input-size mt-2" id="restTogprcInputMappingMapAs"
+                                    <label for="restTogprcInputMappingMapAs{{i}}">Map as</label>
+                                    <input type="text" class="form-control input-size mt-2" id="restTogprcInputMappingMapAs{{i}}"
                                       formControlName="restTogprcInputMappingMapAsForm">
                                   </div>
                                   <div class="col-sm-12 col-md-4">
@@ -1923,8 +1947,6 @@
                                       (click)="removeParameterConnect(i,attr.key ,'restToGraphQLMap')"><b>X</b></button>
                                   </div>
                                 </div>
-                                <div id="restTogprcInputMappingHelp" class="form-text">A dictionary that converts the user input into a
-                                  different field during the backend request.</div>
                                 }
                               </div>
                               
@@ -1935,16 +1957,19 @@
                                     <h3>Pub/Sub: Subscriber</h3>
                                   </div>
                                   <div>
-                                    <mat-slide-toggle color="blue" formControlName="isPublicSubscriberActive"></mat-slide-toggle>
+                                    <div class="form-check form-switch">
+                                      <input class="form-check-input" type="checkbox" role="switch" id="isPublicSubscriberActive{{i}}" formControlName="isPublicSubscriberActive">
+                                    </div>
+                                    <!-- <mat-slide-toggle color="blue" formControlName="isPublicSubscriberActive"></mat-slide-toggle> -->
                                   </div>
                                 </div>
                                 @if(!getFormGroup(i).value.isPublicSubscriberActive){
                                 <p>Read events from a queue</p>
                                 }@else{
                                 <div class="col-sm-12 mb-3">
-                                  <label for="publicSubSubscriptionType">Subscription type</label>
+                                  <label for="publicSubSubscriptionType">Subscription type <i class="bi bi-info-circle" [matTooltip]=pubSubType_tooltip></i></label>
                                   <!-- <input type="text" class="form-control input-size" id="publicSubSubscriptionType" formControlName="publicSubSubscriptionTypeForm"> -->
-                                  <select name="" id="publicSubSubscriptionType" class="form-select input-size"
+                                  <select name="" id="publicSubSubscriptionType{{i}}" class="form-select input-size"
                                     formControlName="publicSubSubscriptionTypeForm">
                                     <option value="GCP PubSub
                                       ">GCP PubSub
@@ -1968,16 +1993,13 @@
                                       ">Kafka
                                     </option>
                                   </select>
-                                  <div id="publicSubSubscriptionTypeHelp" class="form-text">Click on a subscription_url type to load an example
-                                    URL.</div>
                         
                                 </div>
                                 <div class="col-sm-12 mb-3">
-                                  <label for="publicSubSubscriptionURL">Subscription URL</label>
-                                  <input type="text" id="publicSubSubscriptionURL" class="form-control input-size"
+                                  <label for="publicSubSubscriptionURL{{i}}">Subscription URL <i class="bi bi-info-circle" [matTooltip]=pubSubUrl_tooltip></i></label>
+                                  <input type="text" id="publicSubSubscriptionURL{{i}}" class="form-control input-size"
                                     formControlName="publicSubSubscriptionURLForm">
-                                  <div class="form-text">The subscription URL. See <span class="text-edit1">the pub/sub documentation</span> for
-                                    all supported protocols</div>
+                                  
                         
                                 </div>
                         
@@ -1991,16 +2013,19 @@
                                     <h3>Pub/Sub: Publisher</h3>
                                   </div>
                                   <div>
-                                    <mat-slide-toggle color="blue" formControlName="isPublicPublisherActive"></mat-slide-toggle>
+                                    <div class="form-check form-switch">
+                                      <input class="form-check-input" type="checkbox" role="switch" id="isPublicPublisherActive{{i}}" formControlName="isPublicPublisherActive">
+                                    </div>
+                                    <!-- <mat-slide-toggle color="blue" formControlName="isPublicPublisherActive"></mat-slide-toggle> -->
                                   </div>
                                 </div>
                                 @if(!getFormGroup(i).value.isPublicPublisherActive){
                                 <p>Pushes events to a queue</p>
                                 }@else{
                                 <div class="col-sm-12 mb-3">
-                                  <label for="publicPubSubscriptionType">Subscription type</label>
+                                  <label for="publicPubSubscriptionType{{i}}">Subscription type <i class="bi bi-info-circle" [matTooltip]=pubSubPublisherType_tooltip></i></label>
                                   <!-- <input type="text" class="form-control input-size" id="publicSubSubscriptionType" formControlName="publicSubSubscriptionTypeForm"> -->
-                                  <select name="" id="publicPubSubscriptionType" class="form-select input-size"
+                                  <select name="" id="publicPubSubscriptionType{{i}}" class="form-select input-size"
                                     formControlName="publicPubSubscriptionTypeForm">
                                     <option value="GCP PubSub
                                         ">GCP PubSub
@@ -2024,16 +2049,13 @@
                                         ">Kafka
                                     </option>
                                   </select>
-                                  <div id="publicPubSubscriptionTypeHelp" class="form-text">Click on a subscription_url type to load an example
-                                    URL.</div>
                         
                                 </div>
                                 <div class="col-sm-12 mb-3">
-                                  <label for="publicPubSubscriptionURL">Topic URL</label>
-                                  <input type="text" id="publicPubTopicURL" class="form-control input-size"
+                                  <label for="publicPubSubscriptionURL">Topic URL <i class="bi bi-info-circle" [matTooltip]=pubSubPublisherUrl_tooltip></i></label>
+                                  <input type="text" id="publicPubTopicURL{{i}}" class="form-control input-size"
                                     formControlName="publicPubTopicURLForm">
-                                  <div class="form-text">The subscription URL. See <span class="text-edit1">the pub/sub documentation</span> for
-                                    all supported protocols</div>
+                                  
                         
                                 </div>
                         
@@ -2047,7 +2069,10 @@
                                     <h3> AMQP producer</h3>
                                   </div>
                                   <div>
-                                    <mat-slide-toggle color="blue"  formControlName="isAMQPproducerActive"></mat-slide-toggle>
+                                    <div class="form-check form-switch">
+                                      <input class="form-check-input" type="checkbox" role="switch" id="isAMQPproducerActive{{i}}" formControlName="isAMQPproducerActive">
+                                    </div>
+                                    <!-- <mat-slide-toggle color="blue"  formControlName="isAMQPproducerActive"></mat-slide-toggle> -->
                                   </div>
                                 </div>
                                 @if(!getFormGroup(i).value.isAMQPproducerActive){
@@ -2055,23 +2080,21 @@
                                 }@else{
                                 <div class="col-sm-12 d-flex mb-3">
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="amqpProducerQueueName">Queue name</label>
-                                    <input type="text" id="amqpProducerQueueName" class="form-control input-size"
+                                    <label for="amqpProducerQueueName{{i}}">Queue name <i class="bi bi-info-circle" [matTooltip]=amqpProName_tooltip></i></label>
+                                    <input type="text" id="amqpProducerQueueName{{i}}" class="form-control input-size"
                                       formControlName="amqpProducerQueueNameForm">
-                                    <div class="form-text" id="amqpProducerQueueNameHelp">The name of the queue you want to connect to</div>
                                   </div>
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="amqpProducerExchange">Exchange</label>
-                                    <input type="text" id="amqpProducerExchange" class="form-control input-size"
+                                    <label for="amqpProducerExchange{{i}}">Exchange <i class="bi bi-info-circle" [matTooltip]=amqpProExchange_tooltip></i></label>
+                                    <input type="text" id="amqpProducerExchange{{i}}" class="form-control input-size"
                                       formControlName="amqpProducerExchangeForm">
-                                    <div class="form-text" id="amqpProducerExchangeHelp">The entity name where messages are sent for routing
-                                    </div>
+                                    
                                   </div>
                                 </div>
                                 <div class="col-sm-12 d-flex mb-3">
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="amqpProducerBackoffStrategy">Backoff Strategy</label>
-                                    <select class="form-select input-size" id="amqpProducerBackoffStrategy"
+                                    <label for="amqpProducerBackoffStrategy{{i}}">Backoff Strategy <i class="bi bi-info-circle" [matTooltip]=amqpProBackoffst_tooltip></i></label>
+                                    <select class="form-select input-size" id="amqpProducerBackoffStrategy{{i}}"
                                       formControlName="amqpProducerBackoffStrategyForm">
                                       <option value="Linear - Delay time between attemps grows linearly">Linear - Delay time between attemps
                                         grows linearly</option>
@@ -2081,16 +2104,12 @@
                                       </option>
                                       <option value="Fallback - Retry every 1 second">Fallback - Retry every 1 second</option>
                                     </select>
-                                    <div class="form-text" id="amqpProducerQueueNameHelp">When the connection to your event source gets
-                                      interrupted <br> for whatever reason, KrakenD keeps trying to reconnect <br> after a delay</div>
                                   </div>
                                   <div class="col-sm-12 col-md-6">
                                     <div class="d-flex">
                                       <input type="checkbox" class="input-size1" formControlName="amqpProducerDurableForm">&nbsp;&nbsp;&nbsp;
-                                      <div class="checkbox-text">Durable</div>
+                                      <div class="checkbox-text">Durable <i class="bi bi-info-circle" [matTooltip]=amqpProDurable_tooltip></i></div>
                                     </div>
-                                    <div class="form-text" id="amqpProducerDurableHelp">Durable exchanges survive broker restart whereas <br>
-                                      transient exchanges do not</div>
                                   </div>
                                 </div>
                         

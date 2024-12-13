@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,5 +20,13 @@ export class CommunicationService {
 
   emitGatewayCreated(data: any) {
     this.gatewayCreatedSource.next(data);
+  }
+
+  // showparent
+  private showParentSource = new BehaviorSubject<boolean>(true); // Initial state is true
+  showParent$ = this.showParentSource.asObservable();
+
+  updateShowParent(value: boolean) {
+    this.showParentSource.next(value);
   }
 }

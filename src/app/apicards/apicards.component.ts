@@ -42,6 +42,8 @@ export class ApicardsComponent implements OnInit{
   userDetails:any;
   userId:any=localStorage.getItem('userid');
   ngOnInit(){
+    console.log(this.isShowParent);
+    
     if(this.userId){
       this.loadCards(this.userId)
     }else{
@@ -68,6 +70,10 @@ export class ApicardsComponent implements OnInit{
 //     }
 //   }
 // });
+this.communucationSer.showParent$.subscribe((value) => {
+  this.isShowParent = value;
+  console.log('showParent updated to:', this.isShowParent);
+});
 }
   
   loadCards(userId:any){
@@ -91,11 +97,13 @@ export class ApicardsComponent implements OnInit{
     {id:4,name:"name4"}
   ]
   goToCreateApi(){
-    this.isShowParent=false;
+    // this.isShowParent=false;
+    this.communucationSer.updateShowParent(false);
 this.router.navigate(['createapi'],{relativeTo: this.route})
   }
   goToApiViewPage(id:string){
-    this.isShowParent=false;
+    // this.isShowParent=false;
+    this.communucationSer.updateShowParent(false);
     this.router.navigate([`viewapi/${id}/overview`],{relativeTo:this.route})
   }
 }
