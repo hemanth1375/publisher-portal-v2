@@ -1,15 +1,19 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 // import { SharedDataService } from '../services/shared-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EndpointService } from '../services/endpoint.service';
+import { HttpsecurityService } from '../services/httpsecurity.service';
 @Component({
   selector: 'app-gateways-httpsecurity',
   templateUrl: './gateways-httpsecurity.component.html',
   styleUrl: './gateways-httpsecurity.component.css'
 })
 export class GatewaysHttpsecurityComponent {
+
+  selectedValues: string[] = []; // Array to store selected values
   formGroupHttpSecurity: FormGroup;
+
   allowedOriginsToolTip="Add those origins you would like to accept. Or use * for any origins"
   allowedHeadersToolTip="Only the headers added here will be allowed"
   exposeHeadersToolTip="Headers that are safe to expose to the API of a CORS API specification"
@@ -36,8 +40,10 @@ export class GatewaysHttpsecurityComponent {
   httpSecurityHPKPToolTip="Allows HTTPS websites to resist impersonation by attackers using mis-issued or otherwise fraudulent certificates."
   httpSecuritySniffingToolTip="When set prevents Internet Explorer from MIME-sniffing a response away from the declared content-type. This also applies to Google Chrome, when downloading extensions. Sets sX-Content-Type-Options: nosniff"
   browserCrossSiteScriptingToolTip="When set adds the header X-XSS-Protection: 1; mode=block"
-  basicAuthHtpasswdPathToolTip="Absolute Path to the htpasswd filename (recommended) or relative ./ to the workdir."
-
+  basicAuthHtpasswdPathToolTip = "Absolute Path to the htpasswd filename (recommended) or relative ./ to the workdir."
+  frameOptionsToolTip = "Allows HTTPS websites to resist impersonation by attackers  using mis-issued or otherwise fraudulent certificates. "
+  httpSecurityConSecPolicyToolTip = "Enable Content Security Policy (CSP) by writing your policies in the header (see reference)."
+  httpSecurityHSTSMaxAgeToolTip = "The max-age of the Strict-Transport-Security header. Setting to 0 disables  "
 
   onToggleChangeStaticResponse(event: any, id: any) {
     console.log('id', id);
@@ -59,12 +65,23 @@ export class GatewaysHttpsecurityComponent {
 
   objectMap: Map<string, string> = new Map();
   entireJsonData: any;
+
   endPointData:any;
+
+  removeAttribute(index: number): void {
+    this.selectedValues.splice(index, 1);
+    this.formGroupHttpSecurity.get('multiSelect')?.setValue(this.selectedValues); // Update the form control
+  }
+
   ngOnInit() {
     // this.sharedService.getEntireJsonData$().subscribe(data => {
     //   this.entireJsonData = data;
 
     // })
+    // Update the selectedValues array whenever the form control changes
+    this.formGroupHttpSecurity.get('multiSelect')?.valueChanges.subscribe((values) => {
+      this.selectedValues = values;
+    });
     console.log(this.entireJsonData);
     // if (this.entireJsonData != undefined) {
     //   this.corsAllowedOriginsArray = this.entireJsonData?.extra_config?.["security/cors"]?.allow_origins ||[];
@@ -81,61 +98,64 @@ export class GatewaysHttpsecurityComponent {
     //   this.objectMap = this.entireJsonData?.extra_config?.["security/http"]?.ssl_proxy_headers ||[];
     // }
 
-    this.formGroupHttpSecurity.patchValue({
-      isCorsActive: !!this.entireJsonData?.extra_config?.["security/cors"],
-      isBotDetectorActive: !!this.entireJsonData?.extra_config?.["security/bot-detector"],
-      isMultipleIdentityProviderActive: !!this.entireJsonData?.extra_config?.["plugin/http-server"]?.name?.includes("jwk-aggregator"),
-      isIpFilterActive: !!this.entireJsonData?.extra_config?.["plugin/http-server"]?.name?.includes("ip-filter"),
-      isHttpSecurityActive: !!this.entireJsonData?.extra_config?.["security/http"],
-      isBasicAuthActive: !!this.entireJsonData?.extra_config?.["auth/basic"],
-      corsAllowedOriginsForm: '',
-      corsAllowedHeadersForm: '',
-      corsExposeHeadersForm: '',
-      corsAllowCredentialsForm: this.entireJsonData?.extra_config?.["security/cors"]?.allow_credentials,
-      corsMaxAgeForm: this.entireJsonData?.extra_config?.["security/cors"]?.max_age,
-      botDetectorAllowForm: '',
-      botDetectorDenyForm: '',
-      botDetectorPatternsForm: '',
-      botDetectorCacheSizeForm: this.entireJsonData?.extra_config?.["security/bot-detector"]?.cache_size,
-      botDetectorEmptyUsersForm: this.entireJsonData?.extra_config?.["security/bot-detector"]?.empty_user_agent_is_bot,
-      multipleIdentityProviderOriginsForm: '',
-      multipleIdentityProviderPortForm: this.entireJsonData?.extra_config?.["plugin/http-server"]?.["jwk-aggregator"]?.port,
-      multipleIdentityProviderCacheForm: this.entireJsonData?.extra_config?.["plugin/http-server"]?.["jwk-aggregator"]?.cache,
-      ipFilterCIDRForm: '',
-      ipFilterClientIPHeadersForm: '',
-      ipFilterTrustedProxiesForm: '',
-      ipFilterAllowModeForm: this.entireJsonData?.extra_config?.["plugin/http-server"]?.["ip-filter"]?.allow,
-      httpSecurityAllowedHostsForm: '',
-      httpSecuritySSLOptForceSSLForm: this.entireJsonData?.extra_config?.["security/http"]?.ssl_redirect,
-      httpSecuritySSLOptForm: this.entireJsonData?.extra_config?.["security/http"]?.ssl_host,
-      httpSecuritySSLOptPortForm: this.entireJsonData?.extra_config?.["security/http"]?.ssl_port,
-      httpSecuritySSLProxyHeaderForm: '',
-      httpSecurityHeaderValueForm: '',
-      httpSecurityHSTSForm: this.entireJsonData?.extra_config?.["security/http"]?.sts_seconds,
-      httpSecurityIncSubdomainForm: this.entireJsonData?.extra_config?.["security/http"]?.sts_include_subdomains,
-      httpSecurityClickjackProtectForm: this.entireJsonData?.extra_config?.["security/http"]?.frame_deny,
-      httpSecurityHPKPForm: this.entireJsonData?.extra_config?.["security/http"]?.hpkp_public_key,
-      httpSecuritySniffingForm: this.entireJsonData?.extra_config?.["security/http"]?.content_type_nosniff,
-      httpSecurityXSSProtectionForm: this.entireJsonData?.extra_config?.["security/http"]?.browser_xss_filter,
-      httpSecurityConSecPolicyForm: this.entireJsonData?.extra_config?.["security/http"]?.content_security_policy,
-      basicAuthHtpasswdPathForm: this.entireJsonData?.extra_config?.["auth/basic"]?.htpasswd_path,
-      corsAllowedOriginsFormArray: this.entireJsonData?.extra_config?.["security/cors"]?.allow_origins,
-      corsAllowedHeadersFormArray: this.entireJsonData?.extra_config?.["security/cors"]?.allow_headers,
-      corsExposeHeadersFormArray: this.entireJsonData?.extra_config?.["security/cors"]?.expose_headers,
-      // corsMaxAgeFormArray: [[]],
-      botDetectorAllowFormArray: this.entireJsonData?.extra_config?.["security/bot-detector"]?.allow,
-      botDetectorDenyFormArray: this.entireJsonData?.extra_config?.["security/bot-detector"]?.deny,
-      botDetectorPatternsFormArray: this.entireJsonData?.extra_config?.["security/bot-detector"]?.patterns,
-      multipleIdentityProviderOriginsFormArray: this.entireJsonData?.extra_config?.["plugin/http-server"]?.["jwk-aggregator"]?.origins,
-      ipFilterCIDRFormArray: this.entireJsonData?.extra_config?.["plugin/http-server"]?.["ip-filter"]?.CIDR,
-      ipFilterTrustedProxiesFormArray: this.entireJsonData?.extra_config?.["plugin/http-server"]?.["ip-filter"]?.trusted_proxies,
-      ipFilterClientIPHeadersFormArray: this.entireJsonData?.extra_config?.["plugin/http-server"]?.["ip-filter"]?.client_ip_headers,
-      httpSecurityAllowedHostsFormArray: this.entireJsonData?.extra_config?.["security/http"]?.allowed_hosts,
-      // objectMapValue: [[]],
-      frameOptions: this.entireJsonData?.extra_config?.["security/http"]?.custom_frame_options_value
-    })
+    // this.formGroupHttpSecurity.patchValue({
+    //   isCorsActive: !!this.entireJsonData?.extra_config?.["security/cors"],
+    //   isBotDetectorActive: !!this.entireJsonData?.extra_config?.["security/bot-detector"],
+    //   isMultipleIdentityProviderActive: !!this.entireJsonData?.extra_config?.["plugin/http-server"]?.name?.includes("jwk-aggregator"),
+    //   isIpFilterActive: !!this.entireJsonData?.extra_config?.["plugin/http-server"]?.name?.includes("ip-filter"),
+    //   isHttpSecurityActive: !!this.entireJsonData?.extra_config?.["security/http"],
+    //   isBasicAuthActive: !!this.entireJsonData?.extra_config?.["auth/basic"],
+    //   corsAllowedOriginsForm: '',
+    //   corsAllowedHeadersForm: '',
+    //   corsExposeHeadersForm: '',
+    //   corsAllowCredentialsForm: this.entireJsonData?.extra_config?.["security/cors"]?.allow_credentials,
+    //   corsMaxAgeForm: this.entireJsonData?.extra_config?.["security/cors"]?.max_age,
+    //   botDetectorAllowForm: '',
+    //   botDetectorDenyForm: '',
+    //   botDetectorPatternsForm: '',
+    //   botDetectorCacheSizeForm: this.entireJsonData?.extra_config?.["security/bot-detector"]?.cache_size,
+    //   botDetectorEmptyUsersForm: this.entireJsonData?.extra_config?.["security/bot-detector"]?.empty_user_agent_is_bot,
+    //   multipleIdentityProviderOriginsForm: '',
+    //   multipleIdentityProviderPortForm: this.entireJsonData?.extra_config?.["plugin/http-server"]?.["jwk-aggregator"]?.port ?? [],
+    //   multipleIdentityProviderCacheForm: this.entireJsonData?.extra_config?.["plugin/http-server"]?.["jwk-aggregator"]?.cache,
+    //   ipFilterCIDRForm: '',
+    //   ipFilterClientIPHeadersForm: '',
+    //   ipFilterTrustedProxiesForm: '',
+    //   ipFilterAllowModeForm: this.entireJsonData?.extra_config?.["plugin/http-server"]?.["ip-filter"]?.allow,
+    //   httpSecurityAllowedHostsForm: '',
+    //   httpSecuritySSLOptForceSSLForm: this.entireJsonData?.extra_config?.["security/http"]?.ssl_redirect,
+    //   httpSecuritySSLOptForm: this.entireJsonData?.extra_config?.["security/http"]?.ssl_host,
+    //   httpSecuritySSLOptPortForm: this.entireJsonData?.extra_config?.["security/http"]?.ssl_port,
+    //   httpSecuritySSLProxyHeaderForm: '',
+    //   httpSecurityHeaderValueForm: '',
+    //   httpSecurityHSTSForm: this.entireJsonData?.extra_config?.["security/http"]?.sts_seconds,
+    //   httpSecurityIncSubdomainForm: this.entireJsonData?.extra_config?.["security/http"]?.sts_include_subdomains,
+    //   httpSecurityClickjackProtectForm: this.entireJsonData?.extra_config?.["security/http"]?.frame_deny,
+    //   httpSecurityHPKPForm: this.entireJsonData?.extra_config?.["security/http"]?.hpkp_public_key,
+    //   httpSecuritySniffingForm: this.entireJsonData?.extra_config?.["security/http"]?.content_type_nosniff,
+    //   httpSecurityXSSProtectionForm: this.entireJsonData?.extra_config?.["security/http"]?.browser_xss_filter,
+    //   httpSecurityConSecPolicyForm: this.entireJsonData?.extra_config?.["security/http"]?.content_security_policy,
+    //   basicAuthHtpasswdPathForm: this.entireJsonData?.extra_config?.["auth/basic"]?.htpasswd_path,
+    //   corsAllowedOriginsFormArray: this.entireJsonData?.extra_config?.["security/cors"]?.allow_origins ?? [],
+    //   corsAllowedHeadersFormArray: this.entireJsonData?.extra_config?.["security/cors"]?.allow_headers ?? [],
+    //   corsExposeHeadersFormArray: this.entireJsonData?.extra_config?.["security/cors"]?.expose_headers ?? [],
+    //   corsMaxAgeFormArray: [[]],
+    //   botDetectorAllowFormArray: this.entireJsonData?.extra_config?.["security/bot-detector"]?.allow ?? [],
+    //   botDetectorDenyFormArray: this.entireJsonData?.extra_config?.["security/bot-detector"]?.deny ?? [],
+    //   botDetectorPatternsFormArray: this.entireJsonData?.extra_config?.["security/bot-detector"]?.patterns ?? [],
+    //   multipleIdentityProviderOriginsFormArray: this.entireJsonData?.extra_config?.["plugin/http-server"]?.["jwk-aggregator"]?.origins ?? [],
+    //   ipFilterCIDRFormArray: this.entireJsonData?.extra_config?.["plugin/http-server"]?.["ip-filter"]?.CIDR ?? [],
+    //   ipFilterTrustedProxiesFormArray: this.entireJsonData?.extra_config?.["plugin/http-server"]?.["ip-filter"]?.trusted_proxies ?? [],
+    //   ipFilterClientIPHeadersFormArray: this.entireJsonData?.extra_config?.["plugin/http-server"]?.["ip-filter"]?.client_ip_headers ?? [],
+    //   httpSecurityAllowedHostsFormArray: this.entireJsonData?.extra_config?.["security/http"]?.allowed_hosts ?? [],
+    //   // objectMapValue: [[]],
+    //   frameOptions: this.entireJsonData?.extra_config?.["security/http"]?.custom_frame_options_value
+    // })
   }
-
+  getSelectedValues(): string {
+    const values = this.formGroupHttpSecurity.get('multiSelect')?.value || [];
+    return values.join(', '); // Convert array to a comma-separated string
+  }
 
 
   updateMapControl() {
@@ -262,10 +282,10 @@ export class GatewaysHttpsecurityComponent {
   }
 
 
+  
 
+  constructor(private formBuilder: FormBuilder, private _snackBar: MatSnackBar, private httpSecurityService: HttpsecurityService) {
 
-
-  constructor(private formBuilder: FormBuilder, private _snackBar: MatSnackBar, private endpointService:EndpointService) {
     this.formGroupHttpSecurity = this.formBuilder.group({
       isCorsActive: [false],
       isBotDetectorActive: [false],
@@ -273,6 +293,8 @@ export class GatewaysHttpsecurityComponent {
       isIpFilterActive: [false],
       isHttpSecurityActive: [false],
       isBasicAuthActive: [false],
+      multiSelect: [[]], // Initialize the form control with an empty array
+
       corsAllowedOriginsForm: [null],
       corsAllowedHeadersForm: [null],
       corsExposeHeadersForm: [null],
@@ -294,7 +316,7 @@ export class GatewaysHttpsecurityComponent {
       httpSecuritySSLOptForceSSLForm: [false],
       httpSecuritySSLOptForm: [null],
       httpSecuritySSLOptPortForm: [null],
-      httpSecuritySSLProxyHeaderForm: [null],
+      httpSecuritySSLProxyHeaderForm: [{}],
       httpSecurityHeaderValueForm: [null],
       httpSecurityHSTSForm: [null],
       httpSecurityIncSubdomainForm: [false],
@@ -322,15 +344,225 @@ export class GatewaysHttpsecurityComponent {
   }
   emitValue() {
     console.log(this.formGroupHttpSecurity.value);
+    // const renamingObj = data?.objectMapValue?.reduce((acc:any, [key, value]:any) => {
+    //   acc[key] = value;
+    //   return acc;
+    // }, {});
+    const ssl_proxy_headers_values = this.formGroupHttpSecurity.get('objectMapValue')?.value.reduce((acc: any, [key, value]: any) => {
+      acc[key] = value;
+      return acc;
+    }, {});
+    const httpbody = {
+      // "id": this.cardId?this.cardId:null,
+
+      //       ...(this.formGroupHttpSecurity.get('corsAllowedHeadersFormArray') as FormArray)?.length != 0 &&
+      // {
+      //   "allow_headers": (this.formGroupHttpSecurity.get('corsAllowedHeadersFormArray') as FormArray)?.value
+      // }),
+      ...(this.formGroupHttpSecurity.get('isCorsActive')?.value && {
+        "security/cors": {
+          // ...(this.formGroupHttpSecurity.get('corsAllowedOriginsFormArray')?.length!=0 &&{"allow_origins": this.formGroupHttpSecurity.get('corsAllowedOriginsFormArray')}),
+          // "allow_methods": [
+          //   ''
+          // ],
+          ...(this.formGroupHttpSecurity.get('multiSelect')?.value.length && {
+            "allow_methods": this.formGroupHttpSecurity.get('multiSelect')?.value
+          }),
+          ...((this.formGroupHttpSecurity.get('corsAllowedOriginsFormArray')?.value)?.length != 0 &&
+            { "allow_origins": this.formGroupHttpSecurity.get('corsAllowedOriginsFormArray')?.value }),
+
+          // ...(this.formGroupHttpSecurity.get('corsAllowedHeadersFormArray')?.length != 0 && {"allow_headers": this.formGroupHttpSecurity.get('corsAllowedHeadersFormArray')}),
+          ...(this.formGroupHttpSecurity.get('corsAllowedHeadersFormArray')?.value)?.length != 0 && {
+            "allow_headers": this.formGroupHttpSecurity.get('corsAllowedHeadersFormArray')?.value
+          },
+          // ...(this.formGroupHttpSecurity.get('corsExposeHeadersFormArray')?.length!=0 &&{"expose_headers": this.formGroupHttpSecurity.get('corsExposeHeadersFormArray')}),
+          ...(this.formGroupHttpSecurity.get('corsExposeHeadersFormArray')?.value)?.length != 0 && {
+            "expose_headers": this.formGroupHttpSecurity.get('corsExposeHeadersFormArray')?.value
+          },
+          // ...(this.formGroupHttpSecurity?.corsMaxAgeForm &&{"max_age": this.formGroupHttpSecurity?.corsMaxAgeForm}),
+          ...(this.formGroupHttpSecurity.get('corsMaxAgeForm')?.value && {
+            "max_age": this.formGroupHttpSecurity.get('corsMaxAgeForm')?.value
+          }),
+          //   ...(this.formGroupHttpSecurity?.corsAllowCredentialsForm &&{"allow_credentials": this.formGroupHttpSecurity?.corsAllowCredentialsForm})
+          // }}),
+          ...(this.formGroupHttpSecurity.get('corsAllowCredentialsForm')?.value && { "allow_credentials": this.formGroupHttpSecurity.get('corsAllowCredentialsForm')?.value })
+        }
+      }),
+
+
+
+      ...(this.formGroupHttpSecurity.get('isBotDetectorActive')?.value &&
+      {
+        "security/bot-detector": {
+          ...(this.formGroupHttpSecurity.get('botDetectorAllowFormArray')?.value)?.length != 0 && {
+            "detector-allow": (this.formGroupHttpSecurity.get('botDetectorAllowFormArray')?.value),
+          },
+          ...(this.formGroupHttpSecurity.get('botDetectorCacheSizeForm')?.value && {
+            "cache_size": this.formGroupHttpSecurity.get('botDetectorCacheSizeForm')?.value,
+          }),
+          ...(this.formGroupHttpSecurity.get('botDetectorDenyFormArray')?.value)?.length != 0 && {
+            "detector-deny": (this.formGroupHttpSecurity.get('botDetectorDenyFormArray'))?.value,
+          },
+          ...(this.formGroupHttpSecurity.get('botDetectorEmptyUsersForm')?.value && {
+            "empty_user_agent_is_bot": this.formGroupHttpSecurity.get('botDetectorEmptyUsersForm')?.value,
+          }),
+          ...(this.formGroupHttpSecurity.get('botDetectorPatternsFormArray')?.value)?.length != 0 && {
+            "patterns": (this.formGroupHttpSecurity.get('botDetectorPatternsFormArray')?.value),
+          },
+        },
+      }
+      ),
+      ...((this.formGroupHttpSecurity.get('isIpFilterActive')?.value || this.formGroupHttpSecurity.get('isMultipleIdentityProviderActive')?.value) && {
+        "plugin/http-server": {
+          // "name": [
+          //   this.formGroupHttpSecurity.get('isIpFilterActive') && 'ip-filter',
+          //   this.formGroupHttpSecurity.get('isMultipleIdentityProviderActive') && 'jwk-aggregator'
+          // ].filter(Boolean),
+          // ...(this.formGroupHttpSecurity?.isGeoIpActive &&{"geoip": {
+          //   ...(this.formGroupHttpSecurity?.databasePath &&{"citydb_path":this.formGroupHttpSecurity?.databasePath})
+          // }}),
+          // ...(this.formGroupHttpSecurity?.isUrlRewriteActive && {"url-rewrite": {
+          //   "literal": literalObj,
+          //   "regexp": this.formGroupHttpSecurity?.regExpMatchObjectMapValue
+          // }}),
+
+          // "name": [
+          //   this.formGroupHttpSecurity.get('isIpFilterActive')?.value && 'ip-filter',
+          //   this.formGroupHttpSecurity.get('isMultipleIdentityProviderActive') && 'jwk-aggregator'
+          // ].filter(Boolean),
+          ...((this.formGroupHttpSecurity.get('isIpFilterActive')?.value || this.formGroupHttpSecurity.get('isMultipleIdentityProviderActive')?.value) && {
+            "name": [
+              this.formGroupHttpSecurity.get('isIpFilterActive')?.value && 'ip-filter',
+              this.formGroupHttpSecurity.get('isMultipleIdentityProviderActive')?.value && 'jwk-aggregator'
+            ].filter(Boolean),
+          }),
+          ...(this.formGroupHttpSecurity.get('isIpFilterActive')?.value && {
+            "ip-filter": {
+              // ...(this.formGroupHttpSecurity?.ipFilterCIDRFormArray.length!=0 &&{"CIDR": this.formGroupHttpSecurity?.ipFilterCIDRFormArray}),
+              ...(this.formGroupHttpSecurity.get('ipFilterCIDRFormArray')?.value?.length != 0 && {
+                "CIDR": this.formGroupHttpSecurity.get('ipFilterCIDRFormArray')?.value
+              }),
+
+              // "allow": this.formGroupHttpSecurity.get('ipFilterAllowModeForm')?.value,
+              // "allow": this.formGroupHttpSecurity.get('ipFilterAllowModeForm')?.value,
+              // ...(this.formGroupHttpSecurity.get('ipFilterAllowModeForm')?.value && {
+              "allow": this.formGroupHttpSecurity.get('ipFilterAllowModeForm')?.value,
+              // }),
+              // ...(this.formGroupHttpSecurity?.ipFilterClientIPHeadersFormArray.length!=0 &&{"client_ip_headers": this.formGroupHttpSecurity?.ipFilterClientIPHeadersFormArray}),
+              ...this.formGroupHttpSecurity.get('ipFilterClientIPHeadersFormArray')?.value.length != 0 && {
+                "client_ip_headers": this.formGroupHttpSecurity.get('ipFilterClientIPHeadersFormArray')?.value
+              },
+              // ...(this.formGroupHttpSecurity?.ipFilterTrustedProxiesFormArray.length!=0 &&{"trusted_proxies": this.formGroupHttpSecurity?.ipFilterTrustedProxiesFormArray})
+              ...(this.formGroupHttpSecurity.get('ipFilterTrustedProxiesFormArray')?.value?.length != 0 && {
+                "trusted_proxies": (this.formGroupHttpSecurity.get('ipFilterTrustedProxiesFormArray') as FormArray)?.value
+              }),
+
+            }
+          }),
+          ...(this.formGroupHttpSecurity.get('isMultipleIdentityProviderActive')?.value && {
+            "jwk-aggregator": {
+              ...(this.formGroupHttpSecurity.get('multipleIdentityProviderCacheForm')?.value && { "cache": this.formGroupHttpSecurity.get('multipleIdentityProviderCacheForm')?.value }),
+              // ...(this.formGroupHttpSecurity?.multipleIdentityProviderOriginsFormArray.length!=0 &&{"origins": this.formGroupHttpSecurity?.multipleIdentityProviderOriginsFormArray}),
+              ...(this.formGroupHttpSecurity.get('multipleIdentityProviderOriginsFormArray')?.value?.length != 0 && {
+                "origins": this.formGroupHttpSecurity.get('multipleIdentityProviderOriginsFormArray')?.value
+              }),
+              // ...(this.formGroupHttpSecurity?.multipleIdentityProviderPortForm &&{"port": this.formGroupHttpSecurity?.multipleIdentityProviderPortForm})
+              ...(this.formGroupHttpSecurity.get('multipleIdentityProviderPortForm')?.value?.length != 0 && {
+                "port": this.formGroupHttpSecurity.get('multipleIdentityProviderPortForm')?.value
+              }),
+            }
+          }),
+        }
+      }),
+
+
+      ...(this.formGroupHttpSecurity.get('isHttpSecurityActive')?.value && {
+        "security/http":
+        {
+          // ...(this.formGroupHttpSecurity?.httpSecurityAllowedHostsFormArray.length!=0 &&{"allowed_hosts": this.formGroupHttpSecurity?.httpSecurityAllowedHostsFormArray}),
+          // "allowed_hosts_are_regex": true,
+          // ...(this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value?.length != 0 && {
+          "allowed_hosts": this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value,
+          // }),
+          ...(this.formGroupHttpSecurity.get('httpSecurityXSSProtectionForm')?.value && { "browser_xss_filter": this.formGroupHttpSecurity.get('httpSecurityXSSProtectionForm')?.value }),
+          // ...(this.formGroupHttpSecurity?.httpSecurityConSecPolicyForm &&{"content_security_policy": this.formGroupHttpSecurity?.httpSecurityConSecPolicyForm}),
+          ...(this.formGroupHttpSecurity.get('httpSecurityConSecPolicyForm')?.value && { "content_security_policy": this.formGroupHttpSecurity.get('httpSecurityConSecPolicyForm')?.value }),
+          // ...(this.formGroupHttpSecurity?.httpSecuritySniffingForm &&{"content_type_nosniff": this.formGroupHttpSecurity?.httpSecuritySniffingForm}),
+          ...(this.formGroupHttpSecurity.get('httpSecuritySniffingForm')?.value && { "content_type_nosniff": this.formGroupHttpSecurity.get('httpSecuritySniffingForm')?.value }),
+
+          // ...(this.formGroupHttpSecurity?.frameOptions &&{"custom_frame_options_value": this.formGroupHttpSecurity?.frameOptions}),
+          ...(this.formGroupHttpSecurity.get('frameOptions')?.value && { "custom_frame_options_value": this.formGroupHttpSecurity.get('frameOptions')?.value }),
+
+          // "force_sts_header": true,
+
+          // ...(this.formGroupHttpSecurity?.httpSecurityClickjackProtectForm &&{"frame_deny": this.formGroupHttpSecurity?.httpSecurityClickjackProtectForm}),
+          ...(this.formGroupHttpSecurity.get('httpSecurityClickjackProtectForm')?.value && { "frame_deny": this.formGroupHttpSecurity.get('httpSecurityClickjackProtectForm')?.value }),
+
+          // ...(this.formGroupHttpSecurity?.httpSecurityXSSProtectionForm &&{"host_proxy_headers": [
+          //   ''
+          // ]}),
+          // ...(this.formGroupHttpSecurity.get('httpSecurityXSSProtectionForm')?.value?.length != 0 && {
+          //   // "host_proxy_headers": this.formGroupHttpSecurity.get('httpSecurityXSSProtectionForm')?.value,
+          //   "host_proxy_headers": '',
+          // }),
+          // ...(this.formGroupHttpSecurity?.httpSecurityHPKPForm &&{"hpkp_public_key": this.formGroupHttpSecurity?.httpSecurityHPKPForm}),
+          ...(this.formGroupHttpSecurity.get('httpSecurityHPKPForm')?.value && { "hpkp_public_key": this.formGroupHttpSecurity.get('httpSecurityHPKPForm')?.value }),
+          // "is_development": true,
+          // "referrer_policy": null,
+          // ...(this.formGroupHttpSecurity?.httpSecuritySSLOptForm &&{"ssl_host": this.formGroupHttpSecurity?.httpSecuritySSLOptForm}),
+          ...(this.formGroupHttpSecurity.get('httpSecuritySSLOptForm')?.value && { "ssl_host": this.formGroupHttpSecurity.get('httpSecuritySSLOptForm')?.value }),
+          ...(this.formGroupHttpSecurity.get('httpSecuritySSLOptPortForm')?.value && { "ssl_port": this.formGroupHttpSecurity.get('httpSecuritySSLOptPortForm')?.value }),
+
+
+          // ...(this.formGroupHttpSecurity?.sslProxyHeadersObj &&{"ssl_proxy_headers": sslProxyHeadersObj}),
+          // "ssl_proxy_headers": this.formGroupHttpSecurity.get('httpSecuritySSLProxyHeaderForm')?.value,
+          "ssl_proxy_headers": ssl_proxy_headers_values,
+
+
+          // ...(this.formGroupHttpSecurity?.httpSecuritySSLOptForceSSLForm &&{"ssl_redirect": this.formGroupHttpSecurity?.httpSecuritySSLOptForceSSLForm}),
+          ...(this.formGroupHttpSecurity.get('httpSecuritySSLOptForceSSLForm')?.value && { "ssl_redirect": this.formGroupHttpSecurity.get('httpSecuritySSLOptForceSSLForm')?.value }),
+
+          // ...(this.formGroupHttpSecurity?.httpSecurityIncSubdomainForm &&{"sts_include_subdomains": this.formGroupHttpSecurity?.httpSecurityIncSubdomainForm}),
+          ...(this.formGroupHttpSecurity.get('httpSecurityIncSubdomainForm')?.value && { "sts_include_subdomains": this.formGroupHttpSecurity.get('httpSecurityIncSubdomainForm')?.value }),
+
+          // ...(this.formGroupHttpSecurity?.httpSecurityHSTSForm &&{"sts_seconds": this.formGroupHttpSecurity?.httpSecurityHSTSForm})
+          ...(this.formGroupHttpSecurity.get('httpSecurityHSTSForm')?.value && { "sts_seconds": this.formGroupHttpSecurity.get('httpSecurityHSTSForm')?.value }),
+
+        }
+      }),
+      ...(this.formGroupHttpSecurity.get('isBasicAuthActive')?.value && {
+        "auth/basic": {
+          ...(this.formGroupHttpSecurity.get('basicAuthHtpasswdPathForm')?.value && { "htpasswd_path": this.formGroupHttpSecurity.get('basicAuthHtpasswdPathForm')?.value })
+        }
+      })
+    }
+
+    console.log("******************httpbody", httpbody);
+
     if (this.formGroupHttpSecurity.valid) {
       this._snackBar.open('Saved Successfully', 'OK', {
         duration: 5000
       });
 
       // this.sharedService.setHttpSecurityData(this.formGroupHttpSecurity.value)
+
+
+
+
+
+
     }
 
+    this.httpSecurityService.createData(httpbody).subscribe({
+      next:(res)=>{
+        console.log(res);
+      }
+    })
+    console.log("***************************************************");
+
   }
+
+
 
 
 }

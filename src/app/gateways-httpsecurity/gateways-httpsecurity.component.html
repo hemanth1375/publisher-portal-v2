@@ -1,687 +1,770 @@
 <!-- <p>http-security works!</p> -->
 
 <div class="container">
-    
-    <form [formGroup]="formGroupHttpSecurity">
-      <div class="row mt-2">
-          <h3>HTTP SECURITIES</h3>
+
+  <form [formGroup]="formGroupHttpSecurity">
+    <div class="row mt-2">
+      <h3>Http Securities</h3>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <mat-accordion [multi]="true">
+          <mat-expansion-panel (opened)="formGroupHttpSecurity.value.isCorsActive">
+            <mat-expansion-panel-header collapsedHeight="70px">
+              <mat-panel-title>
+                <div class="d-flex justify-content-between toggle-header">
+                  <div>
+                    Cross-origin resource sharing (CORS)
+                  </div>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                      formControlName="isCorsActive">
+                  </div>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            @if(!formGroupHttpSecurity.value.isCorsActive){
+            <p>Enable Cross-Origin Resource Sharing (CORS) module when the API is consumed by browsers in different
+              domains.
+            </p>
+            }@else{
+            <div class="row">
+              <div class="col-sm-12 gap-2">
+                <label for="corsAllowedMethods" class="form-label">Allowed methods</label>
+                <p>Select which methods will be allowed</p>
+
+                <!-- <textarea class="static-text-area input-size form-control mb-2" id="corsAllowedMethods"> -->
+                <div>
+                  <label for="menu2" class="form-label">Simple Requests</label>
+                  <select class="form-select" multiple formControlName="multiSelect" id="multiSelect"
+                    aria-label="multiple select example">
+                    <!-- <option value="Get">Get</option>
+                    <option value="Head">Head</option>
+                    <option value="Post">Post</option>
+                    <option value="PUT">Put</option>
+                    <option value="DELETE">Delete</option>
+                    <option value="CONNECT">Connect</option>  
+                    <option value="OPTIONS">Options</option>
+                    <option value="TRACE">Trace</option>
+                    <option value="PATCH">Patch</option> -->
+                    <optgroup label="Simple requests">
+                      <option value="GET" selected="selected">GET</option>
+                      <option value="HEAD" selected="selected">HEAD</option>
+                      <option value="POST" selected="selected">POST</option>
+                    </optgroup>
+                    <optgroup label="Preflighted requests">
+                      <option value="PUT">PUT</option>
+                      <option value="DELETE">DELETE</option>
+                      <option value="CONNECT">CONNECT</option>
+                      <option value="OPTIONS">OPTIONS</option>
+                      <option value="TRACE">TRACE</option>
+                      <option value="PATCH">PATCH</option>
+                    </optgroup>
+                  </select>
+                  <!-- <label for="menu2" class="form-label">Open to select fruits</label>
+                  <select class="form-select" multiple id="menu2" aria-label="multiple select example">
+                    <option value="PUT">Put</option>
+                    <option value="DELETE">Delete</option>
+                    <option value="CONNECT">Connect</option>  
+                    <option value="OPTIONS">Options</option>
+                    <option value="TRACE">Trace</option>
+                    <option value="PATCH">Patch</option>
+                  </select> -->
+                </div>
+
+                <!-- Real-time Display -->
+                <!-- <p>Selected Values: {{ formGroupHttpSecurity.get('multiSelect')?.value | json }}</p> -->
+                <!-- </textarea> -->
+
+              </div>
+              <div class="col-sm-12 d-flex mt-3">
+                <button *ngFor="let attr of selectedValues; let i = index" class="parameter-item"
+                  (click)="removeAttribute(i)">
+                  {{ attr }}<mat-icon class="d-flex align-items-center justify-content-end">close</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <div class="row gap-3 mb-3 p-2">
+              <div class="input-con d-flex gap-2 flex-column">
+                <div class="row align-items-end">
+                  <div class="col-sm-4">
+                    <label for="corsAllowedOrigins" class="form-label">Allowed origins &nbsp; <i
+                        class="bi bi-info-circle" [matTooltip]=allowedOriginsToolTip></i></label>
+                    <input type="text" class="form-control" id="corsAllowedOrigins" placeholder="https://example.com"
+                      formControlName="corsAllowedOriginsForm">
+                  </div>
+                  <div class="col-sm-2">
+                    <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit"
+                      (click)="addParameter('corsAllowedOriginsForm')"><svg xmlns="http://www.w3.org/2000/svg"
+                        width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                          d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                      </svg></button>
+                  </div>
+                  <div class="col-sm-12 d-flex mt-3">
+                    <button *ngFor="let attr of corsAllowedOriginsArray; let i = index" class="parameter-item">
+                      {{ attr }}<mat-icon (click)="removeParameter(i,'corsAllowedOriginsForm')"
+                        class="d-flex align-items-center justify-content-end">close</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row  mb-4 d-flex">
+              <div class="col-sm-12 col-md-6 ">
+                <div class="input-con d-flex gap-2 flex-column">
+                  <div class="row align-items-end">
+                    <div class="col-sm-8">
+                      <label for="corsAllowedHeaders" class="form-label">Allowed headers &nbsp; <i
+                          class="bi bi-info-circle" [matTooltip]=allowedHeadersToolTip></i></label>
+                      <input type="text" class="form-control" id="corsAllowedHeaders" placeholder="https://example.com"
+                        formControlName="corsAllowedHeadersForm">
+                    </div>
+                    <div class="col-sm-2">
+                      <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                        type="submit" (click)="addParameter('corsAllowedHeadersForm')"><svg
+                          xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-plus-lg" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd"
+                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                        </svg></button>
+                    </div>
+
+                    <div class="col-sm-12 d-flex mt-3">
+                      <button *ngFor="let attr of corsAllowedHeadersArray; let i = index" class="parameter-item">
+                        {{ attr }}<mat-icon (click)="removeParameter(i,'corsAllowedHeadersForm')"
+                          class="d-flex align-items-center justify-content-end">close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-12 col-md-6">
+                <div class="input-con d-flex gap-2 flex-column">
+                  <div class="row align-items-end">
+                    <div class="col-sm-8">
+                      <label for="corsExposeHeaders" class="form-label">Expose headers &nbsp; <i
+                          class="bi bi-info-circle" [matTooltip]=exposeHeadersToolTip></i></label>
+                      <input type="text" class="form-control" id="corsExposeHeaders" placeholder="https://example.com"
+                        formControlName="corsExposeHeadersForm">
+                    </div>
+                    <div class="col-sm-2">
+                      <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                        type="submit" (click)="addParameter('corsExposeHeadersForm')"><svg
+                          xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-plus-lg" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd"
+                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                        </svg></button>
+                    </div>
+
+                    <div class="col-sm-12 d-flex mt-3">
+                      <button *ngFor="let attr of corsExposeHeadersArray; let i = index" class="parameter-item">
+                        {{ attr }}<mat-icon (click)="removeParameter(i,'corsExposeHeadersForm')"
+                          class="d-flex align-items-center justify-content-end">close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3 d-flex">
+              <div class="col-sm-12 col-md-6">
+                <div class="d-flex">
+                  <input type="checkbox" class="input-size1" formControlName="corsAllowCredentialsForm">
+                  <div class="checkbox-text">Allow credentials &nbsp; <i class="bi bi-info-circle"
+                      [matTooltip]=allowedcredentialsToolTip></i></div>
+                </div>
+
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <label for="corsMaxAge" class="form-label">Max age &nbsp; <i class="bi bi-info-circle"
+                    [matTooltip]=corsMaxAgeToolTip></i></label>
+                <div class="col-sm-12">
+                  <input type="text" class="form-control input-size" id="corsMaxAge" formControlName="corsMaxAgeForm"
+                    placeholder="12h"
+                    [class.is-invalid]="formGroupHttpSecurity.get('corsMaxAgeForm')?.invalid && formGroupHttpSecurity.get('corsMaxAgeForm')?.touched" />
+                  <div class="invalid-feedback"
+                    *ngIf="formGroupHttpSecurity.get('corsMaxAgeForm')?.errors?.['pattern'] && formGroupHttpSecurity.get('corsMaxAgeForm')?.touched">
+                    Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                  </div>
+                </div>
+              </div>
+            </div>
+            }
+          </mat-expansion-panel>
+
+          <mat-expansion-panel (opened)="formGroupHttpSecurity.value.isBotDetectorActive">
+            <mat-expansion-panel-header collapsedHeight="70px">
+              <mat-panel-title>
+                <div class="d-flex justify-content-between toggle-header">
+                  <div>
+                    Bot detector
+                  </div>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                      formControlName="isBotDetectorActive">
+                  </div>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            @if(!formGroupHttpSecurity.value.isBotDetectorActive){
+            <p>Detect and reject bots carrying out scraping, content theft, and form spam.
+            </p>
+            }@else{
+            <div class="row d-flex mb-3">
+              <div class="col-sm-12 col-md-6">
+
+                <div class="input-con d-flex gap-2 flex-column">
+                  <div class="row align-items-end">
+                    <div class="col-sm-8">
+                      <label for="botDetectorAllow" class="form-label">Allow &nbsp; <i class="bi bi-info-circle"
+                          [matTooltip]=botDetectorAllowToolTip></i></label>
+                      <input type="text" class="form-control" id="botDetectorAllow" placeholder="https://example.com"
+                        formControlName="botDetectorAllowForm">
+                    </div>
+                    <div class="col-sm-2">
+                      <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                        type="submit" (click)="addParameter('botDetectorAllowForm')"><svg
+                          xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-plus-lg" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd"
+                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                        </svg></button>
+                    </div>
+
+                    <div class="col-sm-12 d-flex mt-3">
+                      <button *ngFor="let attr of botDetectorAllowArray; let i = index" class="parameter-item">
+                        {{ attr }}<mat-icon (click)="removeParameter(i,'botDetectorAllowForm')"
+                          class="d-flex align-items-center justify-content-end">close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+
+                <div class="input-con d-flex gap-2 flex-column">
+                  <div class="row align-items-end">
+                    <div class="col-sm-8">
+                      <label for="botDetectorDeny" class="form-label">Deny &nbsp; <i class="bi bi-info-circle"
+                          [matTooltip]=botDetectorDenyToolTip></i></label>
+                      <input type="text" class="form-control" id="botDetectorDeny" placeholder="https://example.com"
+                        formControlName="botDetectorDenyForm">
+                    </div>
+                    <div class="col-sm-2">
+                      <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                        type="submit" (click)="addParameter('botDetectorDenyForm')"><svg
+                          xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-plus-lg" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd"
+                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                        </svg></button>
+                    </div>
+
+                    <div class="col-sm-12 d-flex mt-3">
+                      <button *ngFor="let attr of botDetectorDenyArray; let i = index" class="parameter-item">
+                        {{ attr }}<mat-icon (click)="removeParameter(i,'botDetectorDenyForm')"
+                          class="d-flex align-items-center justify-content-end">close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+            <div class="row mb-3">
+              <div class="input-con d-flex gap-2 flex-column">
+                <div class="row align-items-end">
+                  <div class="col-sm-4">
+                    <label for="botDetectorPatterns" class="form-label">Patterns &nbsp; <i class="bi bi-info-circle"
+                        [matTooltip]=botDetectorPatternsToolTip></i></label>
+                    <input type="text" class="form-control" id="botDetectorPatterns" placeholder="https://example.com"
+                      formControlName="botDetectorPatternsForm">
+                  </div>
+                  <div class="col-sm-2">
+                    <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit"
+                      (click)="addParameter('botDetectorPatternsForm')"><svg xmlns="http://www.w3.org/2000/svg"
+                        width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                          d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                      </svg></button>
+                  </div>
+                  <div class="col-sm-12 d-flex mt-3">
+                    <button *ngFor="let attr of botDetectorPatternsArray; let i = index" class="parameter-item">
+                      {{ attr }}<mat-icon (click)="removeParameter(i,'botDetectorPatternsForm')"
+                        class="d-flex align-items-center justify-content-end">close</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="row d-flex mb-3">
+              <div class="col-sm-12 col-md-6">
+                <label for="botDetectorCacheSize" class="form-label">Cache size &nbsp; <i class="bi bi-info-circle"
+                    [matTooltip]=botDetectorCacheSizeToolTip></i></label>
+                <input type="text" id="botDetectorCacheSize" class="form-control input-size"
+                  formControlName="botDetectorCacheSizeForm" placeholder="1000">
+
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div class="d-flex">
+                  <input type="checkbox" class="input-size1" formControlName="botDetectorEmptyUsersForm">
+                  <div class="checkbox-text">Empty user agents are bots &nbsp; <i class="bi bi-info-circle"
+                      [matTooltip]=emptyUsersAgentsToolTip></i></div>
+                </div>
+
+              </div>
+
+            </div>
+            }
+          </mat-expansion-panel>
+
+          <mat-expansion-panel (opened)="formGroupHttpSecurity.value.isMultipleIdentityProviderActive">
+            <mat-expansion-panel-header collapsedHeight="70px">
+              <mat-panel-title>
+                <div class="d-flex justify-content-between toggle-header">
+                  <div>
+                    Multiple Identity Providers
+                  </div>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                      formControlName="isMultipleIdentityProviderActive">
+                  </div>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            @if(!formGroupHttpSecurity.value.isMultipleIdentityProviderActive){
+            <p>The JWK aggregator plugin allows KrakenD to validate tokens issued by multiple Identity Providers.
+            </p>
+            }@else{
+            <div class="row mb-3 d-flex">
+              <div class="col-sm-12 col-md-6">
+                <div class="input-con d-flex gap-2 flex-column">
+                  <div class="row align-items-end">
+                    <div class="col-sm-8">
+                      <label for="multipleIdentityProviderOrigins" class="form-label">Identity Provider origins &nbsp;
+                        <i class="bi bi-info-circle"
+                          [matTooltip]=multipleIdentityProviderOriginsArrayToolTip></i></label>
+                      <input type="text" class="form-control" id="multipleIdentityProviderOrigins"
+                        placeholder="https://example.com" formControlName="multipleIdentityProviderOriginsForm">
+                    </div>
+                    <div class="col-sm-2">
+                      <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                        type="submit" (click)="addParameter('multipleIdentityProviderOriginsForm')"><svg
+                          xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-plus-lg" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd"
+                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                        </svg></button>
+                    </div>
+                    <div class="col-sm-12 d-flex mt-3">
+                      <button *ngFor="let attr of multipleIdentityProviderOriginsArray; let i = index"
+                        class="parameter-item">
+                        {{ attr }}<mat-icon (click)="removeParameter(i,'multipleIdentityProviderOriginsForm')"
+                          class="d-flex align-items-center justify-content-end">close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-3">
+                <label for="multipleIdentityProviderPort" class="form-label">Port &nbsp; <i class="bi bi-info-circle"
+                    [matTooltip]=multipleIdentityProviderPortToolTip></i></label>
+                <input type="text" id="multipleIdentityProviderPort" class="form-control"
+                  formControlName="multipleIdentityProviderPortForm">
+                <!-- <div id="multipleIdentityProviderPortHelp" class="form-text">The port of the local key <br> server</div> -->
+              </div>
+              <div class="col-sm-12 col-md-3">
+                <div class="d-flex">
+                  <input type="checkbox" class="input-size1"
+                    formControlName="multipleIdentityProviderCacheForm">&nbsp;&nbsp;&nbsp;
+                  <div class="checkbox-text">Cache &nbsp; <i class="bi bi-info-circle"
+                      [matTooltip]=multipleIdentityProviderCacheFormToolTip></i></div>
+                </div>
+                <!-- <div id="multipleIdentityProviderCache" class="form-text">Cache keys</div> -->
+              </div>
+            </div>
+            }
+          </mat-expansion-panel>
+
+          <mat-expansion-panel (opened)="formGroupHttpSecurity.value.isIpFilterActive">
+            <mat-expansion-panel-header collapsedHeight="70px">
+              <mat-panel-title>
+                <div class="d-flex justify-content-between toggle-header">
+                  <div>IP Filter</div>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                      formControlName="isIpFilterActive">
+                  </div>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            @if(!formGroupHttpSecurity.value.isIpFilterActive){
+            <p>The IP filtering plugin allows you to restrict the traffic to your API gateway based on the IP address.
+              It
+              works in two different modes (allow or deny) where you define the list of IPs (CIDR blocks) that are
+              authorized to use the API, or that are denied from using the API.
+            </p>
+            }@else{
+            <div class="row d-flex mb-3">
+              <div class="col-sm-12 col-md-6">
+                <div class="input-con d-flex gap-2 flex-column">
+                  <div class="row align-items-end">
+                    <div class="col-sm-8">
+                      <label for="ipFilterCIDR" class="form-label">CIDR &nbsp; <i class="bi bi-info-circle"
+                          [matTooltip]=ipFilterCIDRToolTip></i></label>
+                      <input type="text" class="form-control" id="ipFilterCIDR" placeholder="https://example.com"
+                        formControlName="ipFilterCIDRForm">
+                    </div>
+                    <div class="col-sm-2">
+                      <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                        type="submit" (click)="addParameter('ipFilterCIDRForm')"><svg xmlns="http://www.w3.org/2000/svg"
+                          width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd"
+                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                        </svg></button>
+                    </div>
+
+                    <div class="col-sm-12 d-flex mt-3">
+                      <button *ngFor="let attr of ipFilterCIDRArray; let i = index" class="parameter-item">
+                        {{ attr }}<mat-icon (click)="removeParameter(i,'ipFilterCIDRForm')"
+                          class="d-flex align-items-center justify-content-end">close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div class="input-con d-flex gap-2 flex-column">
+                  <div class="row align-items-end">
+                    <div class="col-sm-8">
+                      <label for="ipFilterTrustedProxies" class="form-label">Allowed origins &nbsp; <i
+                          class="bi bi-info-circle" [matTooltip]=ipFilterTrustedProxiesToolTip></i></label>
+                      <input type="text" class="form-control" id="ipFilterTrustedProxies"
+                        placeholder="https://example.com" formControlName="ipFilterTrustedProxiesForm">
+                    </div>
+                    <div class="col-sm-2">
+                      <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                        type="submit" (click)="addParameter('ipFilterTrustedProxiesForm')"><svg
+                          xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-plus-lg" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd"
+                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                        </svg></button>
+                    </div>
+                    <div class="col-sm-12 d-flex mt-3">
+                      <button *ngFor="let attr of ipFilterTrustedProxiesArray; let i = index" class="parameter-item">
+                        {{ attr }}<mat-icon (click)="removeParameter(i,'ipFilterTrustedProxiesForm')"
+                          class="d-flex align-items-center justify-content-end">close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="row d-flex mb-3">
+              <div class="col-sm-12 col-md-6">
+                <div class="input-con d-flex gap-2 flex-column">
+                  <div class="row align-items-end">
+                    <div class="col-sm-8">
+                      <label for="ipFilterClientIPHeaders" class="form-label">Client IP Headers &nbsp; <i
+                          class="bi bi-info-circle" [matTooltip]=ipFilterClientIPHeadersToolTip></i></label>
+                      <input type="text" class="form-control" id="ipFilterClientIPHeaders"
+                        placeholder="https://example.com" formControlName="ipFilterClientIPHeadersForm">
+                    </div>
+                    <div class="col-sm-2">
+                      <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                        type="submit" (click)="addParameter('ipFilterClientIPHeadersForm')"><svg
+                          xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-plus-lg" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd"
+                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                        </svg></button>
+                    </div>
+                    <div class="col-sm-12 d-flex mt-3">
+                      <button *ngFor="let attr of ipFilterClientIPHeadersArray; let i = index" class="parameter-item">
+                        {{ attr }}<mat-icon (click)="removeParameter(i,'ipFilterClientIPHeadersForm')"
+                          class="d-flex align-items-center justify-content-end">close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div class="d-flex align-items-centers">
+                  <input type="checkbox" name="" id="ipFilterAllowMode"
+                    formControlName="ipFilterAllowModeForm">&nbsp;&nbsp;&nbsp;
+                  <div class="checkbox-text">Allow mode &nbsp; <i class="bi bi-info-circle"
+                      [matTooltip]=allowModeToolTip></i></div>
+                </div>
+              </div>
+
+            </div>
+            }
+          </mat-expansion-panel>
+
+          <mat-expansion-panel (opened)="formGroupHttpSecurity.value.isHttpSecurityActive">
+            <mat-expansion-panel-header collapsedHeight="70px">
+              <mat-panel-title>
+                <div class="d-flex justify-content-between toggle-header">
+                  <div>
+                    HTTP Security
+                  </div>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                      formControlName="isHttpSecurityActive">
+                  </div>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            @if(!formGroupHttpSecurity.value.isHttpSecurityActive){
+            <p>Enforces HTTP security policies such as AllowedHosts, SSL Options, HSTS, XSS, HPKP
+            </p>
+            }@else{
+            <div class="row">
+              <div class="row mb-3">
+                <div class="input-con d-flex gap-2 flex-column">
+                  <div class="row align-items-end">
+                    <div class="col-sm-4">
+                      <label for="httpSecurityAllowedHosts" class="form-label">Allowed hosts &nbsp; <i
+                          class="bi bi-info-circle" [matTooltip]=httpSecurityAllowedHostsToolTip></i></label>
+                      <input type="text" class="form-control" id="httpSecurityAllowedHosts"
+                        placeholder="https://example.com" formControlName="httpSecurityAllowedHostsForm">
+                    </div>
+                    <div class="col-sm-2">
+                      <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                        type="submit" (click)="addParameter('httpSecurityAllowedHostsForm')"><svg
+                          xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-plus-lg" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd"
+                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                        </svg></button>
+                    </div>
+                    <div class="col-sm-12 d-flex mt-3">
+                      <button *ngFor="let attr of httpSecurityAllowedHostsArray; let i = index" class="parameter-item">
+                        {{ attr }}<mat-icon (click)="removeParameter(i,'httpSecurityAllowedHostsForm')"
+                          class="d-flex align-items-center justify-content-end">close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="row gap-2 mb-3">
+                <label for="httpSecuritySSLOpt" class="form-label">SSL Options &nbsp; <i class="bi bi-info-circle"
+                    [matTooltip]=httpSecuritySSLOptToolTip></i></label>
+                <div class="col-sm-12 d-flex">
+                  <div class="col-sm-12 col-md-9">
+                    <div class="input-group mb-3">
+                      <span class="input-group-text" id="basic-addon3">
+                        <div class="d-flex">
+                          <input type="checkbox" formControlName="httpSecuritySSLOptForceSSLForm">&nbsp;&nbsp;
+                          <div class="checkbox-text">Force SSL</div>
+                        </div>
+                      </span>
+                      <input type="text" class="form-control input-with-button" id="basic-url"
+                        aria-describedby="basic-addon3" placeholder="ssl.host.domain" formControlName="httpSecuritySSLOptForm">
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-3 align-items-end">
+                    <input type="text" class="form-control input-size button-with-input"
+                      formControlName="httpSecuritySSLOptPortForm" placeholder="port">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="input-con d-flex gap-2 flex-column">
+                  <div class="row align-items-end">
+                    <div class="col-sm-12 col-md-4">
+                      <label for="httpSecuritySSLProxyHeader" class="form-label">SSL Proxy header &nbsp; <i
+                          class="bi bi-info-circle" [matTooltip]=httpSecuritySSLProxyHeaderToolTip></i></label>
+                      <input type="text" class="form-control" id="httpSecuritySSLProxyHeader"
+                        placeholder="https://example.com" formControlName="httpSecuritySSLProxyHeaderForm">
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                      <label for="httpSecurityHeaderValue" class="form-label"> Header value</label>
+                      <input type="text" class="form-control" id="httpSecurityHeaderValue"
+                        placeholder="https://example.com" formControlName="httpSecurityHeaderValueForm">
+                    </div>
+                    <div class="col-sm-12 col-md">
+                      <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                        type="submit" (click)="addParameter('httpSecurityHeaderAndHearValue')"><svg
+                          xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-plus-lg" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd"
+                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                        </svg></button>
+                    </div>
+                  </div>
+                  <!-- <div *ngFor="let attr of objectMap | keyvalue" class="row mb-3 d-flex align-items-center">
+                    <div class="col-sm-12 col-md-4">
+                      {{attr.key}}
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                      {{attr.value}}
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                      <button type="button" class="btn btn-dark delete-btn"
+                        (click)="removeParameter(attr.key ,'httpSecurityHeaderAndHearValue')"><b>X</b></button>
+                    </div>
+                  </div> -->
+                  <div class="row">
+                    <div class="col-sm-12 d-flex mt-3">
+                      <button *ngFor="let attr of objectMap | keyvalue; let i = index" class="parameter-item">
+                        {{ attr.key }}<span>=></span>{{attr.value}}<mat-icon
+                          (click)="removeParameter(attr.key ,'httpSecurityHeaderAndHearValue')"
+                          class="d-flex align-items-center justify-content-end">close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="httpSecurityHSTS" class="form-label">HTTP Strict Transport Security (HSTS) &nbsp; <i
+                    class="bi bi-info-circle" [matTooltip]=httpSecurityHSTSToolTip></i></label>
+              </div>
+
+              <div class="input-group mb-3">
+                <span class="input-group-text">max-age</span>
+                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
+                  formControlName="httpSecurityHSTSForm">
+                <span class="input-group-text">seconds &nbsp; <i class="bi bi-info-circle"
+                    [matTooltip]=httpSecurityHSTSToolTip></i></span>
+              </div>
+              <!-- <div class="form-text mb-3">The max-age of the Strict-Transport-Security header. Setting to 0 disables
+                HSTS!
+              </div> -->
+
+              <div class="row">
+                <div class="d-flex mb-3">
+                  <input type="checkbox" id="httpSecurityIncSubdomain" class="input-size1"
+                    formControlName="httpSecurityIncSubdomainForm">
+                  <div class="checkbox-text">Include also subdomains &nbsp; <i class="bi bi-info-circle"
+                      [matTooltip]=includeAlsoSubdomains></i></div>
+                </div>
+
+              </div>
+              <div class="row mt-3 gap-2">
+                <label for="httpSecurityClickjackProtect" class="form-label" style="font-size: large;">Clickjacking
+                  &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpSecurityClickjackProtectToolTip></i></label>
+                <div class="d-flex ">
+                  <input type="checkbox" id="httpSecurityClickjackProtect" class="input-size1"
+                    formControlName="httpSecurityClickjackProtectForm">
+                  <div class="checkbox-text">Enable clickjacking protection</div>
+                </div>
+
+              </div>
+              <div class="row mt-3 gap-2">
+                <!-- <label for="httpSecurityHPKP" class="form-label">HTTP Public Key Pinning (HPKP)</label> -->
+                <div class="input-group mb-3" id="frameOptions">
+                  <span class="input-group-text" id="basic-addon3">X-Frame Options:</span>
+                  <input type="text" class="form-control" id="xframe-url" aria-describedby="xframe"
+                    formControlName="frameOptions">
+                  <span class="input-group-text" id="basic-addon3"> &nbsp; <i class="bi bi-info-circle"
+                      [matTooltip]=frameOptionsToolTip></i></span>
+                </div>
+                <!-- <div class="form-text" id="httpSecurityHPKPHelp">Allows HTTPS websites to resist impersonation by
+                  attackers
+                  using mis-issued or otherwise fraudulent certificates.
+                </div> -->
+              </div>
+              <div class="row mt-3 gap-2">
+                <label for="httpSecurityHPKP" class="form-label">HTTP Public Key Pinning (HPKP) &nbsp; <i
+                    class="bi bi-info-circle" [matTooltip]=httpSecurityHPKPToolTip></i></label>
+                <div class="input-group mb-3" id="httpSecurityHPKP">
+                  <span class="input-group-text" id="basic-addon3">Public-Key-Pins:</span>
+                  <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3"
+                    formControlName="httpSecurityHPKPForm"
+                    placeholder="pin-sha256=&quot;base64==&quot;; max-age=expireTime [; includeSubDomains][; report-uri=&quot;reportURI&quot;]">
+                </div>
+              </div>
+              <div class="row mt-3 gap-2">
+                <label for="httpSecuritySniffing" class="form-label">Sniffing &nbsp; <i class="bi bi-info-circle"
+                    [matTooltip]=httpSecuritySniffingToolTip></i></label>
+                <div class="d-flex" id="httpSecuritySniffing">
+                  <input type="checkbox" class="input-size1" formControlName="httpSecuritySniffingForm">
+                  <div class="checkbox-text">MIME-sniffing prevention</div>
+                </div>
+
+              </div>
+              <div class="row mt-3 gap-2">
+                <label for="httpSecurityXSSProtection" class="form-label">Cross-site scripting (XSS) protection</label>
+                <div class="d-flex" id="httpSecurityXSSProtection">
+                  <input type="checkbox" class="input-size1" formControlName="httpSecurityXSSProtectionForm">
+                  <div class="checkbox-text">Browser cross-site scripting (XSS) filter &nbsp; <i
+                      class="bi bi-info-circle" [matTooltip]=browserCrossSiteScriptingToolTip></i></div>
+                </div>
+              </div>
+              <div class="row mt-3 gap-2">
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon3">Content-Security-Policy:</span>
+                  <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3"
+                    placeholder="default-src 'self';" formControlName="httpSecurityConSecPolicyForm">
+                  <span class="input-group-text" id="basic-addon3"> <i class="bi bi-info-circle"
+                      [matTooltip]=httpSecurityConSecPolicyToolTip></i></span>
+                </div>
+                <!-- <div class="form-text">Enable Content Security Policy (CSP) by writing your policies in the header (see
+                  reference).</div> -->
+              </div>
+            </div>
+            }
+          </mat-expansion-panel>
+
+          <mat-expansion-panel (opened)="formGroupHttpSecurity.value.isBasicAuthActive">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <div class="d-flex justify-content-between toggle-header">
+                  <div>
+                    Basic Authentication
+                  </div>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                      formControlName="isBasicAuthActive">
+                  </div>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            @if(!formGroupHttpSecurity.value.isBasicAuthActive){
+            <p>The Basic Authentication plugin protects the access to selected endpoints using basic username and
+              password
+              credentials via <b>htpasswd</b>.
+            </p>
+            }@else{
+            <div class="row gap-2">
+              <label for="basicAuthHtpasswd">Remember to mark which endpoints need basic auth in their
+                configuration</label>
+              <div class="col-sm-12" id="basicAuthHtpasswd">
+                <label for="basicAuthHtpasswdPath" class="form-label">Htpasswd path &nbsp; <i class="bi bi-info-circle"
+                    [matTooltip]=basicAuthHtpasswdPathToolTip></i></label>
+                <input type="text" name="" id="basicAuthHtpasswdPath" class="form-control input-size"
+                  formControlName="basicAuthHtpasswdPathForm" placeholder="/etc/krakend/.htpasswd">
+              </div>
+            </div>
+            }
+          </mat-expansion-panel>
+        </mat-accordion>
+
       </div>
-         <div class="row">
-          <div class="col-sm-12">
-              <mat-accordion [multi]="true">
-                  <mat-expansion-panel (opened)="formGroupHttpSecurity.value.isCorsActive">
-                      <mat-expansion-panel-header collapsedHeight="70px">
-                          <mat-panel-title>
-                              <div class="d-flex justify-content-between toggle-header">
-                               <div>
-                                  Cross-origin resource sharing (CORS)
-                               </div>
-                                  <div class="form-check form-switch">
-                                      <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" formControlName="isCorsActive">
-                                    </div>
-                              </div>
-                          </mat-panel-title>
-                      </mat-expansion-panel-header>
-                      @if(!formGroupHttpSecurity.value.isCorsActive){
-                          <p>Enable Cross-Origin Resource Sharing (CORS) module when the API is consumed by browsers in different domains.
-                          </p>
-                          }@else{
-                          <div class="row">
-                            <div class="col-sm-12 gap-2">
-                              <label for="corsAllowedMethods" class="form-label">Allowed methods</label>
-                              <p>Select which methods will be allowed</p>
-                  
-                              <textarea class="static-text-area input-size form-control mb-2" id="corsAllowedMethods"></textarea>
-                  
-                            </div>
-                  
-                          </div>
-              
-                          <div class="row gap-3 mb-3 p-2">
-                            <div class="input-con d-flex gap-2 flex-column">
-                                <div class="row align-items-end">
-                                        <div class="col-sm-4">
-                                          <label for="corsAllowedOrigins" class="form-label">Allowed origins  &nbsp; <i class="bi bi-info-circle"
-                                            [matTooltip]=allowedOriginsToolTip></i></label>
-                                        <input type="text" class="form-control" id="corsAllowedOrigins" placeholder="https://example.com"
-                                        formControlName="corsAllowedOriginsForm">
-                                        </div>
-                                        <div class="col-sm-2">
-                                          <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('corsAllowedOriginsForm')"><svg
-                                                  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                  class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                                  <path fill-rule="evenodd"
-                                                      d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                              </svg></button>
-                                      </div>
-                                      <div class="col-sm-12 d-flex mt-3">
-                                        <button *ngFor="let attr of corsAllowedOriginsArray; let i = index" class="parameter-item">
-                                            {{ attr }}<mat-icon (click)="removeParameter(i,'corsAllowedOriginsForm')"
-                                                class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                      </div>
-
-                       
-                          <div class="row  mb-4 d-flex">
-                              <div class="col-sm-12 col-md-6 ">
-                                <div class="input-con d-flex gap-2 flex-column">
-                                    <div class="row align-items-end">
-                                            <div class="col-sm-8">
-                                              <label for="corsAllowedHeaders" class="form-label">Allowed headers  &nbsp; <i class="bi bi-info-circle"
-                                                [matTooltip]=allowedHeadersToolTip></i></label>
-                                            <input type="text" class="form-control" id="corsAllowedHeaders" placeholder="https://example.com"
-                                            formControlName="corsAllowedHeadersForm">
-                                            </div>
-                                            <div class="col-sm-2">
-                                              <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('corsAllowedHeadersForm')"><svg
-                                                      xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                      class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                                      <path fill-rule="evenodd"
-                                                          d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                                  </svg></button>
-                                          </div>
-                          
-                                          <div class="col-sm-12 d-flex mt-3">
-                                            <button *ngFor="let attr of corsAllowedHeadersArray; let i = index" class="parameter-item">
-                                                {{ attr }}<mat-icon (click)="removeParameter(i,'corsAllowedHeadersForm')"
-                                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                          </div>
-                     
-                              <div class="col-sm-12 col-md-6">
-                                <div class="input-con d-flex gap-2 flex-column">
-                                    <div class="row align-items-end">
-                                            <div class="col-sm-8">
-                                              <label for="corsExposeHeaders" class="form-label">Expose headers  &nbsp; <i class="bi bi-info-circle"
-                                                [matTooltip]=exposeHeadersToolTip></i></label>
-                                            <input type="text" class="form-control" id="corsExposeHeaders" placeholder="https://example.com"
-                                            formControlName="corsExposeHeadersForm">
-                                            </div>
-                                            <div class="col-sm-2">
-                                              <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('corsExposeHeadersForm')"><svg
-                                                      xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                      class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                                      <path fill-rule="evenodd"
-                                                          d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                                  </svg></button>
-                                          </div>
-                                         
-                                          <div class="col-sm-12 d-flex mt-3">
-                                            <button *ngFor="let attr of corsExposeHeadersArray; let i = index" class="parameter-item">
-                                                {{ attr }}<mat-icon (click)="removeParameter(i,'corsExposeHeadersForm')"
-                                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                          </div>
-                            </div>
-                  
-                          <div class="row mb-3 d-flex">
-                            <div class="col-sm-12 col-md-6">
-                              <div class="d-flex">
-                                <input type="checkbox" class="input-size1" formControlName="corsAllowCredentialsForm">
-                                <div class="checkbox-text">Allow credentials  &nbsp; <i class="bi bi-info-circle"
-                                  [matTooltip]=allowedcredentialsToolTip></i></div>
-                              </div>
-                      
-                            </div>
-                            <div class="col-sm-12 col-md-6">
-                              <label for="corsMaxAge" class="form-label">Max age  &nbsp; <i class="bi bi-info-circle"
-                                [matTooltip]=corsMaxAgeToolTip></i></label>
-                              <div class="col-sm-12">
-                                <input type="text" class="form-control input-size" id="corsMaxAge" formControlName="corsMaxAgeForm"
-                                  placeholder="12h"
-                                  [class.is-invalid]="formGroupHttpSecurity.get('corsMaxAgeForm')?.invalid && formGroupHttpSecurity.get('corsMaxAgeForm')?.touched" />
-                                <div class="invalid-feedback"
-                                  *ngIf="formGroupHttpSecurity.get('corsMaxAgeForm')?.errors?.['pattern'] && formGroupHttpSecurity.get('corsMaxAgeForm')?.touched">
-                                  Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
-                                </div>
-                              </div>                                 
-                            </div>
-                          </div>
-                          }
-                  </mat-expansion-panel>
-
-                  <mat-expansion-panel (opened)="formGroupHttpSecurity.value.isBotDetectorActive">
-                      <mat-expansion-panel-header collapsedHeight="70px">
-                          <mat-panel-title>
-                              <div class="d-flex justify-content-between toggle-header">
-                                  <div>
-                                      Bot detector
-                                  </div>
-                                      <div class="form-check form-switch">
-                                          <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" formControlName="isBotDetectorActive">
-                                        </div>
-                              </div>
-                          </mat-panel-title>
-                      </mat-expansion-panel-header>
-                      @if(!formGroupHttpSecurity.value.isBotDetectorActive){
-                          <p>Detect and reject bots carrying out scraping, content theft, and form spam.
-                          </p>
-                          }@else{
-                          <div class="row d-flex mb-3">
-                            <div class="col-sm-12 col-md-6">
-                             
-                              <div class="input-con d-flex gap-2 flex-column">
-                                <div class="row align-items-end">
-                                        <div class="col-sm-8">
-                                          <label for="botDetectorAllow" class="form-label">Allow  &nbsp; <i class="bi bi-info-circle"
-                                            [matTooltip]=botDetectorAllowToolTip></i></label>
-                                        <input type="text" class="form-control" id="botDetectorAllow" placeholder="https://example.com"
-                                        formControlName="botDetectorAllowForm">
-                                        </div>
-                                        <div class="col-sm-2">
-                                          <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('botDetectorAllowForm')"><svg
-                                                  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                  class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                                  <path fill-rule="evenodd"
-                                                      d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                              </svg></button>
-                                      </div>
-                              
-                                      <div class="col-sm-12 d-flex mt-3">
-                                        <button *ngFor="let attr of botDetectorAllowArray; let i = index" class="parameter-item">
-                                            {{ attr }}<mat-icon (click)="removeParameter(i,'botDetectorAllowForm')"
-                                                class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6">
-                          
-                              <div class="input-con d-flex gap-2 flex-column">
-                                <div class="row align-items-end">
-                                        <div class="col-sm-8">
-                                          <label for="botDetectorDeny" class="form-label">Deny  &nbsp; <i class="bi bi-info-circle"
-                                            [matTooltip]=botDetectorDenyToolTip></i></label>
-                                        <input type="text" class="form-control" id="botDetectorDeny" placeholder="https://example.com"
-                                        formControlName="botDetectorDenyForm">
-                                        </div>
-                                        <div class="col-sm-2">
-                                          <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('botDetectorDenyForm')"><svg
-                                                  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                  class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                                  <path fill-rule="evenodd"
-                                                      d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                              </svg></button>
-                                      </div>
-                                     
-                                      <div class="col-sm-12 d-flex mt-3">
-                                        <button *ngFor="let attr of botDetectorDenyArray; let i = index" class="parameter-item">
-                                            {{ attr }}<mat-icon (click)="removeParameter(i,'botDetectorDenyForm')"
-                                                class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                              
-                            </div>
-                  
-                          </div>
-                          <div class="row mb-3">
-                            <div class="input-con d-flex gap-2 flex-column">
-                              <div class="row align-items-end">
-                                      <div class="col-sm-4">
-                                        <label for="botDetectorPatterns" class="form-label">Patterns  &nbsp; <i class="bi bi-info-circle"
-                                          [matTooltip]=botDetectorPatternsToolTip></i></label>
-                                      <input type="text" class="form-control" id="botDetectorPatterns" placeholder="https://example.com"
-                                      formControlName="botDetectorPatternsForm">
-                                      </div>
-                                      <div class="col-sm-2">
-                                        <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('botDetectorPatternsForm')"><svg
-                                                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd"
-                                                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                            </svg></button>
-                                    </div>
-                                    <div class="col-sm-12 d-flex mt-3">
-                                      <button *ngFor="let attr of botDetectorPatternsArray; let i = index" class="parameter-item">
-                                          {{ attr }}<mat-icon (click)="removeParameter(i,'botDetectorPatternsForm')"
-                                              class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                      </button>
-                                  </div>
-                              </div>
-                          </div>
-                            
-                          </div>
-                          <div class="row d-flex mb-3">
-                            <div class="col-sm-12 col-md-6">
-                              <label for="botDetectorCacheSize" class="form-label">Cache size  &nbsp; <i class="bi bi-info-circle"
-                                [matTooltip]=botDetectorCacheSizeToolTip></i></label>
-                              <input type="text" id="botDetectorCacheSize" class="form-control input-size"
-                                formControlName="botDetectorCacheSizeForm" placeholder="1000">
-                         
-                            </div>
-                            <div class="col-sm-12 col-md-6">
-                              <div class="d-flex">
-                                <input type="checkbox" class="input-size1" formControlName="botDetectorEmptyUsersForm">
-                                <div class="checkbox-text">Empty user agents are bots  &nbsp; <i class="bi bi-info-circle"
-                                  [matTooltip]=emptyUsersAgentsToolTip></i></div>
-                              </div>
-                         
-                            </div>
-                  
-                          </div>
-                          }
-                  </mat-expansion-panel>
-                
-                    <mat-expansion-panel (opened)="formGroupHttpSecurity.value.isMultipleIdentityProviderActive">
-                      <mat-expansion-panel-header collapsedHeight="70px">
-                          <mat-panel-title>
-                              <div class="d-flex justify-content-between toggle-header">
-                                  <div>
-                                      Multiple Identity Providers  
-                                  </div>
-                                  <div class="form-check form-switch">
-                                      <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" formControlName="isMultipleIdentityProviderActive">
-                                    </div>
-                              </div>
-                          </mat-panel-title>
-                      </mat-expansion-panel-header>
-                      @if(!formGroupHttpSecurity.value.isMultipleIdentityProviderActive){
-                          <p>The JWK aggregator plugin allows KrakenD to validate tokens issued by multiple Identity Providers.
-                          </p>
-                          }@else{
-                          <div class="row mb-3 d-flex">
-                            <div class="col-sm-12 col-md-6">
-                              <div class="input-con d-flex gap-2 flex-column">
-                                <div class="row align-items-end">
-                                        <div class="col-sm-8">
-                                          <label for="multipleIdentityProviderOrigins" class="form-label">Identity Provider origins  &nbsp; <i class="bi bi-info-circle"
-                                            [matTooltip]=multipleIdentityProviderOriginsArrayToolTip></i></label>
-                                        <input type="text" class="form-control" id="multipleIdentityProviderOrigins" placeholder="https://example.com"
-                                        formControlName="multipleIdentityProviderOriginsForm">
-                                        </div>
-                                        <div class="col-sm-2">
-                                          <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('multipleIdentityProviderOriginsForm')"><svg
-                                                  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                  class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                                  <path fill-rule="evenodd"
-                                                      d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                              </svg></button>
-                                      </div>
-                                      <div class="col-sm-12 d-flex mt-3">
-                                        <button *ngFor="let attr of multipleIdentityProviderOriginsArray; let i = index" class="parameter-item">
-                                            {{ attr }}<mat-icon (click)="removeParameter(i,'multipleIdentityProviderOriginsForm')"
-                                                class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                            <div class="col-sm-12 col-md-3">
-                              <label for="multipleIdentityProviderPort" class="form-label">Port &nbsp; <i class="bi bi-info-circle"
-                                [matTooltip]=multipleIdentityProviderPortToolTip></i></label>
-                              <input type="text" id="multipleIdentityProviderPort" class="form-control"
-                                formControlName="multipleIdentityProviderPortForm">
-                              <!-- <div id="multipleIdentityProviderPortHelp" class="form-text">The port of the local key <br> server</div> -->
-                            </div>
-                            <div class="col-sm-12 col-md-3">
-                              <div class="d-flex">
-                                <input type="checkbox" class="input-size1"
-                                  formControlName="multipleIdentityProviderCacheForm">&nbsp;&nbsp;&nbsp;
-                                <div class="checkbox-text">Cache  &nbsp; <i class="bi bi-info-circle"
-                                  [matTooltip]=multipleIdentityProviderCacheFormToolTip></i></div>
-                              </div>
-                              <!-- <div id="multipleIdentityProviderCache" class="form-text">Cache keys</div> -->
-                            </div>
-                          </div>
-                          }
-                    </mat-expansion-panel>
-
-                   <mat-expansion-panel (opened)="formGroupHttpSecurity.value.isIpFilterActive">
-                      <mat-expansion-panel-header  collapsedHeight="70px">
-                          <mat-panel-title>
-                              <div class="d-flex justify-content-between toggle-header">
-                                  <div>IP Filter</div>
-                                  <div class="form-check form-switch">
-                                      <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" formControlName="isIpFilterActive">
-                                    </div>
-                                </div>
-                          </mat-panel-title>
-                      </mat-expansion-panel-header>
-                      @if(!formGroupHttpSecurity.value.isIpFilterActive){
-                          <p>The IP filtering plugin allows you to restrict the traffic to your API gateway based on the IP address. It
-                            works in two different modes (allow or deny) where you define the list of IPs (CIDR blocks) that are
-                            authorized to use the API, or that are denied from using the API.
-                          </p>
-                          }@else{
-                          <div class="row d-flex mb-3">
-                            <div class="col-sm-12 col-md-6">
-                              <div class="input-con d-flex gap-2 flex-column">
-                                <div class="row align-items-end">
-                                        <div class="col-sm-8">
-                                          <label for="ipFilterCIDR" class="form-label">CIDR  &nbsp; <i class="bi bi-info-circle"
-                                            [matTooltip]=ipFilterCIDRToolTip></i></label>
-                                        <input type="text" class="form-control" id="ipFilterCIDR" placeholder="https://example.com"
-                                        formControlName="ipFilterCIDRForm">
-                                        </div>
-                                        <div class="col-sm-2">
-                                          <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('ipFilterCIDRForm')"><svg
-                                                  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                  class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                                  <path fill-rule="evenodd"
-                                                      d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                              </svg></button>
-                                      </div>
-      
-                                      <div class="col-sm-12 d-flex mt-3">
-                                        <button *ngFor="let attr of ipFilterCIDRArray; let i = index" class="parameter-item">
-                                            {{ attr }}<mat-icon (click)="removeParameter(i,'ipFilterCIDRForm')"
-                                                class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                              
-                            </div>
-                            <div class="col-sm-12 col-md-6">
-                              <div class="input-con d-flex gap-2 flex-column">
-                                <div class="row align-items-end">
-                                        <div class="col-sm-8">
-                                          <label for="ipFilterTrustedProxies" class="form-label">Allowed origins  &nbsp; <i class="bi bi-info-circle"
-                                            [matTooltip]=ipFilterTrustedProxiesToolTip></i></label>
-                                        <input type="text" class="form-control" id="ipFilterTrustedProxies" placeholder="https://example.com"
-                                        formControlName="ipFilterTrustedProxiesForm">
-                                        </div>
-                                        <div class="col-sm-2">
-                                          <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('ipFilterTrustedProxiesForm')"><svg
-                                                  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                  class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                                  <path fill-rule="evenodd"
-                                                      d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                              </svg></button>
-                                      </div>
-                                      <div class="col-sm-12 d-flex mt-3">
-                                        <button *ngFor="let attr of ipFilterTrustedProxiesArray; let i = index" class="parameter-item">
-                                            {{ attr }}<mat-icon (click)="removeParameter(i,'ipFilterTrustedProxiesForm')"
-                                                class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                  
-                          </div>
-                          <div class="row d-flex mb-3">
-                            <div class="col-sm-12 col-md-6">
-                              <div class="input-con d-flex gap-2 flex-column">
-                                <div class="row align-items-end">
-                                        <div class="col-sm-8">
-                                          <label for="ipFilterClientIPHeaders" class="form-label">Client IP Headers  &nbsp; <i class="bi bi-info-circle"
-                                            [matTooltip]=ipFilterClientIPHeadersToolTip></i></label>
-                                        <input type="text" class="form-control" id="ipFilterClientIPHeaders" placeholder="https://example.com"
-                                        formControlName="ipFilterClientIPHeadersForm">
-                                        </div>
-                                        <div class="col-sm-2">
-                                          <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('ipFilterClientIPHeadersForm')"><svg
-                                                  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                  class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                                  <path fill-rule="evenodd"
-                                                      d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                              </svg></button>
-                                      </div>
-                                      <div class="col-sm-12 d-flex mt-3">
-                                        <button *ngFor="let attr of ipFilterClientIPHeadersArray; let i = index" class="parameter-item">
-                                            {{ attr }}<mat-icon (click)="removeParameter(i,'ipFilterClientIPHeadersForm')"
-                                                class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6">
-                              <div class="d-flex align-items-centers">
-                                <input type="checkbox" name="" id="ipFilterAllowMode"
-                                  formControlName="ipFilterAllowModeForm">&nbsp;&nbsp;&nbsp;
-                                <div class="checkbox-text">Allow mode  &nbsp; <i class="bi bi-info-circle"
-                                  [matTooltip]=allowModeToolTip></i></div>
-                              </div>
-                            </div>
-                  
-                          </div>
-                          }
-                   </mat-expansion-panel>
-
-                   <mat-expansion-panel (opened)="formGroupHttpSecurity.value.isHttpSecurityActive">
-                      <mat-expansion-panel-header collapsedHeight="70px">
-                          <mat-panel-title>
-                              <div class="d-flex justify-content-between toggle-header">
-                                  <div>
-                                      HTTP Security
-                                  </div>
-                                  <div class="form-check form-switch">
-                                      <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" formControlName="isHttpSecurityActive">
-                                    </div>
-                              </div>
-                          </mat-panel-title>
-                      </mat-expansion-panel-header>
-                      @if(!formGroupHttpSecurity.value.isHttpSecurityActive){
-                          <p>Enforces HTTP security policies such as AllowedHosts, SSL Options, HSTS, XSS, HPKP
-                          </p>
-                          }@else{
-                          <div class="row">
-                            <div class="row mb-3">
-                              <div class="input-con d-flex gap-2 flex-column">
-                                <div class="row align-items-end">
-                                        <div class="col-sm-4">
-                                          <label for="httpSecurityAllowedHosts" class="form-label">Allowed hosts  &nbsp; <i class="bi bi-info-circle"
-                                            [matTooltip]=httpSecurityAllowedHostsToolTip></i></label>
-                                        <input type="text" class="form-control" id="httpSecurityAllowedHosts" placeholder="https://example.com"
-                                        formControlName="httpSecurityAllowedHostsForm">
-                                        </div>
-                                        <div class="col-sm-2">
-                                          <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('httpSecurityAllowedHostsForm')"><svg
-                                                  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                  class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                                  <path fill-rule="evenodd"
-                                                      d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                              </svg></button>
-                                      </div>
-                                      <div class="col-sm-12 d-flex mt-3">
-                                        <button *ngFor="let attr of httpSecurityAllowedHostsArray; let i = index" class="parameter-item">
-                                            {{ attr }}<mat-icon (click)="removeParameter(i,'httpSecurityAllowedHostsForm')"
-                                                class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                              
-                            </div>
-                            <div class="row gap-2 mb-3">
-                              <label for="httpSecuritySSLOpt" class="form-label">SSL Options  &nbsp; <i class="bi bi-info-circle"
-                                [matTooltip]=httpSecuritySSLOptToolTip></i></label>
-                              <div class="col-sm-12 d-flex">
-                                <div class="col-sm-12 col-md-9">
-                                  <div class="input-group mb-3">
-                                    <span class="input-group-text" id="basic-addon3">
-                                      <div class="d-flex">
-                                        <input type="checkbox" formControlName="httpSecuritySSLOptForceSSLForm">&nbsp;&nbsp;
-                                        <div class="checkbox-text">Force SSL</div>
-                                      </div>
-                                    </span>
-                                    <input type="text" class="form-control input-with-button" id="basic-url"
-                                      aria-describedby="basic-addon3" placeholder="ssl.host.domain">
-                                  </div>
-                                </div>
-                                <div class="col-sm-12 col-md-3 align-items-end">
-                                  <input type="text" class="form-control input-size button-with-input"
-                                    formControlName="httpSecuritySSLOptPortForm" placeholder="port">
-                                </div>
-                              </div>
-                     
-                  
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="input-con d-flex gap-2 flex-column">
-                                  <div class="row align-items-end">
-                                          <div class="col-sm-12 col-md-4">
-                                            <label for="httpSecuritySSLProxyHeader" class="form-label">SSL Proxy header &nbsp; <i class="bi bi-info-circle"
-                                              [matTooltip]=httpSecuritySSLProxyHeaderToolTip></i></label>
-                                          <input type="text" class="form-control" id="httpSecuritySSLProxyHeader" placeholder="https://example.com"
-                                          formControlName="httpSecuritySSLProxyHeaderForm">
-                                          </div>
-                                          <div class="col-sm-12 col-md-4">
-                                            <label for="httpSecurityHeaderValue" class="form-label"> Header value</label>
-                                          <input type="text" class="form-control" id="httpSecurityHeaderValue" placeholder="https://example.com"
-                                          formControlName="httpSecurityHeaderValueForm">
-                                          </div>
-                                          <div class="col-sm-12 col-md">
-                                            <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('httpSecurityHeaderAndHearValue')"><svg
-                                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                    class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                                    <path fill-rule="evenodd"
-                                                        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                                </svg></button>
-                                        </div>
-                                  </div>
-                                  <div *ngFor="let attr of objectMap | keyvalue" class="row mb-3 d-flex align-items-center">
-                                    <div class="col-sm-12 col-md-4">
-                                      {{attr.key}}
-                                    </div>
-                                    <div class="col-sm-12 col-md-4">
-                                      {{attr.value}}
-                                    </div>
-                                    <div class="col-sm-12 col-md-4">
-                                      <button type="button" class="btn btn-dark delete-btn"
-                                        (click)="removeParameter(attr.key ,'httpSecurityHeaderAndHearValue')"><b>X</b></button>
-                                    </div>
-                                  </div>
-                              </div>
-                            </div>
-                            <div class="row mb-3">
-                              <label for="httpSecurityHSTS" class="form-label">HTTP Strict Transport Security (HSTS)  &nbsp; <i class="bi bi-info-circle"
-                                [matTooltip]=httpSecurityHSTSToolTip></i></label>                  
-                            </div>
-                  
-                            <div class="input-group mb-3">
-                              <span class="input-group-text">max-age</span>
-                              <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
-                                formControlName="httpSecurityHSTSForm">
-                              <span class="input-group-text">seconds</span>
-                            </div>
-                            <div class="form-text mb-3">The max-age of the Strict-Transport-Security header. Setting to 0 disables HSTS!
-                            </div>
-                  
-                            <div class="row">
-                              <div class="d-flex mb-3">
-                                <input type="checkbox" id="httpSecurityIncSubdomain" class="input-size1"
-                                  formControlName="httpSecurityIncSubdomainForm">
-                                <div class="checkbox-text">Include also subdomains &nbsp; <i class="bi bi-info-circle"
-                                  [matTooltip]=includeAlsoSubdomains></i></div>
-                              </div>
-                        
-                            </div>
-                            <div class="row mt-3 gap-2">
-                              <label for="httpSecurityClickjackProtect" class="form-label" style="font-size: large;">Clickjacking &nbsp; <i class="bi bi-info-circle"
-                                [matTooltip]=httpSecurityClickjackProtectToolTip></i></label>
-                              <div class="d-flex ">
-                                <input type="checkbox" id="httpSecurityClickjackProtect" class="input-size1"
-                                  formControlName="httpSecurityClickjackProtectForm">
-                                <div class="checkbox-text">Enable clickjacking protection</div>
-                              </div>
-                        
-                            </div>
-                            <div class="row mt-3 gap-2">
-                              <!-- <label for="httpSecurityHPKP" class="form-label">HTTP Public Key Pinning (HPKP)</label> -->
-                              <div class="input-group mb-3" id="frameOptions">
-                                <span class="input-group-text" id="basic-addon3">X-Frame Options:</span>
-                                <input type="text" class="form-control" id="xframe-url" aria-describedby="xframe"
-                                  formControlName="frameOptions">
-                              </div>
-                              <div class="form-text" id="httpSecurityHPKPHelp">Allows HTTPS websites to resist impersonation by attackers
-                                using mis-issued or otherwise fraudulent certificates.
-                              </div>
-                            </div>
-                            <div class="row mt-3 gap-2">
-                              <label for="httpSecurityHPKP" class="form-label">HTTP Public Key Pinning (HPKP) &nbsp; <i class="bi bi-info-circle"
-                                [matTooltip]=httpSecurityHPKPToolTip></i></label>
-                              <div class="input-group mb-3" id="httpSecurityHPKP">
-                                <span class="input-group-text" id="basic-addon3">Public-Key-Pins:</span>
-                                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3"
-                                  formControlName="httpSecurityHPKPForm"
-                                  placeholder="pin-sha256=&quot;base64==&quot;; max-age=expireTime [; includeSubDomains][; report-uri=&quot;reportURI&quot;]">
-                              </div>
-                            </div>
-                            <div class="row mt-3 gap-2">
-                              <label for="httpSecuritySniffing" class="form-label">Sniffing &nbsp; <i class="bi bi-info-circle"
-                                [matTooltip]=httpSecuritySniffingToolTip></i></label>
-                              <div class="d-flex" id="httpSecuritySniffing">
-                                <input type="checkbox" class="input-size1" formControlName="httpSecuritySniffingForm">
-                                <div class="checkbox-text">MIME-sniffing prevention</div>
-                              </div>
-                
-                            </div>
-                            <div class="row mt-3 gap-2">
-                              <label for="httpSecurityXSSProtection" class="form-label">Cross-site scripting (XSS) protection</label>
-                              <div class="d-flex" id="httpSecurityXSSProtection">
-                                <input type="checkbox" class="input-size1" formControlName="httpSecurityXSSProtectionForm">
-                                <div class="checkbox-text">Browser cross-site scripting (XSS) filter  &nbsp; <i class="bi bi-info-circle"
-                                  [matTooltip]=browserCrossSiteScriptingToolTip></i></div>
-                              </div>
-                            </div>
-                            <div class="row mt-3 gap-2">
-                              <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon3">Content-Security-Policy:</span>
-                                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3"
-                                  placeholder="default-src 'self';" formControlName="httpSecurityConSecPolicyForm">
-                              </div>
-                              <div class="form-text">Enable Content Security Policy (CSP) by writing your policies in the header (see
-                                reference).</div>
-                            </div>
-                          </div>
-                          }
-                   </mat-expansion-panel>
-                   
-                   <mat-expansion-panel (opened)="formGroupHttpSecurity.value.isBasicAuthActive">
-                      <mat-expansion-panel-header>
-                          <mat-panel-title>
-                              <div class="d-flex justify-content-between toggle-header">
-                                  <div>
-                                      Basic Authentication
-                                  </div>
-                                  <div class="form-check form-switch">
-                                      <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" formControlName="isBasicAuthActive">
-                                    </div>
-                              </div>                             
-                          </mat-panel-title>
-                      </mat-expansion-panel-header>
-                      @if(!formGroupHttpSecurity.value.isBasicAuthActive){
-                          <p>The Basic Authentication plugin protects the access to selected endpoints using basic username and password
-                            credentials via <b>htpasswd</b>.
-                          </p>
-                          }@else{
-                          <div class="row gap-2">
-                            <label for="basicAuthHtpasswd">Remember to mark which endpoints need basic auth in their configuration</label>
-                            <div class="col-sm-12" id="basicAuthHtpasswd">
-                              <label for="basicAuthHtpasswdPath" class="form-label">Htpasswd path  &nbsp; <i class="bi bi-info-circle"
-                                [matTooltip]=basicAuthHtpasswdPathToolTip></i></label>
-                              <input type="text" name="" id="basicAuthHtpasswdPath" class="form-control input-size"
-                                formControlName="basicAuthHtpasswdPathForm" placeholder="/etc/krakend/.htpasswd">
-                            </div>
-                          </div>                  
-                          }                
-                   </mat-expansion-panel>
-               </mat-accordion>
-
-          </div>
-         </div>
-
+    </div>
+    <div class="row">
       <div class="col-sm-12 mt-3">
         <!-- <button mat-raised-button (click)="submitForm()">Submit</button> -->
         <button mat-raised-button (click)="emitValue()">Save</button>
       </div>
-    </form>
+    </div>
+  </form>
 
-  
+
 </div>
