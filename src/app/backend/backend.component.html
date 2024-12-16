@@ -1055,20 +1055,20 @@
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
                                   <label for="clientId{{i}}" class="form-label">CLIENT ID <i class="bi bi-info-circle" [matTooltip]=clientId_tooltip></i></label>
-                                  <input type="text" class="form-control" id="clientId{{i}}" formControlName="clientId">
+                                  <input type="text" class="form-control" id="clientId{{i}}" formControlName="clientId" [class.is-invalid]="getFormGroup(i).get('clientId')?.invalid">
                                   
                                 </div>
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
                                   <label for="clientSecret{{i}}" class="form-label">CLIENT SECRET <i class="bi bi-info-circle" [matTooltip]=clientSecret_tooltip></i></label>
-                                  <input type="text" class="form-control" id="clientSecret{{i}}" formControlName="clientSecret">
+                                  <input type="text" class="form-control" id="clientSecret{{i}}" formControlName="clientSecret" [class.is-invalid]="getFormGroup(i).get('clientSecret')?.invalid">
                                 </div>
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
                                   <label for="tokenUrl{{i}}" class="form-label">Token URL <i class="bi bi-info-circle" [matTooltip]=tokenUrl_tooltip></i></label>
-                                  <input type="text" class="form-control" id="tokenUrl{{i}}" formControlName="tokenUrl">
+                                  <input type="text" class="form-control" id="tokenUrl{{i}}" formControlName="tokenUrl" [class.is-invalid]="getFormGroup(i).get('tokenUrl')?.invalid">
                                   
                                 </div>
                               </div>
@@ -1422,7 +1422,7 @@
                                   end-user or before it's merged in the endpoint with the rest of the backends. </p>
                                 @if(getFormGroup(i).value.isResSchValidatorActive){
                                 <div class="col-sm-12 col-md-9">
-                                  <textarea name="" id="responseSchema{{i}}" class="static-text-area" formControlName="responseSchema">{}</textarea><br>
+                                  <textarea name="" id="responseSchema{{i}}" class="static-text-area" formControlName="responseSchema"></textarea><br>
                                   <p>Write your JSON schema directly in this field, with any number of fields or validations you need.</p>
                         
                                   <div class="d-flex col-sm-12">

@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MainService } from '../services/main.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommunicationService } from '../services/communication.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-backend',
@@ -169,7 +170,7 @@ export class BackendComponent {
   formArray: FormArray; // Holds a FormGroup for each panel
   items: any[] = []; // Items from the backend
 
-  constructor(private fb: FormBuilder, private http: HttpClient,private mainSer:MainService,private route:ActivatedRoute,private router:Router,private communucationSer:CommunicationService) {
+  constructor(private fb: FormBuilder, private http: HttpClient,private mainSer:MainService,private route:ActivatedRoute,private router:Router,private communucationSer:CommunicationService, private toastService:ToastService) {
     this.itemsRes = [
       { name: 'Deny' },
       { name: 'Allow' },
@@ -247,10 +248,14 @@ endpointId:any;
   initializeFormGroups() {
     this.items.forEach((item,index) => {
       console.log(item);
+      const flatmapFilters = item.flatmap_filter || [];
    
       const group = this.fb.group({
         id: [item.id],
         extraConfigId:[item?.extra_config?.id],
+        httpClientConnectId:[item?.extra_config?.['backend/http/client']?.id],
+        regExContentReplacerPluginId:[item?.extra_config?.['plugin/req-resp-modifier']?.id],
+        proxyId:[item?.extra_config?.['proxy']?.id],
        
       isStaticServerActive:[!!item?.extra_config?.['backend/static-filesystem']],
       isBodymanipulationActive:[!!item?.extra_config?.['modifier/body-generator']],
@@ -289,23 +294,26 @@ endpointId:any;
       expression:[item?.extra_config?.["modifier/jmespath"]?.expr],
 
 
-      bodyEditorResponse:[item.bodyEditorResponse],
+      bodyEditorResponse:[item?.extra_config?.["modifier/response-body-generator"]?.path ?"externalResponse":"bodyeditorResponse"],
       templateResponse:[item?.extra_config?.["modifier/response-body-generator"]?.template],
       contentTypeResponse:[item?.extra_config?.["modifier/response-body-generator"]?.content_type],
       debugResponse:[item?.extra_config?.["modifier/response-body-generator"]?.debug],
       pathResponse:[item?.extra_config?.["modifier/response-body-generator"]?.path],
 
       contentReplacer: this.fb.group({}),
-      contentReplacerKey:[item.contentReplacerKey],
+      contentReplacerKey:[''],
 
       
-      regexConReplacerActive:[item.regexConReplacerActive],
+      regexConReplacerActive:[item?.extra_config?.["plugin/req-resp-modifier"]?.name.includes('content-replacer')],
 
 
       operationType:[item.operationType],
-      flatmapTargetObj:[item.flatmapTargetObj],
-      flatmapOriginalObj:[item.flatmapOriginalObj],
-      flatmapFilterArr:[[]],
+      // flatmapTargetObj:[item.flatmapTargetObj],
+      // flatmapOriginalObj:[item.flatmapOriginalObj],
+      // flatmapFilterArr:[[]],
+      flatmapFilterArr: [flatmapFilters.map((filter:any) => ({ ...filter }))],
+      flatmapOriginalObj: [''],
+      flatmapTargetObj: [''],
       martianActive:[item.martianActive],
       martian:[item.martian],
       // throttling
@@ -321,9 +329,9 @@ endpointId:any;
       logStatusChange: [item?.extra_config?.["qos/circuit-breaker"]?.log_status_change],
 
       // authentication
-      clientId: [item?.extra_config?.["auth/client-credentials"]?.client_id],
-      clientSecret: [item?.extra_config?.["auth/client-credentials"]?.client_secret],
-      tokenUrl: [item?.extra_config?.["auth/client-credentials"]?.token_url],
+      clientId: [item?.extra_config?.["auth/client-credentials"]?.client_id,Validators.required],
+      clientSecret: [item?.extra_config?.["auth/client-credentials"]?.client_secret, Validators.required],
+      tokenUrl: [item?.extra_config?.["auth/client-credentials"]?.token_url, Validators.required],
       scopes: [item?.extra_config?.["auth/client-credentials"]?.scopes],
       audience: [item?.extra_config?.["auth/gcp"]?.audience],
       user: [item?.extra_config?.["auth/ntlm"]?.user],
@@ -366,7 +374,7 @@ endpointId:any;
       isPublicPublisherActive:[!!item.extra_config?.["backend/pubsub/publisher"]],
       isAMQPproducerActive:[!!item.extra_config?.["backend/amqp/producer"]],
     
-      bodyEditorConnect:[item.bodyEditorConnect],
+      bodyEditorConnect:[item?.extra_config?.["backend/soap"]?.path ?"externalConnect":"bodyeditorConnect"],
       templateConnect:[item?.extra_config?.["backend/soap"]?.template],
       contentTypeConnect:[item?.extra_config?.["backend/soap"]?.content_type],
       debugConnect:[item?.extra_config?.["backend/soap"]?.debug],
@@ -505,6 +513,9 @@ showBackend:boolean=true;
       mainHost:this.mainHost,
       id: null,
       extraConfigId:null,
+      httpClientConnectId:null,
+      regExContentReplacerPluginId:null,
+      proxyId:null,
       isStaticServerActive: false,
       isBodymanipulationActive: false,
       isMartianActive: false,
@@ -556,10 +567,14 @@ showBackend:boolean=true;
       regexConReplacerActive:false,
 
 
-      operationType:'',
-      flatmapTargetObj:'',
-      flatmapOriginalObj:'',
-      flatmapFilterArr:[],
+      // operationType:'',
+      // flatmapTargetObj:'',
+      // flatmapOriginalObj:'',
+      // flatmapFilterArr:[],
+      flatmapFilterArr: [[]], // Initialize as empty array
+    operationType: [''],
+    flatmapOriginalObj: [''],
+    flatmapTargetObj: [''],
       martianActive:false,
       martian:'',
       // throttling
@@ -689,6 +704,9 @@ showBackend:boolean=true;
       mainHost:[this.mainHost,Validators.required],
       id: [null],
       extraConfigId:[null],
+      httpClientConnectId:[null],
+      regExContentReplacerPluginId:null,
+      proxyId:null,
       // name: [''],
       isStaticServerActive:[false],
       isBodymanipulationActive:[false],
@@ -758,9 +776,9 @@ showBackend:boolean=true;
       capacity: ['', Validators.required],
       logStatusChange: [false],
       // authentication
-      clientId: [null],
-      clientSecret: [null],
-      tokenUrl: [null],
+      clientId: [null,Validators.required],
+      clientSecret: [null,Validators.required],
+      tokenUrl: [null,Validators.required],
       scopes: [null],
       audience: [null],
       user: [null],
@@ -861,6 +879,7 @@ showBackend:boolean=true;
     this.mainMethod=null;
     this.formArray.push(newGroup);
     this.hostArray[this.formArray.length - 1]=[];
+    this.hostArray[this.formArray.length - 1].push(newGroup?.get('host')?.value);
     this.parameterArraySecReqPolicy[this.formArray.length - 1]=[];
     this.parameterArraySecResPolicy[this.formArray.length-1]=[];
     this.parameterArrayJwtValReqPolicy[this.formArray.length-1]=[];
@@ -877,6 +896,9 @@ showBackend:boolean=true;
     console.log(this.objectMaps);
   }
   
+  showError(message:string){
+    this.toastService.show(message , {type:"error"})
+  }
   saveBackend(index: number) {
     const formGroup = this.getFormGroup(index);
     const data = formGroup.value;
@@ -917,6 +939,7 @@ const backendBody=
           ...(data?.logStatusChange && {"log_status_change": data?.logStatusChange})
         }}),
         ...((data.regexConReplacerActive ||data?.isResSchValidatorActive) &&{"plugin/req-resp-modifier": {
+          "id":data?.regExContentReplacerPluginId,
           "name": [
             data.regexConReplacerActive && 'content-replacer',
             data?.isResSchValidatorActive && 'response-schema-validator'
@@ -985,10 +1008,10 @@ const backendBody=
         }}),
         ...(data?.isRestToSoapActive &&{"backend/soap": {
           "@comment": null,
-          "template": "",
-      "content_type": data?.contentTypeRestToSoap,
-      "debug": data?.enableDebugRestToSoap,
-          "path": data?.pathRestToSoapForm
+      ...(data?.bodyEditorConnect==='bodyeditorConnect' &&{"template": data?.templateConnect}),
+      ...(data?.contentTypeConnect &&{"content_type": data?.contentTypeConnect}),
+  ...(data?.debugConnect &&{"debug": data?.debugConnect}),
+  ...(data?.bodyEditorConnect==='externalConnect' &&{"path": data?.pathConnect})
         }}),
         ...(data?.isrestToGRPCActive &&{"backend/grpc": {
           ...(data?.objectMapValueConnect &&{"input_mapping": inputMapObjConnectRestToGrpc}),
@@ -1003,6 +1026,7 @@ const backendBody=
           ...(data?.restTogrpcUseReqBodyForm &&{"use_request_body": data?.restTogrpcUseReqBodyForm})
         }}),
         ...(data?.isHttpClientSettingActive &&{"backend/http/client": {
+          id:data?.httpClientConnectId,
       ...(data?.connectvWebProxyForm &&{"proxy_address": data?.connectvWebProxyForm}),
       "no_redirect": data?.donotFollowRedirectsForm
     }}),
@@ -1011,20 +1035,20 @@ const backendBody=
           ...(data?.staticUrl &&{"path": data?.staticUrl})
         }}),
         ...(data?.isBodymanipulationActive &&{"modifier/body-generator": {
-      ...(data?.bodyEditor &&{"template": data?.template}),
+      ...(data?.bodyEditor==='bodyeditor' &&{"template": data?.template}),
       ...(data?.contentType &&{"content_type": data?.contentType}),
       ...(data?.debug &&{"debug": data?.debug}),
-      ...(data?.path &&{"path": data?.path})
+      ...(data?.bodyEditor==='external' &&{"path": data?.path})
     }}),
     ...( data?.isMartianActive &&{"modifier/martian": data?.martianDslTextarea}),
     ...(data.AdvResManipulationActive &&{"modifier/jmespath": {
       "expr": data.expression
     }}),
     ...(data.resManiWithGoTemplActive &&{"modifier/response-body-generator": {
-      ...(data.contentType &&{"content_type": data.contentTypeResponse}),
-      ...(data.debug &&{"debug": data.debugResponse}),
-      ...(data.path &&{"path": data.pathResponse}),
-      ...(data.template &&{"template": data.templateResponse})
+      ...(data.contentTypeResponse &&{"content_type": data.contentTypeResponse}),
+      ...(data.debugResponse &&{"debug": data.debugResponse}),
+      ...(data?.bodyEditorResponse==='externalResponse' &&{"path": data.pathResponse}),
+      ...(data?.bodyEditorResponse==='bodyeditorResponse' &&{"template": data.templateResponse})
     }}),
     ...(data.isPublicSubscriberActive &&{"backend/pubsub/susbcriber": {
               "subscription_url": data.publicSubSubscriptionURLForm
@@ -1041,7 +1065,12 @@ const backendBody=
               "name": data.amqpProducerQueueNameForm
             }}),
             "proxy": {
-              "flatmap_filter": data?.flatmapFilterArr
+              "id": data?.proxyId,
+              "flatmap_filter": data?.flatmapFilterArr.map((filter: any) => ({
+                "id": filter.id || undefined, // Include `id` only if it exists
+                "type": filter.type,
+                "args": filter.args
+              }))
             },
             ...(data.isAMQPconsumerActive &&{"backend/amqp/consumer": {
               ...(data.amqpConsumerQueueNameForm &&{"name": data.amqpConsumerQueueNameForm}),
@@ -1071,6 +1100,7 @@ this.mainSer.addBackend(this.endpointId,backendBody).subscribe({
   },
   error:(err:any)=>{
     console.log(err);
+    this.showError(err?.message);
     
   }
 })
@@ -1125,6 +1155,7 @@ const backendBody={
       ...(data?.logStatusChange && {"log_status_change": data?.logStatusChange})
     }}),
     ...((data.regexConReplacerActive ||data?.isResSchValidatorActive) &&{"plugin/req-resp-modifier": {
+      "id":data?.regExContentReplacerPluginId,
       "name": [
         data.regexConReplacerActive && 'content-replacer',
         data?.isResSchValidatorActive && 'response-schema-validator'
@@ -1211,6 +1242,7 @@ const backendBody={
       ...(data?.restTogrpcUseReqBodyForm &&{"use_request_body": data?.restTogrpcUseReqBodyForm})
     }}), 
     ...(data?.isHttpClientSettingActive &&{"backend/http/client": {
+      id:data?.httpClientConnectId,
   ...(data?.connectvWebProxyForm &&{"proxy_address": data?.connectvWebProxyForm}),
   "no_redirect": data?.donotFollowRedirectsForm
 }}),
@@ -1231,8 +1263,8 @@ const backendBody={
 ...(data.resManiWithGoTemplActive &&{"modifier/response-body-generator": {
   ...(data.contentTypeResponse &&{"content_type": data.contentTypeResponse}),
   ...(data.debugResponse &&{"debug": data.debugResponse}),
-  ...(data.pathResponse &&{"path": data.pathResponse}),
-  ...(data.bodyEditorResponse==='bodteditorResponse' &&{"template": data.templateResponse})
+  ...(data.bodyEditorResponse==='bodyeditorResponse' &&{"path": data.pathResponse}),
+  ...(data.bodyEditorResponse==='bodyeditorResponse' &&{"template": data.templateResponse})
 }}),
 ...(data.isPublicSubscriberActive &&{"backend/pubsub/susbcriber": {
   "subscription_url": data.publicSubSubscriptionURLForm
@@ -1249,6 +1281,7 @@ const backendBody={
   "name": data.amqpProducerQueueNameForm
 }}),
 "proxy": {
+  "id":data?.proxyId,
               "flatmap_filter": data?.flatmapFilterArr
             },
             ...(data.isAMQPconsumerActive &&{"backend/amqp/consumer": {
@@ -1286,7 +1319,7 @@ this.mainSer.updateBackend(backendId,backendBody).subscribe({
   },
   error:(err:any)=>{
     console.log(err);
-    
+    this.showError(err?.message);
   }
 })
 
@@ -1401,24 +1434,28 @@ this.mainSer.updateBackend(backendId,backendBody).subscribe({
         if (originalObject && renamedObject) {
           this.addToMap(formGroupIndex,originalObject, renamedObject)
         }
-      }else if(fieldName === 'flatMap'){
-        const obj = {
-          "type": this.getFormGroup(formGroupIndex).get('operationType')?.value,
-          "args": [
-            this.getFormGroup(formGroupIndex).get('flatmapOriginalObj')?.value,
-            this.getFormGroup(formGroupIndex).get('flatmapTargetObj')?.value || undefined
-          ].filter(value => value !== undefined) // Filter out undefined values
-        };
-        console.log(this.faltMapArr[formGroupIndex]);
-        
-      this.faltMapArr[formGroupIndex].push(obj);
-
-      this.getFormGroup(formGroupIndex).get('flatmapFilterArr')?.setValue([...this.faltMapArr[formGroupIndex]])
-      console.log(this.faltMapArr[formGroupIndex]);
-      this.getFormGroup(formGroupIndex).get('operationType')?.reset()
-      this.getFormGroup(formGroupIndex).get('flatmapOriginalObj')?.reset()
-      this.getFormGroup(formGroupIndex).get('flatmapTargetObj')?.reset()
-      
+      }else if (fieldName === 'flatMap') {
+        const operationType = this.getFormGroup(formGroupIndex).get('operationType')?.value;
+        const originalObj = this.getFormGroup(formGroupIndex).get('flatmapOriginalObj')?.value;
+        const targetObj = this.getFormGroup(formGroupIndex).get('flatmapTargetObj')?.value;
+    
+        if (operationType && originalObj) {
+          const newFlatmap = {
+            type: operationType,
+            args: [
+              originalObj,
+              targetObj || undefined
+            ].filter(value => value !== undefined) // Remove undefined
+          };
+    
+          const currentFlatmapArr = this.getFormGroup(formGroupIndex).get('flatmapFilterArr')?.value || [];
+          this.getFormGroup(formGroupIndex).get('flatmapFilterArr')?.setValue([...currentFlatmapArr, newFlatmap]);
+    
+          // Reset inputs
+          this.getFormGroup(formGroupIndex).get('operationType')?.reset();
+          this.getFormGroup(formGroupIndex).get('flatmapOriginalObj')?.reset();
+          this.getFormGroup(formGroupIndex).get('flatmapTargetObj')?.reset();
+        }
       }
       this.getFormGroup(formGroupIndex).get(fieldName)?.reset();
     }
@@ -1435,9 +1472,11 @@ this.mainSer.updateBackend(backendId,backendBody).subscribe({
     else if(fieldName === 'renaming'){
      this.removeFromMap(formGroupIndex,index);
     }
-    else if(fieldName ==='flatMap'){
-      this.faltMapArr[formGroupIndex].splice(index,1)
-      this.getFormGroup(formGroupIndex).get('flatmapFilterArr')?.setValue([...this.faltMapArr[formGroupIndex]])
+    else if (fieldName === 'flatMap') {
+      this.faltMapArr[formGroupIndex].splice(index, 1);
+      this.getFormGroup(formGroupIndex)
+        .get('flatmapFilterArr')
+        ?.setValue([...this.faltMapArr[formGroupIndex]]);
     }
     
   }
@@ -1517,9 +1556,8 @@ removeFromMapAuth(formGroupIndex:number,key: string) {
   // this.objectMapAuth.delete(key);
   this.updateMapControlAuth(formGroupIndex);  
 }
-patchFlatMapArray(formGroupIndex: number, resultArray:any){
- 
- this.getFormGroup(formGroupIndex).get('flatmapFilterArr')?.setValue([...resultArray])
+patchFlatMapArray(formGroupIndex: number, resultArray: any[]) {
+  this.getFormGroup(formGroupIndex).get('flatmapFilterArr')?.setValue([...resultArray]);
 }
 patchRenamingAuthObj(formGroupIndex: number, renamingObj: Record<string, string>) {
   if(renamingObj){
