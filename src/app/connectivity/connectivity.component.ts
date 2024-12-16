@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EndpointService } from '../services/endpoint.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-connectivity',
@@ -20,7 +21,7 @@ export class ConnectivityComponent implements OnInit {
   endpointId: any;
   endPointData:any;
 
-  constructor(private formBuilder: FormBuilder,private route: ActivatedRoute, private endpointService:EndpointService) {
+  constructor(private formBuilder: FormBuilder,private route: ActivatedRoute, private endpointService:EndpointService,private toastService: ToastService) {
     this.formGroup1 = this.formBuilder.group({
       inputHeader: [null],
       concurrentCalls: [""],
@@ -41,13 +42,16 @@ export class ConnectivityComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
+  showSuccess(message:string) {
+    this.toastService.show(message, { type: 'success' });
+  }
 
-    this.route.parent?.paramMap.subscribe(params => {
-      this.endpointId = params.get('id');
-      console.log('Parent ID:', this.endpointId);
-    });
 
+  showError(message:string){
+    this.toastService.show(message , {type:"error"})
+  }
+
+  getEndpoint(){
     this.endpointService.getEndpointById(this.endpointId).subscribe({
       next:(res)=>{
         console.log(res);
@@ -78,9 +82,25 @@ export class ConnectivityComponent implements OnInit {
       },
       error:(err)=>{
         console.error(err);
-        
+        this.showError(err?.message)       
       }
     })
+  }
+
+  ngOnInit(): void {
+
+    this.formGroup1.valueChanges.subscribe(value => {
+      console.log(value);
+    });
+
+    this.route.parent?.paramMap.subscribe(params => {
+      this.endpointId = params.get('id');
+      console.log('Parent ID:', this.endpointId);
+    });
+
+
+    this.getEndpoint();
+  
 
   }
 
@@ -122,18 +142,25 @@ export class ConnectivityComponent implements OnInit {
         ...(this.formGroup1.value?.maxRetries &&{"max_retries": this.formGroup1.value?.maxRetries}),
         ...(this.formGroup1.value?.backoffStrategy &&{"backoff_strategy": this.formGroup1.value?.backoffStrategy}),
         // "enable_direct_communication": true,
-        ...(this.formGroup1.value?.returnErr &&{"return_error_details": this.formGroup1.value?.returnErr}),
+        "return_error_details": this.formGroup1.value?.returnErr,
         // "timeout": null
       }}),
-      "concurrent_calls": this.formGroup1.value?.concurrentCalls
-    }
+    },
+    "concurrent_calls": this.formGroup1.value?.concurrentCalls
     }
 
     console.log(body);
 
-    this.endpointService.addConnectivity(this.endpointId,body).subscribe({
-      next:(res)=>{
-      console.log(res);
+    this.endpointService.addConnectivity(this.endpointId, body).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        this.showSuccess(res?.message);
+        this.getEndpoint();
+      },
+      error:(err)=>{
+        console.error(err);
+        this.showError(err?.message);
+        this.getEndpoint();
       }
     })
     

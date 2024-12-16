@@ -103,13 +103,14 @@
                             <img src="../../assets/images/Group.svg" alt="logo-krakend">
                         </div>
                         <div class="icon-support">
-                            <h3>Pizza Shack</h3>
-                            <p>Created by: Admin</p>
+                            <h3>{{endpointInfo?.apiName}}</h3>
+                            <p>created by {{endpointInfo?.createdBy}}</p>
+                            
                         </div>
                     </div>
                     <div class="col-sm-3 about-name-section">
                         <div class="icon-support">
-                            <h3>Draft State</h3>
+                            <h3>{{endpointInfo.status}}</h3>
                             <p>State</p>
                         </div>
                         

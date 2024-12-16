@@ -31,7 +31,7 @@ import { CreategatewayComponent } from './creategateway/creategateway.component'
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { ViewgatewayComponent } from './viewgateway/viewgateway.component';
 import { GatewayDashboardComponent } from './gateway-dashboard/gateway-dashboard.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { BackendComponent } from './backend/backend.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -45,6 +45,7 @@ import { OpenapiComponent } from './openapi/openapi.component';
 import { GatewayServiceSettingsComponent } from './gateway-service-settings/gateway-service-settings.component';
 import { GatewayTelemetryComponent } from './gateway-telemetry/gateway-telemetry.component';
 import { GatewaysHttpsecurityComponent } from './gateways-httpsecurity/gateways-httpsecurity.component';
+import { ToastComponent } from './toast/toast.component';
 
 // keycloak
 function initializeKeycloak(keycloak: KeycloakService){
@@ -96,7 +97,8 @@ function initializeKeycloak(keycloak: KeycloakService){
     OpenapiComponent,
     GatewayServiceSettingsComponent,
     GatewayTelemetryComponent,
-    GatewaysHttpsecurityComponent
+    GatewaysHttpsecurityComponent,
+    ToastComponent
   ],
   imports: [
     BrowserModule,
@@ -117,7 +119,8 @@ function initializeKeycloak(keycloak: KeycloakService){
     MatCheckboxModule,
     MatChipsModule,
     MatExpansionModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    NgbToastModule
     
   ],
   providers: [KeycloakService,

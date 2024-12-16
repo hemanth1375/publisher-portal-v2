@@ -3,6 +3,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EndpointService } from '../services/endpoint.service';
 import { ActivatedRoute } from '@angular/router';
+import { ToastService } from '../services/toast.service';
 @Component({
   selector: 'app-policies',
   templateUrl: './policies.component.html',
@@ -23,7 +24,7 @@ export class PoliciesComponent implements OnInit{
   parameterArraySecResPolicy: any = [];
   parameterArrayJwtValReqPolicy: any = [];
 
-  constructor(private formBuilder:FormBuilder, private endpointService:EndpointService,private route: ActivatedRoute){
+  constructor(private formBuilder:FormBuilder, private endpointService:EndpointService,private route: ActivatedRoute, private toastService: ToastService){
     this.formGroupPolicies = this.formBuilder.group({
       securityReqPolicy: [null],
       secReqErrorStCode: [null],
@@ -126,13 +127,16 @@ export class PoliciesComponent implements OnInit{
     }
   }
 
-  ngOnInit(): void {
+  showSuccess(message:string) {
+    this.toastService.show(message, { type: 'success' });
+  }
 
-    this.route.parent?.paramMap.subscribe(params => {
-      this.endpointId = params.get('id');
-      console.log('Parent ID:', this.endpointId);
-    });
 
+  showError(message:string){
+    this.toastService.show(message , {type:"error"})
+  }
+
+  getEndpoint(){
     this.endpointService.getEndpointById(this.endpointId).subscribe({
       next:(res)=>{
         console.log(res);
@@ -173,12 +177,26 @@ export class PoliciesComponent implements OnInit{
 
           resJSONSchema: JSON.stringify(this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["response-schema-validator"]?.schema,  null, 2)
         })
+
+
         
       },
       error:(err)=>{
         console.error(err);
+        this.showError(err?.message)
       }
     });
+  }
+
+  ngOnInit(): void {
+
+    this.route.parent?.paramMap.subscribe(params => {
+      this.endpointId = params.get('id');
+      console.log('Parent ID:', this.endpointId);
+    });
+
+    this.getEndpoint();
+
   }
 
   submit(){    
@@ -235,14 +253,18 @@ export class PoliciesComponent implements OnInit{
 
     console.log(body);
     
-    // this.endpointService.addPolicies(this.endpointId, body).subscribe({
-    //   next:(res)=>{
-    //     console.log(res)
-    //   },
-    //   error:(err)=>{
-    //     console.error(err)
-    //   }
-    // })
+    this.endpointService.addPolicies(this.endpointId, body).subscribe({
+      next:(res:any)=>{
+        console.log(res);
+        this.showSuccess(res?.message)
+        this.getEndpoint();
+      },
+      error:(err)=>{
+        console.error(err);
+        this.showError(err?.message)
+        this.getEndpoint();
+      }
+    })
 
 
   }

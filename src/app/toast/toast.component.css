@@ -1,0 +1,11 @@
+.toast-container {
+    z-index: 1050; /* Ensure it appears above other elements */
+    position: fixed; /* Keeps the toast container in a fixed position */
+    top: calc(64px + 5px); /* Navbar height + some margin */
+    right: 16px; /* Aligns it to the right */
+    width: auto; /* Ensures the width adjusts to content */
+  }
+
+.toast {
+    opacity: 0.9;
+}

@@ -2,7 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EndpointService } from '../services/endpoint.service';
 import { ActivatedRoute } from '@angular/router';
+import { ToastService } from '../services/toast.service';
 
+interface Alert {
+	type: string;
+	message: string;
+}
 
 @Component({
   selector: 'app-throttling',
@@ -40,7 +45,8 @@ export class ThrottlingComponent implements OnInit {
   endpointId: any;
   endPointData:any;
 
-  constructor(private formBuilder: FormBuilder, private endpointService: EndpointService, private route: ActivatedRoute) {
+  constructor(private formBuilder: FormBuilder, private endpointService: EndpointService, private route: ActivatedRoute, private toastService: ToastService) {
+
     this.formGroupThrottling = this.formBuilder.group({
       timeout: ['', Validators.pattern("^[0-9]+(ns|ms|us|µs|s|m|h)$")],
       cacheTtl: ['', Validators.pattern("^[0-9]+(ns|ms|us|µs|s|m|h)$")],
@@ -68,13 +74,16 @@ export class ThrottlingComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
+  showSuccess(message:string) {
+    this.toastService.show(message, { type: 'success' });
+  }
 
-    this.route.parent?.paramMap.subscribe(params => {
-      this.endpointId = params.get('id');
-      console.log('Parent ID:', this.endpointId);
-    });
 
+  showError(message:string){
+    this.toastService.show(message , {type:"error"})
+  }
+
+  getEndpoint(){
     this.endpointService.getEndpointById(this.endpointId).subscribe({
       next: (res) => {
         console.log(res)
@@ -113,8 +122,23 @@ export class ThrottlingComponent implements OnInit {
         })
 
         console.log(this.endPointData);
+      },
+      error:(err)=>{
+        console.log(err);
+        this.showError(err?.message)
       }
     })
+  }
+
+
+  ngOnInit(): void {
+
+    this.route.parent?.paramMap.subscribe(params => {
+      this.endpointId = params.get('id');
+      console.log('Parent ID:', this.endpointId);
+    });
+
+    this.getEndpoint()
   }
 
   addParameter(fieldName: 'cidr' | 'trustedProxies' | 'clientIpHeaders') {
@@ -218,11 +242,15 @@ export class ThrottlingComponent implements OnInit {
     console.log(body);
 
     this.endpointService.addUpdateThrottling(this.endpointId,body).subscribe({
-      next:(res)=>{
+      next:(res:any)=>{
         console.log("added", res);
+        this.showSuccess(res?.message);
+        this.getEndpoint();
       },
       error:(err)=>{
-        console.error(err)
+        console.error(err);
+        this.showError(err?.message);
+        this.getEndpoint();
       }
     })
   }

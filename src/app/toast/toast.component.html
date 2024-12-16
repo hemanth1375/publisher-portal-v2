@@ -1,0 +1,18 @@
+<div
+  *ngFor="let toast of toastService.toasts"
+  class="toast-container position-fixed p-3"
+  style="z-index: 1200"
+>
+  <ngb-toast
+    *ngIf="toast"
+    [autohide]="true"
+    [delay]="toast.delay || 5000"
+    (hidden)="toastService.remove(toast)"
+    [class.bg-success]="toast.type === 'success'"
+    [class.bg-danger]="toast.type === 'error'"
+    [class.bg-warning]="toast.type === 'warning'"
+    [class.text-light]="toast.type"
+  >
+    {{ toast.message }}
+  </ngb-toast>
+</div>

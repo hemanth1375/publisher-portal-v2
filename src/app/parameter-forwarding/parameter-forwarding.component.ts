@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EndpointService } from '../services/endpoint.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-parameter-forwarding',
@@ -18,7 +19,7 @@ export class ParameterForwardingComponent implements OnInit{
   endpointId:any
 
 
-  constructor(private fb: FormBuilder, private route:ActivatedRoute, private endpointService:EndpointService ) {
+  constructor(private fb: FormBuilder, private route:ActivatedRoute, private endpointService:EndpointService ,private toastService: ToastService) {
     this.parameterForm = this.fb.group({
       input_parameter: [],
       input_header: [],
@@ -27,13 +28,7 @@ export class ParameterForwardingComponent implements OnInit{
     })
   }
 
-  ngOnInit(): void {
-
-    this.route.parent?.paramMap.subscribe(params => {
-      this.endpointId = params.get('id');
-      console.log('Parent ID:', this.endpointId);
-    });
-
+  getEndpoint(){
     this.endpointService.getEndpointById(this.endpointId).subscribe({ 
       next:(res)=>{
         console.log(res)
@@ -47,8 +42,32 @@ export class ParameterForwardingComponent implements OnInit{
           input_query_strings:data?.input_query_strings,
           input_headers:data?.input_headers
         })
+      },
+      error:(err)=>{
+        console.log(err);
+        this.showError(err?.message)
       }
     })
+  }
+
+  showSuccess(message:string) {
+    this.toastService.show(message, { type: 'success' });
+  }
+
+
+  showError(message:string){
+    this.toastService.show(message , {type:"error"})
+  }
+
+  ngOnInit(): void {
+
+    this.route.parent?.paramMap.subscribe(params => {
+      this.endpointId = params.get('id');
+      console.log('Parent ID:', this.endpointId);
+    });
+
+    this.getEndpoint();
+ 
   }
 
  
@@ -100,11 +119,15 @@ export class ParameterForwardingComponent implements OnInit{
     console.log(body);
     
     this.endpointService.addParameterForwarding(this.endpointId,body).subscribe({
-      next:(res)=>{
+      next:(res:any)=>{
         console.log("added", res);
+        this.showSuccess(res?.message);
+        this.getEndpoint();
       },
       error:(err)=>{
         console.error(err)
+        this.showError(err?.message);
+        this.getEndpoint();
       }
     })
   }

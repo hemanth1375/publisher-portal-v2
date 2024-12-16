@@ -21,7 +21,7 @@
         <div class="row pt-3 g-3 row-size">
             @for(item of endpointCards; track item.id){
             <div class="col-sm-3">
-                <div class="api-card"(click)="goToApiViewPage(item.id)">
+                <div class="api-card"(click)="goToApiViewPage(item)">
                     <div class="api-card-above d-flex justify-content-center align-items-center">
                         <img src="../../assets/images/Group.svg"/>
                     </div>

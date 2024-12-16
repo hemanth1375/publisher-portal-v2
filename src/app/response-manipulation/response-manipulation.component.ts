@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EndpointService } from '../services/endpoint.service';
+import { ToastService } from '../services/toast.service';
 
 
 @Component({
@@ -9,16 +10,16 @@ import { EndpointService } from '../services/endpoint.service';
   templateUrl: './response-manipulation.component.html',
   styleUrl: './response-manipulation.component.css'
 })
-export class ResponseManipulationComponent implements OnInit{
+export class ResponseManipulationComponent implements OnInit {
 
-  staticresTooltip="When the backend fails you can still return the static data provided below to the user. The data is merged with any existing partial responses. If you still don't have a backend and want to have this data, add a fake one that cannot be resolved."
+  staticresTooltip = "When the backend fails you can still return the static data provided below to the user. The data is merged with any existing partial responses. If you still don't have a backend and want to have this data, add a fake one that cannot be resolved."
 
   isKeyCreated: boolean = false;
 
   formGroupResponseManipulation: FormGroup;
 
   endpointId: any;
-  endPointData:any;
+  endPointData: any;
 
   jsonData = {
     "students": [
@@ -28,7 +29,7 @@ export class ResponseManipulationComponent implements OnInit{
     ]
   };
 
-  constructor(private formBuilder: FormBuilder,private route: ActivatedRoute, private endpointService:EndpointService ) {
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private endpointService: EndpointService,private toastService: ToastService) {
     this.formGroupResponseManipulation = this.formBuilder.group({
       response: [null],
       strategy: [null],
@@ -52,6 +53,63 @@ export class ResponseManipulationComponent implements OnInit{
   }
 
 
+  showSuccess(message:string) {
+    this.toastService.show(message, { type: 'success' });
+  }
+
+
+  showError(message:string){
+    this.toastService.show(message , {type:"error"})
+  }
+
+
+  getEndpoint(){
+    this.endpointService.getEndpointById(this.endpointId).subscribe({
+      next: (res) => {
+        console.log(res)
+        this.endPointData = res;
+        console.log(this.endPointData);
+
+        this.formGroupResponseManipulation.patchValue({
+          response: JSON.stringify(this.endPointData?.extra_config?.proxy?.static?.data, null, 2),
+          strategy: this.endPointData?.extra_config?.proxy?.static?.strategy,
+
+          expression: this.endPointData?.extra_config?.["modifier/jmespath"]?.expr,
+
+          contentReplacer: this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["content-replacer"],
+          regexConReplacerActive: !!this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.name.includes("content-replacer"),
+
+          isStaticResponseActive: !!this.endPointData?.extra_config?.["proxy"]?.["static"],
+          isAdvanceResponseActive: !!this.endPointData?.extra_config?.["modifier/jmespath"],
+
+          isAdvanceResponseGoActive: !!this.endPointData?.extra_config?.["modifier/response-body-generator"],
+
+          template: JSON.stringify(this.endPointData?.extra_config?.["modifier/response-body-generator"]?.template, null, 2),
+          contentType: this.endPointData?.extra_config?.["modifier/response-body-generator"]?.content_type,
+          debug: this.endPointData?.extra_config?.["modifier/response-body-generator"]?.debug,
+          path: this.endPointData?.extra_config?.["modifier/response-body-generator"]?.path
+        });
+
+        const obj = this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["content-replacer"];
+
+        const contentep = Object.keys(obj);
+
+        if (contentep.length != 0) {
+          this.formGroupResponseManipulation.get("contentReplacerKey")?.setValue(contentep[0]);
+          console.log(this.formGroupResponseManipulation.get("contentReplacerKey")?.value);
+          this.createContentReplacerKeyWithValues();
+        }
+
+
+
+      },
+      error: (err) => {
+        console.error(err);
+        this.showError(err?.message)
+      }
+    })
+  }
+
   ngOnInit(): void {
 
     this.route.parent?.paramMap.subscribe(params => {
@@ -73,34 +131,8 @@ export class ResponseManipulationComponent implements OnInit{
       }
     })
 
-    this.endpointService.getEndpointById(this.endpointId).subscribe({
-      next: (res) => {
-        console.log(res)
-        this.endPointData=res;
-        console.log(this.endPointData);
-
-        this.formGroupResponseManipulation.patchValue({
-          response: JSON.stringify(this.endPointData?.extra_config?.proxy?.static?.data, null, 2),
-          strategy: this.endPointData?.extra_config?.proxy?.static?.strategy,
-          
-          expression: this.endPointData?.extra_config?.["modifier/jmespath"]?.expr,
-
-          contentReplacer: this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["content-replacer"],
-          regexConReplacerActive:!!this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.name.includes("content-replacer"),
-    
-          isStaticResponseActive: !!this.endPointData?.extra_config?.["proxy"]?.["static"],
-          isAdvanceResponseActive: !!this.endPointData?.extra_config?.["modifier/jmespath"],
-         
-          isAdvanceResponseGoActive: !!this.endPointData?.extra_config?.["modifier/response-body-generator"],
-  
-          template: JSON.stringify(this.endPointData?.extra_config?.["modifier/response-body-generator"]?.template , null, 2),
-          contentType:this.endPointData?.extra_config?.["modifier/response-body-generator"]?.content_type,
-          debug:this.endPointData?.extra_config?.["modifier/response-body-generator"]?.debug,
-          path:this.endPointData?.extra_config?.["modifier/response-body-generator"]?.path
-        });
-      }
-    })
-
+    this.getEndpoint();
+   
 
   }
 
@@ -123,6 +155,36 @@ export class ResponseManipulationComponent implements OnInit{
     }
   }
 
+
+  createContentReplacerKeyWithValues() {
+
+    if (this.formGroupResponseManipulation.get('contentReplacerKey')?.value) {
+      const contentReplacerGroup = this.formGroupResponseManipulation.get('contentReplacer') as FormGroup;
+
+
+      const obj = this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["content-replacer"];
+
+      const contentep = Object.keys(obj);
+
+      console.log(contentep[0])
+
+      console.log(obj[contentep[0]].find);
+
+      // Create a new FormGroup with find, replace, and regexp
+      const nestedFormGroup = this.formBuilder.group({
+        find: [obj[contentep[0]].find],    // Default empty value for find
+        replace: [obj[contentep[0]].replace], // Default empty value for replace
+        regexp: [obj[contentep[0]].regexp] // Default checkbox unchecked
+      });
+
+      // Add the new group to contentReplacer with the entered key
+      contentReplacerGroup.addControl(this.formGroupResponseManipulation.get('contentReplacerKey')?.value, nestedFormGroup);
+
+      // Reset the key input and set flag to show nested controls
+      this.isKeyCreated = true;
+    }
+  }
+
   resetFields() {
     const key = this.formGroupResponseManipulation.get('contentReplacerKey')?.value;
     if (key) {
@@ -133,17 +195,17 @@ export class ResponseManipulationComponent implements OnInit{
     }
   }
 
-  submit(){
+  submit() {
 
     console.log(this.formGroupResponseManipulation.value);
 
     const body = {
       "proxy": {
-        ...((!!this.endPointData?.extra_config?.["proxy"]) && {"id":this.endPointData?.extra_config?.["proxy"]?.id}),
+        ...((!!this.endPointData?.extra_config?.["proxy"]) && { "id": this.endPointData?.extra_config?.["proxy"]?.id }),
         ...(this.formGroupResponseManipulation.value?.isStaticResponseActive && {
           "static": {
-            ...((!!this.endPointData?.extra_config?.["proxy"]?.static) && {"id":this.endPointData?.extra_config?.["proxy"]?.static.id}),
-            "data": this.formGroupResponseManipulation.value?.response ? JSON.parse(this.formGroupResponseManipulation.value?.response) :null ,
+            ...((!!this.endPointData?.extra_config?.["proxy"]?.static) && { "id": this.endPointData?.extra_config?.["proxy"]?.static.id }),
+            "data": this.formGroupResponseManipulation.value?.response ? JSON.parse(this.formGroupResponseManipulation.value?.response) : null,
             "strategy": this.formGroupResponseManipulation.value?.strategy
           }
         })
@@ -151,7 +213,7 @@ export class ResponseManipulationComponent implements OnInit{
 
       ...(this.formGroupResponseManipulation.value?.isAdvanceResponseActive && {
         "modifier/jmespath": {
-          ...((!!this.endPointData?.extra_config?.["modifier/jmespath"]) && {"id":this.endPointData?.extra_config?.["modifier/jmespath"]?.id}),
+          ...((!!this.endPointData?.extra_config?.["modifier/jmespath"]) && { "id": this.endPointData?.extra_config?.["modifier/jmespath"]?.id }),
           // "@comment": null,
           "expr": this.formGroupResponseManipulation.value?.expression
         }
@@ -159,37 +221,43 @@ export class ResponseManipulationComponent implements OnInit{
 
       ...(this.formGroupResponseManipulation.value?.isAdvanceResponseGoActive && {
         "modifier/response-body-generator": {
-        ...((!!this.endPointData?.extra_config?.["modifier/response-body-generator"]) && {"id":this.endPointData?.extra_config?.["modifier/response-body-generator"]?.id}),
-          ...(this.formGroupResponseManipulation.value?.bodyEditor ==="bodyeditor" && {"template": this.formGroupResponseManipulation.value?.template ? JSON.parse(this.formGroupResponseManipulation.value?.template) : null}),
+          ...((!!this.endPointData?.extra_config?.["modifier/response-body-generator"]) && { "id": this.endPointData?.extra_config?.["modifier/response-body-generator"]?.id }),
+          ...(this.formGroupResponseManipulation.value?.bodyEditor === "bodyeditor" && { "template": this.formGroupResponseManipulation.value?.template ? JSON.parse(this.formGroupResponseManipulation.value?.template) : null }),
           "content_type": this.formGroupResponseManipulation.value?.contentType,
           "debug": this.formGroupResponseManipulation.value?.debug,
-          ...(this.formGroupResponseManipulation.value?.bodyEditor ==="external" && {"path": this.formGroupResponseManipulation.value?.path}),
+          ...(this.formGroupResponseManipulation.value?.bodyEditor === "external" && { "path": this.formGroupResponseManipulation.value?.path }),
 
         }
       }),
 
-      ...((this.formGroupResponseManipulation.value?.regexConReplacerActive) &&{"plugin/req-resp-modifier": {
-        ...((!!this.endPointData?.extra_config?.["plugin/req-resp-modifier"]) && {"id":this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.id}),
-        "name": [
-          this.formGroupResponseManipulation.value?.regexConReplacerActive && "content-replacer"
-        ].filter(Boolean),
-        ...(this.formGroupResponseManipulation.value?.regexConReplacerActive &&{"content-replacer": this.formGroupResponseManipulation.value?.contentReplacer}),
-      }})
+      ...((this.formGroupResponseManipulation.value?.regexConReplacerActive) && {
+        "plugin/req-resp-modifier": {
+          ...((!!this.endPointData?.extra_config?.["plugin/req-resp-modifier"]) && { "id": this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.id }),
+          "name": [
+            this.formGroupResponseManipulation.value?.regexConReplacerActive && "content-replacer"
+          ].filter(Boolean),
+          ...(this.formGroupResponseManipulation.value?.regexConReplacerActive && { "content-replacer": this.formGroupResponseManipulation.value?.contentReplacer }),
+        }
+      })
 
-    }    
+    }
 
     console.log(body);
 
     this.endpointService.addResponse(this.endpointId, body).subscribe({
-      next:(res)=>{
+      next: (res:any) => {
         console.log(res)
+        this.showSuccess(res?.message);
+        this.getEndpoint()
       },
-      error:(err)=>{
-        console.error(err)
+      error: (err) => {
+        console.error(err);
+        this.showError(err?.message);
+        this.getEndpoint()
       }
     })
-    
-    
+
+
   }
 
 }

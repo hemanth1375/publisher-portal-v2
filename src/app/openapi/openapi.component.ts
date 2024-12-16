@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EndpointService } from '../services/endpoint.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-openapi',
@@ -17,7 +18,7 @@ export class OpenapiComponent implements OnInit {
   endpointId: any;
   endPointData:any;
 
-  constructor(private formBuilder: FormBuilder,private route: ActivatedRoute ,private endpointService:EndpointService,) {
+  constructor(private formBuilder: FormBuilder,private route: ActivatedRoute ,private endpointService:EndpointService,private toastService: ToastService) {
     this.formGroupOpenapi = this.formBuilder.group({
       summary: [''],
       description: [''],
@@ -29,13 +30,8 @@ export class OpenapiComponent implements OnInit {
       audienceArrayValue: [[]]
     })
   }
-  ngOnInit(): void {
-   
-    this.route.parent?.paramMap.subscribe(params => {
-      this.endpointId = params.get('id');
-      console.log('Parent ID:', this.endpointId);
-    });
 
+  getEndpoint(){
     this.endpointService.getEndpointById(this.endpointId).subscribe({
       next:(res)=>{
         this.endPointData = res;
@@ -52,7 +48,7 @@ export class OpenapiComponent implements OnInit {
           summary: this.endPointData?.extra_config?.["documentation/openapi"]?.summary,
           description: this.endPointData?.extra_config?.["documentation/openapi"]?.description,
           tagsArrayValue:this.endPointData?.extra_config?.["documentation/openapi"]?.tags,
-          example: this.endPointData?.extra_config?.example,
+          example: JSON.stringify(this.endPointData?.extra_config?.["documentation/openapi"].example, null,2),
           isDocumentationActive: !!this.endPointData?.extra_config?.["documentation/openapi"],
           audienceArrayValue:this.endPointData?.extra_config?.["documentation/openapi"]?.audience,
         })
@@ -60,8 +56,29 @@ export class OpenapiComponent implements OnInit {
       },
       error:(err)=>{
         console.error(err);
+        this.showError(err?.message)
       }
     })
+  }
+
+  showSuccess(message:string) {
+    this.toastService.show(message, { type: 'success' });
+  }
+
+
+  showError(message:string){
+    this.toastService.show(message , {type:"error"})
+  }
+
+  ngOnInit(): void {
+   
+    this.route.parent?.paramMap.subscribe(params => {
+      this.endpointId = params.get('id');
+      console.log('Parent ID:', this.endpointId);
+    });
+
+   this.getEndpoint();
+  
   }
 
   addParameter(fieldName: 'audiences' | 'tags') {
@@ -107,11 +124,15 @@ export class OpenapiComponent implements OnInit {
     } 
 
     this.endpointService.addOpenApi(this.endpointId, body).subscribe({
-      next:(res)=>{
-        console.log(res)
+      next:(res:any)=>{
+        console.log(res);
+        this.showSuccess(res?.message);
+        this.getEndpoint();
       },
       error:(err)=>{
-        console.error(err)
+        console.error(err);
+        this.showError(err?.message);
+        this.getEndpoint();
       }
     })
     
