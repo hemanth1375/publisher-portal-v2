@@ -47,8 +47,14 @@
                              <!-- <input type="text" class="input-size form-control" id="name" formControlName="host"/>  -->
                             <div class="d-flex gap-2">
                                 <input type="text" class="form-control" id="host" formControlName="host">
-                                <button type="button" class="btn btn-outline-primary"
-                                    (click)="addParameter('host')">Add</button>
+                                <!-- <button type="button" class="btn btn-outline-primary"
+                                    (click)="addParameter('host')">Add</button> -->
+                                    <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('host')"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-plus-lg" viewBox="0 0 16 16">addParameter('regExpMatch')
+                                        <path fill-rule="evenodd"
+                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                    </svg></button>
                             </div>
                             <div class="form-text">The address where KrakenD connects to. Some valid examples can be
                                 https://myapi, amqp://host, 192.0.2.1:25, my.service.tld. When using gRPC use the syntax
@@ -133,8 +139,14 @@
                                     <!-- <input type="text" class="input-size form-control" id="name" formControlName="host"/> -->
                                     <div class="d-flex gap-2">
                                         <input type="text" class="form-control" id="directory" formControlName="directory">
-                                        <button type="button" class="btn btn-outline-primary"
-                                            (click)="addParameter('directory')">Add</button>
+                                        <!-- <button type="button" class="btn btn-outline-primary"
+                                            (click)="addParameter('directory')">Add</button> -->
+                                            <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('directory')"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                                class="bi bi-plus-lg" viewBox="0 0 16 16">addParameter('regExpMatch')
+                                                <path fill-rule="evenodd"
+                                                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                            </svg></button>
                                     </div>
                                     <div class="form-text">The paths to the different .pb files you want to load, or the paths to
                                         directories containing .pb files. Relative paths point to /etc/krakend by default.</div>
@@ -389,7 +401,13 @@
                                
                             </div>
                             <div class="col-sm-12 col-md-2">
-                                <button class="btn btn-outline-primary" (click)="addParameter('literalMatch')">Add</button>
+                                <!-- <button class="btn btn-outline-primary" (click)="addParameter('literalMatch')">Add</button> -->
+                                <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('literalMatch')"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                </svg></button>
                             </div>
         
                             <div class="col-sm-12 col-md-2">
@@ -405,7 +423,13 @@
                               
                             </div>
                             <div class="col-sm-12 col-md-2">
-                                <button class="btn btn-outline-primary" (click)="addParameter('regExpMatch')">Add</button>
+                                <!-- <button class="btn btn-outline-primary" (click)="addParameter('regExpMatch')">Add</button> -->
+                                <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('regExpMatch')"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-plus-lg" viewBox="0 0 16 16">addParameter('regExpMatch')
+                                    <path fill-rule="evenodd"
+                                        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                </svg></button>
                             </div>
         
                         </div>
@@ -449,8 +473,20 @@
                             <!-- <input type="text" class="input-size form-control" id="name" formControlName="host"/> -->
                             <div class="d-flex gap-2">
                                 <input type="text" class="form-control" id="virtualHost" formControlName="virtualHost">
-                                <button type="button" class="btn btn-outline-primary"
-                                    (click)="addParameter('virtualHost')">Add</button>
+                                <!-- <button type="button" class="btn btn-outline-primary"
+                                    (click)="addParameter('virtualHost')">Add</button> -->
+                                    <!-- <button class="btn btn-primary" type="button" id="button-addon2"
+                                    (click)="addParameter('virtualHost')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                        height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                    </svg></button> -->
+                                    <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('virtualHost')"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                    </svg></button>
                             </div>
                           
                             <div class="mt-3 d-flex">
@@ -760,7 +796,7 @@
            
             <div class="col-sm-12 mt-3">
                 <!-- <button mat-raised-button (click)="submitForm()">Submit</button> -->
-                <button class="btn btn-primary" (click)="emitValue()">Save</button>
+                <button class="btn btn-primary" (click)="submit()">Save</button>
             </div>
         </div>
     </div>

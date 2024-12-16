@@ -1,0 +1,53 @@
+.heading-with-toggle h3 {
+    margin-bottom: 0px !important;
+  }
+
+  .toggle-header{
+    width: 100%;
+  }
+  
+  .input-size {
+    width: 80%;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+  }
+  
+  .input-size1 {
+    width: 5%;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+  }
+  
+  .checkbox-text {
+    margin-bottom: 0;
+    margin-left: 0;
+  }
+  
+  .input-with-button {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  
+  .button-with-input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  
+  .parameter-item {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    border: none;
+  }
+  
+  .parameter-item:hover {
+    background-color: rgb(172, 5, 5);
+  }
+
+  .custom-switch {
+    width: 2.2rem; /* Adjust the width */
+    height: 1.1rem; /* Adjust the height */
+}

@@ -20,5 +20,6 @@ export const urls={
     addResponse: host + "/krakend/endpoint/addOrUpdateResponseManipulation",
     addPolicies:host +"/krakend/endpoint/addOrUpdatePolices",
     addConnectivity : host + "/krakend/endpoint/addOrUpdateConnectivityOptions",
-    addOpenAPI:host +"/krakend/endpoint/addOrUpdateOpenApi"
+    addOpenAPI:host +"/krakend/endpoint/addOrUpdateOpenApi",
+    addOrUpdateTelemetryMoesifUrl:host +"/krakend/extraconfig/monetization/addOrUpdateTelemetryMoesif"
 }

@@ -20,6 +20,7 @@ import { OpenapiComponent } from './openapi/openapi.component';
 import { GatewayServiceSettingsComponent } from './gateway-service-settings/gateway-service-settings.component';
 import { GatewayTelemetryComponent } from './gateway-telemetry/gateway-telemetry.component';
 import { GatewaysHttpsecurityComponent } from './gateways-httpsecurity/gateways-httpsecurity.component';
+import { GatewayApiMonetizationComponent } from './gateway-api-monetization/gateway-api-monetization.component';
 
 const routes: Routes = [
   {path:"apis",component:ApicardsComponent,children:[
@@ -43,7 +44,8 @@ const routes: Routes = [
       {path:"dashboard",component:GatewayDashboardComponent},
       {path:"service",component:GatewayServiceSettingsComponent},
       {path:"telemetry",component:GatewayTelemetryComponent},
-      {path:"httpsecurity",component:GatewaysHttpsecurityComponent}
+      {path:"httpsecurity",component:GatewaysHttpsecurityComponent},
+      {path:"apimonetize",component:GatewayApiMonetizationComponent}
     ]}
   ]},
   { path: '', redirectTo: '/apis', pathMatch: 'full' }

@@ -46,6 +46,8 @@ import { GatewayServiceSettingsComponent } from './gateway-service-settings/gate
 import { GatewayTelemetryComponent } from './gateway-telemetry/gateway-telemetry.component';
 import { GatewaysHttpsecurityComponent } from './gateways-httpsecurity/gateways-httpsecurity.component';
 import { ToastComponent } from './toast/toast.component';
+import { GatewayApiMonetizationComponent } from './gateway-api-monetization/gateway-api-monetization.component';
+
 
 // keycloak
 function initializeKeycloak(keycloak: KeycloakService){
@@ -98,7 +100,9 @@ function initializeKeycloak(keycloak: KeycloakService){
     GatewayServiceSettingsComponent,
     GatewayTelemetryComponent,
     GatewaysHttpsecurityComponent,
-    ToastComponent
+    ToastComponent,
+    GatewayApiMonetizationComponent
+
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EndpointService } from '../services/endpoint.service';
 
 @Component({
   selector: 'app-gateway-service-settings',
@@ -61,12 +62,13 @@ export class GatewayServiceSettingsComponent {
   formGroupService: FormGroup;
   objectMap: Map<string, string> = new Map();
   regExpObjectMap: Map<string, string> = new Map();
+  endPointData:any;
 
   @Input() formData: any;
   @Output() serviceSettingsFormSubmitted = new EventEmitter<any>();
 
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private endpointService:EndpointService) {
     this.formGroupService = this.formBuilder.group({
       isgRPCActive: [false], 
       isEnableHttpsActive: [false],
@@ -429,6 +431,26 @@ export class GatewayServiceSettingsComponent {
     //   });
     // }
 
+  }
+
+  submit(){
+  //   const body = {
+  //     ...(this.formGroupService.value?.isSpFilterActive && {
+  //       "security/policies": {
+  //         ...(!!this.endPointData?.extra_config?.["security/policies"] && {"id":this.endPointData?.extra_config?.["security/policies"]?.id}),
+  //         "req": {
+  //           "policies": this.formGroupPolicies.value?.secReqPolicyArrayValue,
+  //           "error": {
+  //             "body": this.formGroupPolicies.value?.secReqErrorBody,
+  //             "status": this.formGroupPolicies.value?.secReqErrorStCode,
+  //             "content_type": this.formGroupPolicies.value?.secReqErrorContentType
+  //           }
+  //         }
+  //       }
+  //     })
+      
+
+  //   }
   }
 
 

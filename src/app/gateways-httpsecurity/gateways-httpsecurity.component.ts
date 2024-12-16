@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // import { SharedDataService } from '../services/shared-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { EndpointService } from '../services/endpoint.service';
 @Component({
   selector: 'app-gateways-httpsecurity',
   templateUrl: './gateways-httpsecurity.component.html',
@@ -36,6 +37,8 @@ export class GatewaysHttpsecurityComponent {
   httpSecuritySniffingToolTip="When set prevents Internet Explorer from MIME-sniffing a response away from the declared content-type. This also applies to Google Chrome, when downloading extensions. Sets sX-Content-Type-Options: nosniff"
   browserCrossSiteScriptingToolTip="When set adds the header X-XSS-Protection: 1; mode=block"
   basicAuthHtpasswdPathToolTip="Absolute Path to the htpasswd filename (recommended) or relative ./ to the workdir."
+
+
   onToggleChangeStaticResponse(event: any, id: any) {
     console.log('id', id);
     (this as any)[id] = event.checked;
@@ -56,6 +59,7 @@ export class GatewaysHttpsecurityComponent {
 
   objectMap: Map<string, string> = new Map();
   entireJsonData: any;
+  endPointData:any;
   ngOnInit() {
     // this.sharedService.getEntireJsonData$().subscribe(data => {
     //   this.entireJsonData = data;
@@ -261,7 +265,7 @@ export class GatewaysHttpsecurityComponent {
 
 
 
-  constructor(private formBuilder: FormBuilder, private _snackBar: MatSnackBar) {
+  constructor(private formBuilder: FormBuilder, private _snackBar: MatSnackBar, private endpointService:EndpointService) {
     this.formGroupHttpSecurity = this.formBuilder.group({
       isCorsActive: [false],
       isBotDetectorActive: [false],

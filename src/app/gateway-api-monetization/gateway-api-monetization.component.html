@@ -1,0 +1,90 @@
+<div class="container">
+    <div class="row">
+      <form [formGroup]="formGroupApiMonetization">
+
+        <mat-accordion [multi]="true">
+            <mat-expansion-panel (opened)="formGroupApiMonetization.value.isApiMonetizationActive">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <div class="d-flex justify-content-between toggle-header">
+                            <div>API Monetization and API Governance (Moesif partnership) &nbsp;
+                                <i class="bi bi-info-circle" [matTooltip]=apiMonetizeInfo></i>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input custom-switch" type="checkbox" role="switch" formControlName="isApiMonetizationActive" id="flexSwitchCheckDefault">
+                            </div>
+                        </div>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                @if(formGroupApiMonetization.value.isApiMonetizationActive){
+                    <div class="row gap-2">
+                        <p>Check the documentation for more advanced usages and company identification</p>
+                        <div class="row d-flex">
+                          <div class="col-sm-12 col-md-6 gap-2">
+                            <label for="apiMonetizationAppID" class="form-label">Application ID <i class="bi bi-info-circle" [matTooltip]=apiMonetizationAppIDFormInfo></i></label>
+                            <input type="text" placeholder="XXXX" class="form-control input-size" id="apiMonetizationAppID"
+                              formControlName="apiMonetizationAppIDForm">
+                          
+              
+                          </div>
+                          <div class="col-sm-12 col-md-6 gap-2">
+                            <div class="d-flex">
+                              <input type="checkbox" class="input-size1" formControlName="apiMonetizationDebugForm">
+                              <div class="checkbox-text">&nbsp; Debug &nbsp; <i class="bi bi-info-circle" [matTooltip]=apiMontizeDebugInfo></i></div>
+                            </div>
+                            
+              
+                          </div>
+              
+                        </div>
+              
+                      </div>
+              
+                      <div class="row gap-2 mt-3">
+                        <div class="d-flex">
+                          <div class="col-sm-12 col-md-6 gap-2">
+                            <label for="apiMonetizationHeaders">Headers to identify user ID &nbsp; <i class="bi bi-info-circle" [matTooltip]=apiMonetizationHeadersFormInfo></i></label>
+                            <div class="d-flex">
+                              <input type="text" placeholder="my-indexing" id="apiMonetizationHeaders"
+                                class="form-control input-size input-with-button" formControlName="apiMonetizationHeadersForm">
+                              <button class="btn btn-info button-with-input" type="button"
+                                (click)="addParameter('apiMonetizationHeadersForm')"><b>+</b></button>
+                            </div>
+                           
+              
+                            <div class="mt-3 d-flex">
+                              <button *ngFor="let attr of apiMonetizationHeadersArray; let i = index" class="parameter-item">
+                                {{ attr }}<mat-icon (click)="removeParameter(i,'apiMonetizationHeadersForm')"
+                                  class="d-flex align-items-center justify-content-end">close</mat-icon>
+                              </button>
+                            </div>
+              
+                          </div>
+                          <div class="col-sm-12 col-md-6 gap-2">
+                            <label for="apiMonetizationClaim" class="form-label">Claim with User ID &nbsp; <i class="bi bi-info-circle" [matTooltip]=apiMonetizationClaimFormInfo></i></label>
+                            <input type="text" placeholder="sub" class="form-control input-size" id="apiMonetizationClaim"
+                              formControlName="apiMonetizationClaimForm">
+                           
+              
+                          </div>
+              
+                        </div>
+                      </div>
+                    }
+                
+            </mat-expansion-panel>
+        </mat-accordion>
+
+
+       
+        <div class="col-sm-12 mt-3">
+          <div class="col-sm-12">
+            <button class="btn btn-primary" (click)="onSubmit()">Save</button>
+          </div>
+          
+        </div>
+      </form>
+  
+    </div>
+  
+  </div>
