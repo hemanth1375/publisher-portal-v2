@@ -123,4 +123,22 @@ export class ApicardsComponent implements OnInit {
     this.communucationSer.updateShowParent(false);
     this.router.navigate([`viewapi/${item.id}/overview`], { state: { body: item }, relativeTo: this.route })
   }
+
+  deleteEndpoint(endpointId:any){
+    this.mainSer.deleteEndpoint(endpointId).subscribe({
+      next:(res:any)=>{
+        console.log(res);
+        this.showSuccess(res.message)
+        this.loadCards(this.userId)
+      },
+      error:(err:any)=>{
+        this.showError(err.message)
+        this.loadCards(this.userId)
+      }
+    })
+  }
+  goToDeploymentPage(item:any){
+    this.isShowParent=false;
+    this.router.navigate([`viewapi/${item.id}/deployments`], {state: { body: item },relativeTo: this.route })
+  }
 }

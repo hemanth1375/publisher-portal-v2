@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { ActivatedRoute } from '@angular/router';
 import { MainService } from '../services/main.service';
 import { switchMap } from 'rxjs';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-deployment',
@@ -47,14 +48,29 @@ export class GatewayDialog {
   constructor(
     public dialogRef: MatDialogRef<GatewayDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private mainSer:MainService
+    private mainSer:MainService,
+    private toastService:ToastService
   ) {}
   gatewayCards:any;
+
+  showSuccess(message:string) {
+    this.toastService.show(message, { type: 'success' });
+  }
+
+  showError(message:string){
+    this.toastService.show(message , {type:"error"})
+  }
+
   getGatewayCards(){
     this.mainSer.getCards().subscribe({
       next:(res:any)=>{
         console.log(res);
         this.gatewayCards=res.cards;
+      },
+      error:(err:any)=>{
+        console.log(err);
+        this.showError(err?.message);
+        
       }
     })
   }
@@ -91,10 +107,13 @@ export class GatewayDialog {
       ).subscribe({
         next: (secondApiResponse:any) => {
           console.log('Second API Response:', secondApiResponse);
+          this.showSuccess(secondApiResponse?.message);
           this.dialogRef.close();
         },
         error: (error:any) => {
           console.error('Error occurred:', error);
+          this.showError(error?.message);
+          this.dialogRef.close();
         },
       });
     

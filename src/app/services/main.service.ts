@@ -81,4 +81,8 @@ export class MainService {
       const url=urls.updateBackend+`?backendId=${backendId}`
       return this.http.post(url,body)
     }
+    deleteEndpoint(endpointId:any){
+      const url=urls.deleteEndpoint+`?endpointId=${endpointId}`
+      return this.http.post(url,null)
+    }
 }
