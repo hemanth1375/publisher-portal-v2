@@ -19,13 +19,14 @@
     height:300px;
     border-radius:10px;
     border:1px solid lightgray;
-    cursor: pointer;
+    /* cursor: pointer; */
     /* width:290px; */
     
     /* padding:20px; */
 }
 .api-card-above{
     height:40%;
+    cursor: pointer;
     border:1px solid black;
     border-top-left-radius:10px;
     border-top-right-radius: 10px;

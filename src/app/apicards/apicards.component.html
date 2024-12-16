@@ -21,8 +21,8 @@
         <div class="row pt-3 g-3 row-size">
             @for(item of endpointCards; track item.id){
             <div class="col-sm-3">
-                <div class="api-card"(click)="goToApiViewPage(item)">
-                    <div class="api-card-above d-flex justify-content-center align-items-center">
+                <div class="api-card">
+                    <div class="api-card-above d-flex justify-content-center align-items-center"(click)="goToApiViewPage(item)">
                         <img src="../../assets/images/Group.svg"/>
                     </div>
                     <div class="api-card-below">
@@ -30,8 +30,8 @@
                         <h3 class="endpoint-name">{{item.endpoint}}</h3>
                         <p class="createdBy">by admin</p>
                         <div class="d-flex">
-                            <button class="deploy-btn d-flex align-items-center"><span class="d-flex align-items-center"><mat-icon class="material-symbols-outlined profile-icon-size">deployed_code</mat-icon></span><span>Deploy</span></button>
-                            <button class="delete-btn d-flex align-items-center"><span class="d-flex align-items-center"><mat-icon class="material-symbols-outlined profile-icon-size">delete</mat-icon></span><span>Delete</span></button>
+                            <button class="deploy-btn d-flex align-items-center"(click)="goToDeploymentPage(item)"><span class="d-flex align-items-center"><mat-icon class="material-symbols-outlined profile-icon-size">deployed_code</mat-icon></span><span>Deploy</span></button>
+                            <button class="delete-btn d-flex align-items-center"(click)="deleteEndpoint(item.id)"><span class="d-flex align-items-center"><mat-icon class="material-symbols-outlined profile-icon-size">delete</mat-icon></span><span>Delete</span></button>
                         </div>
                     </div>
                     
