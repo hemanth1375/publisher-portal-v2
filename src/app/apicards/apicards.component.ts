@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { MainService } from '../services/main.service';
 import { KeycloakEventType, KeycloakService } from 'keycloak-angular';
@@ -11,7 +11,7 @@ import { ToastService } from '../services/toast.service';
   templateUrl: './apicards.component.html',
   styleUrl: './apicards.component.css'
 })
-export class ApicardsComponent implements OnInit {
+export class ApicardsComponent implements OnInit , AfterViewInit{
 
   private subscription: Subscription;
 
@@ -40,6 +40,9 @@ export class ApicardsComponent implements OnInit {
       }
     );
   }
+  ngAfterViewInit(): void {
+    this.isShowParent=true
+  }
 
   endpointCards: any;
   userDetails: any;
@@ -55,6 +58,7 @@ export class ApicardsComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.isShowParent=true
     console.log(this.isShowParent);
 
     if (this.userId) {
