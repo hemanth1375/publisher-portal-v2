@@ -49,12 +49,22 @@
           <mat-panel-title>
             <!-- {{ item.isNew ? :  }} -->
               @if(item.isNew){
-                <span class="main-method d-flex justify-content-center align-items-center">{{getFormGroup(i).value.method}}</span> &nbsp;{{getFormGroup(i).value.endpointUrl}}
+                <div class="d-flex justify-content-between head-div">
+                  <span class="main-method d-flex justify-content-center align-items-center">{{getFormGroup(i).value.method}}</span> &nbsp;{{getFormGroup(i).value.endpointUrl}}
+                </div>
+                
               }@else{
-                <span class="main-method d-flex justify-content-center align-items-center">{{getFormGroup(i).value.method}}</span> &nbsp;{{getFormGroup(i).value.endpointUrl}}
+                <div class="d-flex justify-content-between head-div align-items-center">
+                  <span class="main-method d-flex justify-content-center align-items-center">{{getFormGroup(i).value.method}}</span> &nbsp;{{getFormGroup(i).value.endpointUrl}}
+                </div>
+                
               }
           </mat-panel-title>
           <mat-panel-description>
+            <div class="d-flex justify-content-end w-100 align-items-center">
+              <span (click)="deleteBackend(item.id)"><i class="bi bi-trash"></i></span>
+            </div>
+           
             <!-- ID: {{ item.id || 'Not Saved Yet' }} -->
           </mat-panel-description>
         </mat-expansion-panel-header>

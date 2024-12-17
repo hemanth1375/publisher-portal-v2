@@ -22,5 +22,6 @@ export const urls={
     addConnectivity : host + "/krakend/endpoint/addOrUpdateConnectivityOptions",
     addOpenAPI:host +"/krakend/endpoint/addOrUpdateOpenApi",
     deleteEndpoint:host+"/krakend/endpoint/deletedEndpoint",
-    addOrUpdateTelemetryMoesifUrl:host +"/krakend/extraconfig/monetization/addOrUpdateTelemetryMoesif"
+    addOrUpdateTelemetryMoesifUrl:host +"/krakend/extraconfig/monetization/addOrUpdateTelemetryMoesif",
+    deleteBackend:host+"/krakend/endpoint/backend/deletedBackend"
 }

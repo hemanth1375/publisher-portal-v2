@@ -61,7 +61,8 @@ export class GatewaycardsComponent {
         this.gatewaysCards = res.cards
       }),
       error: (err) => {
-        this.showError(err?.message)
+        this.isShowNoGatewayCard=true;
+        this.showError(err?.error?.message);
       }
     })
   }

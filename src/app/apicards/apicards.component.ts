@@ -98,7 +98,8 @@ export class ApicardsComponent implements OnInit {
       },
       error:(err)=>{
         console.error(err);
-        this.showError(err?.message);
+        this.showError(err?.error?.message);
+        this.isShowNoApisCard=true
       }
     })
   }

@@ -5,6 +5,7 @@ import { MainService } from '../services/main.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommunicationService } from '../services/communication.service';
 import { ToastService } from '../services/toast.service';
+import { BackendService } from '../services/backend.service';
 
 @Component({
   selector: 'app-backend',
@@ -170,7 +171,7 @@ export class BackendComponent {
   formArray: FormArray; // Holds a FormGroup for each panel
   items: any[] = []; // Items from the backend
 
-  constructor(private fb: FormBuilder, private http: HttpClient,private mainSer:MainService,private route:ActivatedRoute,private router:Router,private communucationSer:CommunicationService, private toastService:ToastService) {
+  constructor(private fb: FormBuilder, private http: HttpClient,private mainSer:MainService,private route:ActivatedRoute,private router:Router,private communucationSer:CommunicationService, private toastService:ToastService,private backendser:BackendService) {
     this.itemsRes = [
       { name: 'Deny' },
       { name: 'Allow' },
@@ -896,6 +897,9 @@ showBackend:boolean=true;
     console.log(this.objectMaps);
   }
   
+  showSuccess(message:string){
+this.toastService.show(message,{type:"success"})
+  }
   showError(message:string){
     this.toastService.show(message , {type:"error"})
   }
@@ -1450,7 +1454,7 @@ this.mainSer.updateBackend(backendId,backendBody).subscribe({
     
           const currentFlatmapArr = this.getFormGroup(formGroupIndex).get('flatmapFilterArr')?.value || [];
           this.getFormGroup(formGroupIndex).get('flatmapFilterArr')?.setValue([...currentFlatmapArr, newFlatmap]);
-    
+          this.faltMapArr[formGroupIndex].push(newFlatmap)
           // Reset inputs
           this.getFormGroup(formGroupIndex).get('operationType')?.reset();
           this.getFormGroup(formGroupIndex).get('flatmapOriginalObj')?.reset();
@@ -1724,5 +1728,20 @@ removeParameterConnect(formGroupIndex:number,index: any, fieldName: 'amqpConsume
   } else if (fieldName === "inputMappingFieldAndMapAs") {
     this.removeFromMapConnect(formGroupIndex,index);
   }
+}
+
+deleteBackend(backendId:any){
+  this.backendser.deleteBackend(backendId).subscribe({
+    next:(res:any)=>{
+      console.log(res);
+      this.showSuccess(res?.message);
+      this.router.navigate([`apis/viewapi/${this.endpointId}/overview`]);
+    },
+    error:(err:any)=>{
+      console.log(err);
+      this.showError(err?.message);
+      this.router.navigate([`apis/viewapi/${this.endpointId}/overview`]);
+    }
+  })
 }
 }
