@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EndpointService } from '../services/endpoint.service';
 import { GatewayService } from '../services/gateway.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-gateway-api-monetization',
@@ -22,7 +23,7 @@ export class GatewayApiMonetizationComponent implements OnInit {
   gatewayId: any;
   gatewayData: any;
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private getwayService:GatewayService) {
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private getwayService:GatewayService, private toastService: ToastService) {
     this.formGroupApiMonetization = this.formBuilder.group({
       isApiMonetizationActive:[false],
       apiMonetizationAppIDForm: [null],
@@ -33,6 +34,16 @@ export class GatewayApiMonetizationComponent implements OnInit {
     })
 
   }
+
+  showSuccess(message:string) {
+    this.toastService.show(message, { type: 'success' });
+  }
+
+
+  showError(message:string){
+    this.toastService.show(message , {type:"error"})
+  }
+
   ngOnInit(): void {
     
     this.route.parent?.paramMap.subscribe(params => {
@@ -49,9 +60,12 @@ export class GatewayApiMonetizationComponent implements OnInit {
           this.apiMonetizationHeadersArray = this.gatewayData?.extra_config?.["telemetry/moesif"]?.user_id_headers ?? [];
         }
         this.formGroupApiMonetization.patchValue({
+          ...((!!this.gatewayData?.extra_config?.["telemetry/moesif"]) && {"id":this.gatewayData?.extra_config?.["telemetry/moesif"]?.id}),
           apiMonetizationAppIDForm : this.gatewayData?.extra_config?.["telemetry/moesif"]?.application_id,
           apiMonetizationClaimForm : this.gatewayData?.extra_config?.["telemetry/moesif"]?.user_id_jwt_claim,
-          apiMonetizationDebugForm : this.gatewayData?.extra_config?.["telemetry/moesif"]?.debug
+          apiMonetizationDebugForm : this.gatewayData?.extra_config?.["telemetry/moesif"]?.debug,
+          isApiMonetizationActive  : !! this.gatewayData?.extra_config?.["telemetry/moesif"]
+
         })
       },
       error:(err)=>{
@@ -103,11 +117,13 @@ export class GatewayApiMonetizationComponent implements OnInit {
     console.log(body);
 
      this.getwayService.addApiMontezation(this.gatewayId, body).subscribe({
-      next:(res)=>{
+      next:(res : any)=>{
         console.log(res)
+        this.showSuccess(res?.message);
       },
       error:(err)=>{
         console.error(err)
+        this.showError(err?.message);
       }
     })
   }
