@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EndpointService } from '../services/endpoint.service';
 import { ToastService } from '../services/toast.service';
+import { CustomValidators } from '../shared/validators/custom-validators';
+
 
 
 @Component({
@@ -12,7 +14,25 @@ import { ToastService } from '../services/toast.service';
 })
 export class ResponseManipulationComponent implements OnInit {
 
-  staticresTooltip = "When the backend fails you can still return the static data provided below to the user. The data is merged with any existing partial responses. If you still don't have a backend and want to have this data, add a fake one that cannot be resolved."
+  staticResTooltip = "When the backend fails you can still return the static data provided below to the user. The data is merged with any existing partial responses. If you still don't have a backend and want to have this data, add a fake one that cannot be resolved." 
+  resJson  = "Provide the JSON object you want to return (ensure to start and end with curly braces {})";
+
+
+  AdvResMani = "Manipulate the response dataset after the aggregation layer using a JSON Query language.";
+  exp= "JMESpath query to execute on returned results of /v1/batwing-touch/{id_touch}";
+
+  regexCon = "The content replacer plugin allows you to modify the response of your services by doing literal replacements or more sophisticated replacements with regular expressions.";
+  keyToRep = "Write the key of the object you would like to replace content."
+  find = "The find expression or literal you want to use.";
+  replace = "The literal string or expression you want to use as a replacement. You can use capture groups with $1, $2, etc.";
+
+  regex = "Check if you want to use regular expression instead of a literal string (faster)";
+
+  bodyEditor = "The response body you will return to the end-user. You can introduce the variables .resp_headers.xxx, .resp_headers.xxx (with no-op), .resp_status.xxx (with no-op), .resp_body.xxx, .req_params.Xxx, .req_headers.xxx, .req_querystring.xxx, .req_path"
+  contentType = "The Content-Type that you are coding in the template. Defaults to application/json";
+  enableDebug = "shows useful information in the logs with DEBUG level about the input received and the body generated. Do not enable in production.";
+  path = "You can load the response from an external file instead of editing the template.";
+
 
   isKeyCreated: boolean = false;
 
@@ -31,7 +51,8 @@ export class ResponseManipulationComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private endpointService: EndpointService,private toastService: ToastService) {
     this.formGroupResponseManipulation = this.formBuilder.group({
-      response: [null],
+      // response: [null, [this.jsonValidator()]],
+      response: [null, [CustomValidators.jsonValidator()]],
       strategy: [null],
       expression: [null],
 
@@ -45,13 +66,27 @@ export class ResponseManipulationComponent implements OnInit {
       isAdvanceResponseGoActive: [false],
 
       bodyEditor: ['bodyeditor'],
-      template: [''],
+      template: ['', [CustomValidators.jsonValidator()]],
       contentType: [''],
       debug: [false],
       path: [''],
     })
   }
 
+
+  jsonValidator() {
+    return (control: any) => {
+      if (!control.value) {
+        return null; // No value, validation is not applied
+      }
+      try {
+        JSON.parse(control.value); // Attempt to parse JSON
+        return null; // Valid JSON
+      } catch (e) {
+        return { invalidJson: true }; // Invalid JSON
+      }
+    };
+  }
 
   showSuccess(message:string) {
     this.toastService.show(message, { type: 'success' });
@@ -197,66 +232,70 @@ export class ResponseManipulationComponent implements OnInit {
 
   submit() {
 
-    console.log(this.formGroupResponseManipulation.value);
+    if(this.formGroupResponseManipulation.valid){
+      console.log(this.formGroupResponseManipulation.value);
 
-    const body = {
-      "proxy": {
-        ...((!!this.endPointData?.extra_config?.["proxy"]) && { "id": this.endPointData?.extra_config?.["proxy"]?.id }),
-        ...(this.formGroupResponseManipulation.value?.isStaticResponseActive && {
-          "static": {
-            ...((!!this.endPointData?.extra_config?.["proxy"]?.static) && { "id": this.endPointData?.extra_config?.["proxy"]?.static.id }),
-            "data": this.formGroupResponseManipulation.value?.response ? JSON.parse(this.formGroupResponseManipulation.value?.response) : null,
-            "strategy": this.formGroupResponseManipulation.value?.strategy
+      const body = {
+        "proxy": {
+          ...((!!this.endPointData?.extra_config?.["proxy"]) && { "id": this.endPointData?.extra_config?.["proxy"]?.id }),
+          ...(this.formGroupResponseManipulation.value?.isStaticResponseActive && {
+            "static": {
+              ...((!!this.endPointData?.extra_config?.["proxy"]?.static) && { "id": this.endPointData?.extra_config?.["proxy"]?.static.id }),
+              "data": this.formGroupResponseManipulation.value?.response ? JSON.parse(this.formGroupResponseManipulation.value?.response) : null,
+              "strategy": this.formGroupResponseManipulation.value?.strategy
+            }
+          })
+        },
+  
+        ...(this.formGroupResponseManipulation.value?.isAdvanceResponseActive && {
+          "modifier/jmespath": {
+            ...((!!this.endPointData?.extra_config?.["modifier/jmespath"]) && { "id": this.endPointData?.extra_config?.["modifier/jmespath"]?.id }),
+            // "@comment": null,
+            "expr": this.formGroupResponseManipulation.value?.expression
+          }
+        }),
+  
+        ...(this.formGroupResponseManipulation.value?.isAdvanceResponseGoActive && {
+          "modifier/response-body-generator": {
+            ...((!!this.endPointData?.extra_config?.["modifier/response-body-generator"]) && { "id": this.endPointData?.extra_config?.["modifier/response-body-generator"]?.id }),
+            ...(this.formGroupResponseManipulation.value?.bodyEditor === "bodyeditor" && { "template": this.formGroupResponseManipulation.value?.template ? JSON.parse(this.formGroupResponseManipulation.value?.template) : null }),
+            "content_type": this.formGroupResponseManipulation.value?.contentType,
+            "debug": this.formGroupResponseManipulation.value?.debug,
+            ...(this.formGroupResponseManipulation.value?.bodyEditor === "external" && { "path": this.formGroupResponseManipulation.value?.path }),
+  
+          }
+        }),
+  
+        ...((this.formGroupResponseManipulation.value?.regexConReplacerActive) && {
+          "plugin/req-resp-modifier": {
+            ...((!!this.endPointData?.extra_config?.["plugin/req-resp-modifier"]) && { "id": this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.id }),
+            "name": [
+              this.formGroupResponseManipulation.value?.regexConReplacerActive && "content-replacer"
+            ].filter(Boolean),
+            ...(this.formGroupResponseManipulation.value?.regexConReplacerActive && { "content-replacer": this.formGroupResponseManipulation.value?.contentReplacer }),
           }
         })
-      },
-
-      ...(this.formGroupResponseManipulation.value?.isAdvanceResponseActive && {
-        "modifier/jmespath": {
-          ...((!!this.endPointData?.extra_config?.["modifier/jmespath"]) && { "id": this.endPointData?.extra_config?.["modifier/jmespath"]?.id }),
-          // "@comment": null,
-          "expr": this.formGroupResponseManipulation.value?.expression
-        }
-      }),
-
-      ...(this.formGroupResponseManipulation.value?.isAdvanceResponseGoActive && {
-        "modifier/response-body-generator": {
-          ...((!!this.endPointData?.extra_config?.["modifier/response-body-generator"]) && { "id": this.endPointData?.extra_config?.["modifier/response-body-generator"]?.id }),
-          ...(this.formGroupResponseManipulation.value?.bodyEditor === "bodyeditor" && { "template": this.formGroupResponseManipulation.value?.template ? JSON.parse(this.formGroupResponseManipulation.value?.template) : null }),
-          "content_type": this.formGroupResponseManipulation.value?.contentType,
-          "debug": this.formGroupResponseManipulation.value?.debug,
-          ...(this.formGroupResponseManipulation.value?.bodyEditor === "external" && { "path": this.formGroupResponseManipulation.value?.path }),
-
-        }
-      }),
-
-      ...((this.formGroupResponseManipulation.value?.regexConReplacerActive) && {
-        "plugin/req-resp-modifier": {
-          ...((!!this.endPointData?.extra_config?.["plugin/req-resp-modifier"]) && { "id": this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.id }),
-          "name": [
-            this.formGroupResponseManipulation.value?.regexConReplacerActive && "content-replacer"
-          ].filter(Boolean),
-          ...(this.formGroupResponseManipulation.value?.regexConReplacerActive && { "content-replacer": this.formGroupResponseManipulation.value?.contentReplacer }),
+  
+      }
+  
+      console.log(body);
+  
+      this.endpointService.addResponse(this.endpointId, body).subscribe({
+        next: (res:any) => {
+          console.log(res)
+          this.showSuccess(res?.message);
+          this.getEndpoint()
+        },
+        error: (err) => {
+          console.error(err);
+          this.showError(err?.message);
+          this.getEndpoint()
         }
       })
-
+  
+    }else{
+      console.error('Form Invalid:', this.formGroupResponseManipulation.errors);
     }
-
-    console.log(body);
-
-    this.endpointService.addResponse(this.endpointId, body).subscribe({
-      next: (res:any) => {
-        console.log(res)
-        this.showSuccess(res?.message);
-        this.getEndpoint()
-      },
-      error: (err) => {
-        console.error(err);
-        this.showError(err?.message);
-        this.getEndpoint()
-      }
-    })
-
 
   }
 
