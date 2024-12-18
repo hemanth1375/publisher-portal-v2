@@ -23,5 +23,7 @@ export const urls={
     addOpenAPI:host +"/krakend/endpoint/addOrUpdateOpenApi",
     deleteEndpoint:host+"/krakend/endpoint/deletedEndpoint",
     addOrUpdateTelemetryMoesifUrl:host +"/krakend/extraconfig/monetization/addOrUpdateTelemetryMoesif",
-    deleteBackend:host+"/krakend/endpoint/backend/deletedBackend"
+    deleteBackend:host+"/krakend/endpoint/backend/deletedBackend",
+    addOrUPdateHttpSecurity :host + "/krakend/extraconfig/httpSecurity/addOrUpdateHttpSecurity",
+    
 }

@@ -30,12 +30,13 @@
             }@else{
             <div class="row">
               <div class="col-sm-12 gap-2">
-                <label for="corsAllowedMethods" class="form-label">Allowed methods</label>
-                <p>Select which methods will be allowed</p>
+                <label for="corsAllowedMethods" class="form-label">Allowed methods &nbsp; <i class="bi bi-info-circle"
+                    [matTooltip]=corsAllowedMethodsToolTip></i></label>
+                <!-- <p>Select which methods will be allowed</p> -->
 
                 <!-- <textarea class="static-text-area input-size form-control mb-2" id="corsAllowedMethods"> -->
                 <div>
-                  <label for="menu2" class="form-label">Simple Requests</label>
+                  <!-- <label for="menu2" class="form-label">Simple Requests</label> -->
                   <select class="form-select" multiple formControlName="multiSelect" id="multiSelect"
                     aria-label="multiple select example">
                     <!-- <option value="Get">Get</option>
@@ -248,7 +249,6 @@
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
-
                 <div class="input-con d-flex gap-2 flex-column">
                   <div class="row align-items-end">
                     <div class="col-sm-8">
@@ -320,7 +320,6 @@
                   <div class="checkbox-text">Empty user agents are bots &nbsp; <i class="bi bi-info-circle"
                       [matTooltip]=emptyUsersAgentsToolTip></i></div>
                 </div>
-
               </div>
 
             </div>
@@ -376,11 +375,22 @@
                 </div>
               </div>
               <div class="col-sm-12 col-md-3">
-                <label for="multipleIdentityProviderPort" class="form-label">Port &nbsp; <i class="bi bi-info-circle"
-                    [matTooltip]=multipleIdentityProviderPortToolTip></i></label>
+                <label for="multipleIdentityProviderPort" class="form-label">
+                  <div [ngClass]="{
+                    'false-color': formGroupHttpSecurity.get('multipleIdentityProviderPortForm')?.errors?.['required'] && formGroupHttpSecurity.get('multipleIdentityProviderPortForm')?.touched,
+                  }">
+                    Port
+                  </div>
+
+                  &nbsp; <i class="bi bi-info-circle" [matTooltip]=multipleIdentityProviderPortToolTip></i>
+                </label>
                 <input type="text" id="multipleIdentityProviderPort" class="form-control"
                   formControlName="multipleIdentityProviderPortForm">
                 <!-- <div id="multipleIdentityProviderPortHelp" class="form-text">The port of the local key <br> server</div> -->
+                <div class="false-color"
+                  *ngIf="formGroupHttpSecurity.get('multipleIdentityProviderPortForm')?.errors?.['required'] && formGroupHttpSecurity.get('multipleIdentityProviderPortForm')?.touched">
+                  The port of the local key server
+                </div>
               </div>
               <div class="col-sm-12 col-md-3">
                 <div class="d-flex">
@@ -447,7 +457,7 @@
                 <div class="input-con d-flex gap-2 flex-column">
                   <div class="row align-items-end">
                     <div class="col-sm-8">
-                      <label for="ipFilterTrustedProxies" class="form-label">Allowed origins &nbsp; <i
+                      <label for="ipFilterTrustedProxies" class="form-label">Trusted Proxies &nbsp; <i
                           class="bi bi-info-circle" [matTooltip]=ipFilterTrustedProxiesToolTip></i></label>
                       <input type="text" class="form-control" id="ipFilterTrustedProxies"
                         placeholder="https://example.com" formControlName="ipFilterTrustedProxiesForm">
@@ -573,7 +583,8 @@
                         </div>
                       </span>
                       <input type="text" class="form-control input-with-button" id="basic-url"
-                        aria-describedby="basic-addon3" placeholder="ssl.host.domain" formControlName="httpSecuritySSLOptForm">
+                        aria-describedby="basic-addon3" placeholder="ssl.host.domain"
+                        formControlName="httpSecuritySSLOptForm">
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-3 align-items-end">
@@ -622,7 +633,7 @@
                   <div class="row">
                     <div class="col-sm-12 d-flex mt-3">
                       <button *ngFor="let attr of objectMap | keyvalue; let i = index" class="parameter-item">
-                        {{ attr.key }}<span>=></span>{{attr.value}}<mat-icon
+                        {{ attr.key }}<span> => </span>{{attr.value}}<mat-icon
                           (click)="removeParameter(attr.key ,'httpSecurityHeaderAndHearValue')"
                           class="d-flex align-items-center justify-content-end">close</mat-icon>
                       </button>
@@ -668,6 +679,7 @@
               </div>
               <div class="row mt-3 gap-2">
                 <!-- <label for="httpSecurityHPKP" class="form-label">HTTP Public Key Pinning (HPKP)</label> -->
+                @if(formGroupHttpSecurity.get('httpSecurityClickjackProtectForm')?.value){
                 <div class="input-group mb-3" id="frameOptions">
                   <span class="input-group-text" id="basic-addon3">X-Frame Options:</span>
                   <input type="text" class="form-control" id="xframe-url" aria-describedby="xframe"
@@ -675,6 +687,7 @@
                   <span class="input-group-text" id="basic-addon3"> &nbsp; <i class="bi bi-info-circle"
                       [matTooltip]=frameOptionsToolTip></i></span>
                 </div>
+                }
                 <!-- <div class="form-text" id="httpSecurityHPKPHelp">Allows HTTPS websites to resist impersonation by
                   attackers
                   using mis-issued or otherwise fraudulent certificates.
