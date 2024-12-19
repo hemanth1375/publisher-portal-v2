@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EndpointService } from '../services/endpoint.service';
 import { ActivatedRoute } from '@angular/router';
 import { ToastService } from '../services/toast.service';
+import { CustomValidators } from '../shared/validators/custom-validators';
 
 interface Alert {
 	type: string;
@@ -44,6 +45,8 @@ export class ThrottlingComponent implements OnInit {
   clientIPHeadersArray: any[] = [];
   endpointId: any;
   endPointData:any;
+  successMessage: string = '';
+  errorMessage: string = '';
 
   constructor(private formBuilder: FormBuilder, private endpointService: EndpointService, private route: ActivatedRoute, private toastService: ToastService) {
 
@@ -51,21 +54,21 @@ export class ThrottlingComponent implements OnInit {
       timeout: ['', Validators.pattern("^[0-9]+(ns|ms|us|µs|s|m|h)$")],
       cacheTtl: ['', Validators.pattern("^[0-9]+(ns|ms|us|µs|s|m|h)$")],
       cidr: [''],
-      cidrArrayValue: [[]],
+      cidrArrayValue: [[[]]],
       trustedProxies: [''],
-      trustedProxiesArrayValue: [[]],
+      trustedProxiesArrayValue: [[[]]],
       clientIpHeaders: [''],
-      clientIPHeadersArrayValue: [[]],
+      clientIPHeadersArrayValue: [[[]]],
       allowModeActive: [false],
-      rateLimit: ['', Validators.required],
+      rateLimit: [''],
       every: ['', Validators.pattern("^[0-9]+(ns|ms|us|µs|s|m|h)$")],
       capacity: [''],
       defaultUserQuota: [''],
       clientCapacity: [''],
       address: [''],
-      rate: ['', Validators.required],
+      rate: [''],
       periods: ['', Validators.pattern("^[0-9]+(ns|ms|us|µs|s|m|h)$")],
-      burst: ['', Validators.required],
+      burst: [''],
       tokenizer: [''],
       tokenizerField: [''],
       isIpFilterActive: [false],
@@ -81,6 +84,32 @@ export class ThrottlingComponent implements OnInit {
 
   showError(message:string){
     this.toastService.show(message , {type:"error"})
+  }
+
+
+
+  closeAlert(type: 'success' | 'error') {
+    if (type === 'success') {
+      this.successMessage = '';
+    } else {
+      this.errorMessage = '';
+    }
+  }
+
+  showSuccessAlert(message: string) {
+    this.successMessage = message;
+    this.errorMessage = ''; // Clear any previous error message
+    setTimeout(() => {
+      this.successMessage = ''; // Clear success message after 5 seconds
+    }, 5000);
+  }
+
+  showErrorAlert(message: string) {
+    this.errorMessage = message;
+    this.successMessage = ''; // Clear any previous success message
+    setTimeout(() => {
+      this.errorMessage = ''; // Clear error message after 5 seconds
+    }, 5000);
   }
 
   getEndpoint(){
@@ -139,6 +168,87 @@ export class ThrottlingComponent implements OnInit {
     });
 
     this.getEndpoint()
+
+    this.formGroupThrottling.get('isIpFilterActive')?.valueChanges.subscribe(value => {
+      console.log(value);
+      const cidrControl = this.formGroupThrottling.get('cidrArrayValue');
+      if (value) {
+        cidrControl?.setValidators([Validators.required]);
+      } else {
+        cidrControl?.clearValidators();// Clear validators if needed
+      }
+      cidrControl?.updateValueAndValidity(); // Re-evaluate the validation state
+    });  
+
+    // this.formGroupThrottling.get('isRedisRateLimitEnabledActive')?.valueChanges.subscribe((value) => {
+    //   const controls = ['address', 'tokenizer', 'burst', 'rate', 'periods'].map(field =>
+    //     this.formGroupThrottling.get(field)
+    //   );
+    
+    //   if (value) {
+    //     controls.forEach(control => control?.setValidators([Validators.required]));
+    //   } else {
+    //     controls.forEach(control => control?.clearValidators());
+    //   }
+    
+    //   controls.forEach(control => control?.updateValueAndValidity());
+    // });
+    
+    this.formGroupThrottling.get('isRedisRateLimitEnabledActive')?.valueChanges.subscribe((value) => {
+      const addressControl = this.formGroupThrottling.get('address');
+      const tokenizerControl = this.formGroupThrottling.get('tokenizer');
+      const burstControl = this.formGroupThrottling.get('burst');
+      const rateControl = this.formGroupThrottling.get('rate');
+      const periodsControl = this.formGroupThrottling.get('periods');
+    
+      if (value) {
+        addressControl?.setValidators([Validators.required]);
+        tokenizerControl?.setValidators([Validators.required]);
+        burstControl?.setValidators([Validators.required]);
+        rateControl?.setValidators([Validators.required]);
+        periodsControl?.setValidators([
+          Validators.required,
+          Validators.pattern('^[0-9]+(ns|ms|us|µs|s|m|h)$'),
+        ]);
+      } else {
+        addressControl?.clearValidators();
+        tokenizerControl?.clearValidators();
+        burstControl?.clearValidators();
+        rateControl?.clearValidators();
+        periodsControl?.clearValidators();
+      }
+    
+      // Update the validity of all controls
+      [addressControl, tokenizerControl, burstControl, rateControl, periodsControl].forEach((control) => {
+        control?.updateValueAndValidity();
+      });
+    });
+    
+
+    this.formGroupThrottling.get('isEndPointRateLimitEnabledActive')?.valueChanges.subscribe((value) => {
+      if (value) {
+        // Add the custom validator
+        const existingValidators = this.formGroupThrottling.validator
+          ? [this.formGroupThrottling.validator]
+          : [];
+        this.formGroupThrottling.setValidators([
+          ...existingValidators,
+          CustomValidators.anyOfValidator(['rateLimit', 'defaultUserQuota']),
+        ]);
+      } else {
+        // Remove the custom validator
+        const existingValidators = this.formGroupThrottling.validator
+          ? [this.formGroupThrottling.validator]
+          : [];
+        this.formGroupThrottling.setValidators(
+          existingValidators.filter(
+            (v) => v !== CustomValidators.anyOfValidator(['rateLimit', 'defaultUserQuota'])
+          )
+        );
+      }
+      this.formGroupThrottling.updateValueAndValidity();
+    });
+
   }
 
   addParameter(fieldName: 'cidr' | 'trustedProxies' | 'clientIpHeaders') {
@@ -159,8 +269,6 @@ export class ThrottlingComponent implements OnInit {
         this.formGroupThrottling.get('clientIPHeadersArrayValue')?.setValue([...this.clientIPHeadersArray])
 
       }
-
-      this.formGroupThrottling.get(fieldName)?.reset();
     }
   }
 
@@ -224,9 +332,9 @@ export class ThrottlingComponent implements OnInit {
           ...(this.formGroupThrottling.value?.isIpFilterActive && {
             "ip-filter": {
               ...(!!this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["ip-filter"] && {"id":this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["ip-filter"].id}),
-              ...(this.formGroupThrottling.value?.allowModeActive && { "allow": this.formGroupThrottling.value?.allowModeActive }),
+               "allow": this.formGroupThrottling.value?.allowModeActive,
               ...(this.formGroupThrottling.value?.clientIPHeadersArrayValue.length != 0 && { "client_ip_headers": this.formGroupThrottling.value?.clientIPHeadersArrayValue }),
-              ...(this.formGroupThrottling.value?.cidrArrayValue.length != 0 && { "CIDR": this.formGroupThrottling.value?.cidrArrayValue }),
+               "CIDR": this.formGroupThrottling.value?.cidrArrayValue,
               ...(this.formGroupThrottling.value?.trustedProxiesArrayValue.length != 0 && { "trusted_proxies": this.formGroupThrottling.value?.trustedProxiesArrayValue })
             }
           })
@@ -241,18 +349,28 @@ export class ThrottlingComponent implements OnInit {
 
     console.log(body);
 
-    this.endpointService.addUpdateThrottling(this.endpointId,body).subscribe({
-      next:(res:any)=>{
-        console.log("added", res);
-        this.showSuccess(res?.message);
-        this.getEndpoint();
-      },
-      error:(err)=>{
-        console.error(err);
-        this.showError(err?.message);
-        this.getEndpoint();
+    if(this.formGroupThrottling.valid){
+      this.endpointService.addUpdateThrottling(this.endpointId,body).subscribe({
+        next:(res:any)=>{
+          console.log("added", res);
+          this.showSuccess(res?.message);
+          setTimeout(()=>{ this.getEndpoint()},3000)
+        },
+        error:(err)=>{
+          console.error(err);
+          this.showError(err?.error?.message);
+          setTimeout(()=>{ this.getEndpoint()},3000)
+        }
+      })
+    }else{
+      if( this.formGroupThrottling.value?.isIpFilterActive && this.formGroupThrottling.value?.cidrArrayValue?.length == 0 ){
+        this.showErrorAlert("Atleast one value must be selected for CIDR Array")
+      }else if(this.formGroupThrottling.errors?.['anyOfError']) {
+        this.showErrorAlert('At least one of "Rate Limit" or "Default user quota" must be provided.')
       }
-    })
+
+    }
+
   }
 
 

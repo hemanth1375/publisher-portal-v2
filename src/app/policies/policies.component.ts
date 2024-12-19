@@ -27,15 +27,15 @@ export class PoliciesComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private endpointService: EndpointService, private route: ActivatedRoute, private toastService: ToastService) {
     this.formGroupPolicies = this.formBuilder.group({
-      securityReqPolicy: [null],
+      securityReqPolicy: [],
       secReqErrorStCode: [null],
       secReqErrorBody: [null],
       secReqErrorContentType: [null],
-      securityResPolicy: [null],
+      securityResPolicy: [],
       secResErrorStCode: [null],
       secResErrorBody: [null],
       secResErrorContentType: [null],
-      jwtReqPolicy: [null],
+      jwtReqPolicy: [],
       enableDebug: [false],
       autoJoinPolicies: [false],
       disableMacros: [false],
@@ -44,9 +44,9 @@ export class PoliciesComponent implements OnInit {
       resSchemaValErrorStCode: [null],
 
 
-      secReqPolicyArrayValue: [[]],
-      secResPolicyArrayValue: [[]],
-      jwtReqPolicyArrayValue: [[]],
+      secReqPolicyArrayValue: [[[]]],
+      secResPolicyArrayValue: [[[]]],
+      jwtReqPolicyArrayValue: [[[]]],
 
       isSpFilterActive: [false],
       isRequestSchValidatorActive: [false],
@@ -91,20 +91,7 @@ export class PoliciesComponent implements OnInit {
       "required_field_2"
     ]
   }
-  jsonValidator() {
-    return (control: any) => {
-      if (!control.value) {
-        return null; // No value, validation is not applied
-      }
-      try {
-        JSON.parse(control.value); // Attempt to parse JSON
-        return null; // Valid JSON
-      } catch (e) {
-        return { invalidJson: true }; // Invalid JSON
-      }
-    };
-  }
-
+ 
   addParameter(fieldName: 'securityReqPolicy' | 'securityResPolicy' | 'jwtReqPolicy') {
     const fieldValue = this.formGroupPolicies.get(fieldName)?.value;
     if (fieldName) {
@@ -210,35 +197,67 @@ export class PoliciesComponent implements OnInit {
 
     this.getEndpoint();
 
+    this.formGroupPolicies.value.get("isResponseSchValidatorActive")?.valueChanges.subscribe((value: any) =>{
+      
+    })
+
   }
 
   submit() {
     const body = {
+      // ...(this.formGroupPolicies.value?.isSpFilterActive && {
+      //   "security/policies": {
+      //     ...(!!this.endPointData?.extra_config?.["security/policies"] && { "id": this.endPointData?.extra_config?.["security/policies"]?.id }),
+      //     "req": {
+      //       "policies": this.formGroupPolicies.value?.secReqPolicyArrayValue,
+      //       "error": {
+      //         "body": this.formGroupPolicies.value?.secReqErrorBody,
+      //         "status": this.formGroupPolicies.value?.secReqErrorStCode,
+      //         "content_type": this.formGroupPolicies.value?.secReqErrorContentType
+      //       }
+      //     },
+      //     "resp": {
+      //       "policies": this.formGroupPolicies.value?.secResPolicyArrayValue,
+      //       "error": {
+      //         "status": this.formGroupPolicies.value?.secResErrorStCode,
+      //         "body": this.formGroupPolicies.value?.secResErrorBody,
+      //         "content_type": this.formGroupPolicies.value?.secResErrorContentType
+      //       }
+      //     },
+      //     "jwt": {
+      //       "policies": this.formGroupPolicies.value?.jwtReqPolicyArrayValue
+      //     },
+      //     "debug": this.formGroupPolicies.value?.enableDebug,
+      //     "auto_join_policies": this.formGroupPolicies.value?.autoJoinPolicies,
+      //     "disable_macros": this.formGroupPolicies.value?.disableMacros
+      //   }
+      // }),
+
       ...(this.formGroupPolicies.value?.isSpFilterActive && {
         "security/policies": {
           ...(!!this.endPointData?.extra_config?.["security/policies"] && { "id": this.endPointData?.extra_config?.["security/policies"]?.id }),
-          "req": {
-            "policies": this.formGroupPolicies.value?.secReqPolicyArrayValue,
-            "error": {
-              "body": this.formGroupPolicies.value?.secReqErrorBody,
-              "status": this.formGroupPolicies.value?.secReqErrorStCode,
-              "content_type": this.formGroupPolicies.value?.secReqErrorContentType
-            }
-          },
-          "resp": {
-            "policies": this.formGroupPolicies.value?.secResPolicyArrayValue,
-            "error": {
-              "status": this.formGroupPolicies.value?.secResErrorStCode,
-              "body": this.formGroupPolicies.value?.secResErrorBody,
-              "content_type": this.formGroupPolicies.value?.secResErrorContentType
-            }
-          },
-          "jwt": {
-            "policies": this.formGroupPolicies.value?.jwtReqPolicyArrayValue
-          },
-          "debug": this.formGroupPolicies.value?.enableDebug,
-          "auto_join_policies": this.formGroupPolicies.value?.autoJoinPolicies,
-          "disable_macros": this.formGroupPolicies.value?.disableMacros
+          ...((this.formGroupPolicies.value?.secReqPolicyArrayValue.length>0 || this.formGroupPolicies.value?.secReqErrorStCode ||this.formGroupPolicies.value?.secReqErrorBody || this.formGroupPolicies.value?.secReqErrorContentType) &&{"req": {
+            ...(this.formGroupPolicies.value?.secReqPolicyArrayValue.length>0 &&{"policies": this.formGroupPolicies.value?.secReqPolicyArrayValue}),
+            ...((this.formGroupPolicies.value?.secReqErrorStCode ||this.formGroupPolicies.value?.secReqErrorBody || this.formGroupPolicies.value?.secReqErrorContentType)&& {"error": {
+              ...(this.formGroupPolicies.value?.secReqErrorStCode &&{"status": this.formGroupPolicies.value?.secReqErrorStCode}),
+              ...(this.formGroupPolicies.value?.secReqErrorBody &&{"body": this.formGroupPolicies.value?.secReqErrorBody}),
+              ...(this.formGroupPolicies.value?.secReqErrorContentType &&{"content_type": this.formGroupPolicies.value?.secReqErrorContentType})
+            }})
+          }}),
+          ...((this.formGroupPolicies.value?.secResPolicyArrayValue.length>0 || this.formGroupPolicies.value?.secResErrorStCode || this.formGroupPolicies.value?.secResErrorBody || this.formGroupPolicies.value?.secResErrorContentType)&&{"resp": {
+            ...(this.formGroupPolicies.value?.secResPolicyArrayValue.length>0 &&{"policies": this.formGroupPolicies.value?.secResPolicyArrayValue}),
+            ...((this.formGroupPolicies.value?.secResErrorStCode || this.formGroupPolicies.value?.secResErrorBody || this.formGroupPolicies.value?.secResErrorContentType)&&{"error": {
+              ...(this.formGroupPolicies.value?.secResErrorStCode &&{"status": this.formGroupPolicies.value?.secResErrorStCode}),
+              ...(this.formGroupPolicies.value?.secResErrorBody &&{"body": this.formGroupPolicies.value?.secResErrorBody}),
+              ...(this.formGroupPolicies.value?.secResErrorContentType &&{"content_type": this.formGroupPolicies.value?.secResErrorContentType})
+            }})
+          }}),
+          ...(this.formGroupPolicies.value?.jwtReqPolicyArrayValue?.length>0 &&{"jwt": {
+            ...(this.formGroupPolicies.value?.jwtReqPolicyArrayValue?.length>0 &&{"policies": this.formGroupPolicies.value?.jwtReqPolicyArrayValue})
+          }}),
+          ...(this.formGroupPolicies.value?.enableDebug &&{"debug": this.formGroupPolicies.value?.enableDebug}),
+          ...(this.formGroupPolicies.value?.autoJoinPolicies &&{"auto_join_policies": this.formGroupPolicies.value?.autoJoinPolicies}),
+          ...(this.formGroupPolicies.value?.disableMacros &&{"disable_macros": this.formGroupPolicies.value?.disableMacros})
         }
       }),
 
@@ -278,8 +297,6 @@ export class PoliciesComponent implements OnInit {
         this.getEndpoint();
       }
     })
-
-
   }
 
 }

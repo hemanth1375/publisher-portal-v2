@@ -2,6 +2,9 @@
     font-size:13px;
 }
 
+.errorMessage{
+    color: red;
+}
 
 .input-size1{
     width: 100%;
