@@ -8,3 +8,8 @@
     border: 2px solid rgba(151, 71, 255, 1);
     padding: 0px 12px 0px 12px;
   }
+
+  
+  .toggle-header{
+    width: 100%;
+  }

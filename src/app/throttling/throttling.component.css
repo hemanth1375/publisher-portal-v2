@@ -24,16 +24,17 @@
     padding: 0px 12px 0px 12px;
   }
 
+
+
 .input-con{
     background-color: rgba(255, 255, 255, 1);
     height: auto;
     padding: 30px;
     border: none; /* Remove default border */
     border-radius: 10px; /* Smooth rounded corners */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    box-shadow: 0 4px 6px rgba(214, 181, 181, 0.1); /* Subtle shadow */
     transition: transform 0.2s, box-shadow 0.2s; /* Smooth animation */
 }
-
 .description{
     color: rgba(0, 0, 0, 0.6);
     font-size: 12px;

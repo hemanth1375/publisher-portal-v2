@@ -14,12 +14,25 @@ import { CustomValidators } from '../shared/validators/custom-validators';
 })
 export class ResponseManipulationComponent implements OnInit {
 
-  staticResTooltip = "When the backend fails you can still return the static data provided below to the user. The data is merged with any existing partial responses. If you still don't have a backend and want to have this data, add a fake one that cannot be resolved." 
-  resJson  = "Provide the JSON object you want to return (ensure to start and end with curly braces {})";
 
+  responseToolTip = "Provide the JSON object you want to return (ensure to start and end with curly braces)."
+  expressionToolTip = "JMESpath query to execute on returned results of  /v1/huge-fountain/&#123;id_fountain&#125;"
+  serverResponseToolTip = "Example of how JMESpath works"
+  regexConReplacerActiveToolTip = "The find expression or literal you want to use"
+  exampleFormControlTextarea1ToolTip = "The response body you will return to the end-user. You can introduce the variables .resp_headers.xxx, .resp_headers.xxx (with no-op), .resp_status.xxx (with no-op), .resp_body.xxx, .req_params.Xxx, .req_headers.xxx, .req_querystring.xxx, .req_path"
+  conTypeToolTip = "The Content-Type that you are coding in the template. Defaults to application/json"
+  debugToolTip = "shows useful information in the logs with DEBUG level about the input received and the body generated. Do not enable in production."
+  pathToolTip = "The Content-Type that you are coding in the template. Defaults to application/json"
+
+
+
+
+
+  staticResTooltip = "When the backend fails you can still return the static data provided below to the user. The data is merged with any existing partial responses. If you still don't have a backend and want to have this data, add a fake one that cannot be resolved."
+  resJson = "Provide the JSON object you want to return (ensure to start and end with curly braces {})";
 
   AdvResMani = "Manipulate the response dataset after the aggregation layer using a JSON Query language.";
-  exp= "JMESpath query to execute on returned results of /v1/batwing-touch/{id_touch}";
+  exp = "JMESpath query to execute on returned results of /v1/batwing-touch/{id_touch}";
 
   regexCon = "The content replacer plugin allows you to modify the response of your services by doing literal replacements or more sophisticated replacements with regular expressions.";
   keyToRep = "Write the key of the object you would like to replace content."
@@ -49,7 +62,7 @@ export class ResponseManipulationComponent implements OnInit {
     ]
   };
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private endpointService: EndpointService,private toastService: ToastService) {
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private endpointService: EndpointService, private toastService: ToastService) {
     this.formGroupResponseManipulation = this.formBuilder.group({
       // response: [null, [this.jsonValidator()]],
       response: [null, [CustomValidators.jsonValidator()]],
@@ -88,17 +101,17 @@ export class ResponseManipulationComponent implements OnInit {
     };
   }
 
-  showSuccess(message:string) {
+  showSuccess(message: string) {
     this.toastService.show(message, { type: 'success' });
   }
 
 
-  showError(message:string){
-    this.toastService.show(message , {type:"error"})
+  showError(message: string) {
+    this.toastService.show(message, { type: "error" })
   }
 
 
-  getEndpoint(){
+  getEndpoint() {
     this.endpointService.getEndpointById(this.endpointId).subscribe({
       next: (res) => {
         console.log(res)
@@ -167,7 +180,7 @@ export class ResponseManipulationComponent implements OnInit {
     })
 
     this.getEndpoint();
-   
+
 
   }
 
@@ -232,7 +245,7 @@ export class ResponseManipulationComponent implements OnInit {
 
   submit() {
 
-    if(this.formGroupResponseManipulation.valid){
+    if (this.formGroupResponseManipulation.valid) {
       console.log(this.formGroupResponseManipulation.value);
 
       const body = {
@@ -246,7 +259,7 @@ export class ResponseManipulationComponent implements OnInit {
             }
           })
         },
-  
+
         ...(this.formGroupResponseManipulation.value?.isAdvanceResponseActive && {
           "modifier/jmespath": {
             ...((!!this.endPointData?.extra_config?.["modifier/jmespath"]) && { "id": this.endPointData?.extra_config?.["modifier/jmespath"]?.id }),
@@ -254,7 +267,7 @@ export class ResponseManipulationComponent implements OnInit {
             "expr": this.formGroupResponseManipulation.value?.expression
           }
         }),
-  
+
         ...(this.formGroupResponseManipulation.value?.isAdvanceResponseGoActive && {
           "modifier/response-body-generator": {
             ...((!!this.endPointData?.extra_config?.["modifier/response-body-generator"]) && { "id": this.endPointData?.extra_config?.["modifier/response-body-generator"]?.id }),
@@ -262,10 +275,10 @@ export class ResponseManipulationComponent implements OnInit {
             "content_type": this.formGroupResponseManipulation.value?.contentType,
             "debug": this.formGroupResponseManipulation.value?.debug,
             ...(this.formGroupResponseManipulation.value?.bodyEditor === "external" && { "path": this.formGroupResponseManipulation.value?.path }),
-  
+
           }
         }),
-  
+
         ...((this.formGroupResponseManipulation.value?.regexConReplacerActive) && {
           "plugin/req-resp-modifier": {
             ...((!!this.endPointData?.extra_config?.["plugin/req-resp-modifier"]) && { "id": this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.id }),
@@ -275,13 +288,13 @@ export class ResponseManipulationComponent implements OnInit {
             ...(this.formGroupResponseManipulation.value?.regexConReplacerActive && { "content-replacer": this.formGroupResponseManipulation.value?.contentReplacer }),
           }
         })
-  
+
       }
-  
+
       console.log(body);
-  
+
       this.endpointService.addResponse(this.endpointId, body).subscribe({
-        next: (res:any) => {
+        next: (res: any) => {
           console.log(res)
           this.showSuccess(res?.message);
           this.getEndpoint()
@@ -292,8 +305,8 @@ export class ResponseManipulationComponent implements OnInit {
           this.getEndpoint()
         }
       })
-  
-    }else{
+
+    } else {
       console.error('Form Invalid:', this.formGroupResponseManipulation.errors);
     }
 

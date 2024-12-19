@@ -11,81 +11,151 @@
                             <mat-panel-title>
                                 <div class="d-flex justify-content-between toggle-header">
                                     <div>
-                                        Documentation (OpenAPI)  &nbsp; <i
-                                        class="bi bi-info-circle" [matTooltip]=docTooltip ></i> 
+                                        Documentation (OpenAPI)
+
+                                        @if(formGroupOpenapi.value.isDocumentationActive){
+                                        &nbsp; <i class="bi bi-info-circle" [matTooltip]=generalOpenApiTooltip></i>
+                                        }
+
                                     </div>
-                                    <div>
+                                    <!-- <div>
                                         <mat-slide-toggle class="example-margin" color="blue"
                                             formControlName="isDocumentationActive">
                                         </mat-slide-toggle>
+                                    </div> -->
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                            formControlName="isDocumentationActive">
                                     </div>
                                 </div>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         @if (formGroupOpenapi.value.isDocumentationActive) {
-                            <p>General OpenAPI information for your developers. All fields are optional.</p>
-                            <div class="d-flex">
-                                <div class="col-sm-12 col-md-6">
-                                    <label for="summary" class="form-label">Summary or Title</label>
-                                    <input type="text" class="input-size form-control" id="summary" formControlName="summary"
-                                        placeholder="Short description">
-                                    <div class="form-text">The title or summary of this endpoint.</div>
-                                </div>
-                                <div class="col-sm-12 col-md-6">
-                                    <label for="description" class="form-label">Description</label>
-                                    <input type="text" class="input-size form-control" formControlName="description"
-                                        placeholder="This is an API. Read more at [http://blah](http://blah.blah.com)" />
-                                    <div class="form-text">Long description for this endpoint</div>
-                                </div>
-            
+                        <!-- <p>General OpenAPI information for your developers. All fields are optional.</p> -->
+                        <div class="d-flex">
+                            <div class="col-sm-12 col-md-6">
+                                <label for="summary" class="form-label">Summary or Title &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=summaryToolTip></i></label>
+                                <input type="text" class="input-size form-control" id="summary"
+                                    formControlName="summary" placeholder="Short description">
+                                <!-- <div class="form-text">The title or summary of this endpoint.</div> -->
                             </div>
-                            <div class="d-flex gap-2 mt-3">
-                                <div class="col-sm-12 col-md-6">
-                                    <label for="tags" class="form-label">Tags</label>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="description" class="form-label">Description summary&nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=descriptionsToolTip></i></label>
+                                <input type="text" class="input-size form-control" formControlName="description"
+                                    placeholder="This is an API. Read more at [http://blah](http://blah.blah.com)" />
+                                <!-- <div class="form-text">Long description for this endpoint</div> -->
+                            </div>
+
+                        </div>
+                        <div class="d-flex gap-2 mt-3">
+                            <!-- <div class="col-sm-12 col-md-6">
+                                    <label for="tags" class="form-label">Tags &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=tagsToolTip></i></label>
                                     <div class="d-flex gap-2">
                                         <input type="text" class="input-size form-control" id="tags" formControlName="tags"
                                             placeholder="foo" />
                                         <button type="button" class="btn btn-outline-primary"
                                             (click)="addParameter('tags')">Add</button>
                                     </div>
-                                    <div class="form-text">OpenAPI segments the endpoints in different tag.</div>
                                     <div class="mt-3 d-flex">
                                         <button *ngFor="let tag of tagsArray; let i = index" class="parameter-item">
                                             {{ tag }}<mat-icon (click)="removeParameter(i,'tags')"
                                                 class="d-flex align-items-center justify-content-end">close</mat-icon>
                                         </button>
                                     </div>
+                                </div> -->
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-con d-flex gap-2 flex-column">
+                                    <div class="row align-items-end">
+                                        <div class="col-sm-8">
+                                            <label for="tags" class="form-label">Tags &nbsp; <i
+                                                    class="bi bi-info-circle" [matTooltip]=tagsToolTip></i></label>
+                                            <input type="text" class="form-control" id="tags" placeholder="foo"
+                                                formControlName="tags">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button class="btn btn-primary"
+                                                style="border-radius: 50%; height: 40px; width: 40px;" type="submit"
+                                                (click)="addParameter('tags')"><svg xmlns="http://www.w3.org/2000/svg"
+                                                    width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
+                                                    viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd"
+                                                        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                                </svg></button>
+                                        </div>
+                                        <div class="col-sm-12 d-flex mt-3">
+                                            <button *ngFor="let attr of tagsArray; let i = index"
+                                                class="parameter-item">
+                                                {{ attr }}<mat-icon (click)="removeParameter(i,'tags')"
+                                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-            
-                                <div class="col-sm-12 col-md-6">
-                                    <label for="audience" class="form-label" id="audience">Audience</label>
+                            </div>
+                            <!-- <div class="col-sm-12 col-md-6">
+                                    <label for="audience" class="form-label" id="audience">Audience &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=audienceToolTip></i></label>
                                     <div class="d-flex gap-2">
                                         <input type="text" class="input-size form-control" formControlName="audiences"
                                             placeholder="foo" />
                                         <button type="button" class="btn btn-outline-primary"
                                             (click)="addParameter('audiences')">Add</button>
                                     </div>
-                                    <div class="form-text">To which audiences you will document this endpoint (e.g.: silver if you
-                                        have plans like gold, silver, bronze.)</div>
+                                   
                                     <div class="mt-3 d-flex">
                                         <button *ngFor="let item of audienceArray; let i = index" class="parameter-item">
                                             {{ item }}<mat-icon (click)="removeParameter(i,'audiences')"
                                                 class="d-flex align-items-center justify-content-end">close</mat-icon>
                                         </button>
                                     </div>
+                                </div> -->
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-con d-flex gap-2 flex-column">
+                                    <div class="row align-items-end">
+                                        <div class="col-sm-8">
+                                            <label for="audience" class="form-label">Audience &nbsp; <i
+                                                    class="bi bi-info-circle" [matTooltip]=audienceToolTip></i></label>
+                                            <input type="text" class="form-control" id="audience" placeholder="foo"
+                                                formControlName="corsAllowedOriginsForm">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button class="btn btn-primary"
+                                                style="border-radius: 50%; height: 40px; width: 40px;" type="submit"
+                                                (click)="addParameter('audiences')"><svg
+                                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd"
+                                                        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                                </svg></button>
+                                        </div>
+                                        <div class="col-sm-12 d-flex mt-3">
+                                            <button *ngFor="let attr of audienceArray; let i = index"
+                                                class="parameter-item">
+                                                {{ attr }}<mat-icon (click)="removeParameter(i,'audiences')"
+                                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-            
                             </div>
-                            <hr class="mt-4">
-                            <h2>Global Settings</h2>
-                            <a>go to openapi settings</a>
-                            <div>
-                                <label for="example" class="form-label">Example</label>
-                                <textarea class="static-text-area form-control" id="example" formControlName="example"></textarea>
-                                <div class="form-text">Deprecated in OAS3. Write an example response in JSON format to show as an
-                                    example in the documentation</div>
-                            </div>
-                        }   
+                        </div>
+                        <hr class="mt-4">
+                        <h2>Global Settings</h2>
+                        <a>go to openapi settings</a>
+                        <div>
+                            <label for="example" class="form-label">Example &nbsp; <i class="bi bi-info-circle"
+                                    [matTooltip]=exampleToolTip></i></label>
+                            <textarea class="static-text-area form-control" id="example"
+                                formControlName="example"></textarea>
+                            <!-- <div class="form-text">Deprecated in OAS3. Write an example response in JSON format to show as an
+                                    example in the documentation</div> -->
+                        </div>
+                        } @else {
+                        {{docTooltip}}
+                        }
                     </mat-expansion-panel>
                 </mat-accordion>
 

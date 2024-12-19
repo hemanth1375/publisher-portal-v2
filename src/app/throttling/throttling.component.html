@@ -1,98 +1,106 @@
-
-<div class="container">     
+<div class="container">
     <form [formGroup]="formGroupThrottling">
         <div class="row">
             <h3>Throttling</h3>
         </div>
-       
-            <div class="col-sm-12">
-                <mat-accordion [multi]="true">
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header >
-                            <mat-panel-title>
-                                        Timeout and Cache TTL &nbsp; <i class="bi bi-info-circle"
-                                        [matTooltip]=timeoutTooltip></i>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <div class="row p-2">
-                            <div class="input-con d-flex gap-2 flex-column">        
-                                <p class="description">All the settings below are defined in the Service configuration, setting one or
-                                    several values here
-                                    means overriding the settings for this specific endpoint only</p>
-                
-                                <div class="row">
-                
-                                    <div class="col-sm-12 col-md-6 d-flex gap-1 align-items-end ">
-                                        <div class="col-sm-8">
-                                            <label for="timeout" class="form-label">Time Out &nbsp; <svg [matTooltip]=timeoutTooltip
-                                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                    class="bi bi-info-circle" viewBox="0 0 16 16">
-                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                                    <path
-                                                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                                </svg></label>
-                                            <input type="text" class="form-control" id="timeout" formControlName="timeout"
-                                                [class.is-invalid]="formGroupThrottling.get('timeout')?.invalid && formGroupThrottling.get('timeout')?.touched" />
-                                            <div class="invalid-feedback"
-                                                *ngIf="formGroupThrottling.get('timeout')?.errors?.['pattern'] && formGroupThrottling.get('timeout')?.touched">
-                                                The amount of time you want to assign followed by its unit (e.g.: `2s`, `200ms`). <br>
-                                                Valid
-                                                time units are: ns, us, (or µs), ms, s, m, h.
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <select class="form-select" aria-label="Default select example">
-                                                <option value="1" selected>ns</option>
-                                                <option value="2">us</option>
-                                                <option value="3">ms</option>
-                                                <option value="3">s</option>
-                                                <option value="3">m</option>
-                                                <option value="3">h</option>
-                                            </select>
+
+        <div class="col-sm-12">
+            <mat-accordion [multi]="true">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <!-- Timeout and Cache TTL &nbsp; <i class="bi bi-info-circle"</i> -->
+                            Timeout and Cache TTL
+
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="row p-2">
+                        <div class="input-con d-flex gap-2 flex-column">
+                            <!-- <p class="description">All the settings below are defined in the Service configuration,
+                                setting one or
+                                several values here
+                                means overriding the settings for this specific endpoint only</p> -->
+
+                            <div class="row">
+
+                                <div class="col-sm-12 col-md-6 d-flex gap-1 align-items-end ">
+                                    <div class="col-sm-8">
+                                        <label for="timeout" class="form-label">Time Out &nbsp; <svg
+                                                [matTooltip]=timeoutTooltip xmlns="http://www.w3.org/2000/svg"
+                                                width="16" height="16" fill="currentColor" class="bi bi-info-circle"
+                                                viewBox="0 0 16 16">
+                                                <path
+                                                    d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                                <path
+                                                    d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                            </svg></label>
+                                        <input type="text" class="form-control" id="timeout" formControlName="timeout"
+                                            [class.is-invalid]="formGroupThrottling.get('timeout')?.invalid && formGroupThrottling.get('timeout')?.touched" />
+                                        <div class="invalid-feedback"
+                                            *ngIf="formGroupThrottling.get('timeout')?.errors?.['pattern'] && formGroupThrottling.get('timeout')?.touched">
+                                            The amount of time you want to assign followed by its unit (e.g.: `2s`,
+                                            `200ms`). <br>
+                                            Valid
+                                            time units are: ns, us, (or µs), ms, s, m, h.
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-6 d-flex gap-1 align-items-end">
-                                        <div class="col-sm-8">
-                                            <label for="cacheTtl" class="form-label">Cache TTL &nbsp; <svg [matTooltip]=cacheTootip
-                                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                    class="bi bi-info-circle" viewBox="0 0 16 16">
-                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                                    <path
-                                                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                                </svg>
-                                            </label>
-                                            <!-- <p></p> -->
-                                            <input type="text" class=" form-control" id="cacheTtl" formControlName="cacheTtl"
-                                                [class.is-invalid]="formGroupThrottling.get('cacheTtl')?.invalid && formGroupThrottling.get('cacheTtl')?.touched" />
-                                            <div class="invalid-feedback"
-                                                *ngIf="formGroupThrottling.get('cacheTtl')?.errors?.['pattern'] && formGroupThrottling.get('cacheTtl')?.touched">
-                                                The amount of time you want to assign followed by its unit (e.g.: `2s`, `200ms`). <br>
-                                                Valid
-                                                time units are: ns, us, (or µs), ms, s, m, h.
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <select class="form-select" aria-label="Default select example">
-                                                <option value="1" selected>ns</option>
-                                                <option value="2">us</option>
-                                                <option value="3">ms</option>
-                                                <option value="3">s</option>
-                                                <option value="3">m</option>
-                                                <option value="3">h</option>
-                                            </select>
-                                        </div>
+                                    <div class="col-sm-3">
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option value="1" selected>ns</option>
+                                            <option value="2">us</option>
+                                            <option value="3">ms</option>
+                                            <option value="3">s</option>
+                                            <option value="3">m</option>
+                                            <option value="3">h</option>
+                                        </select>
                                     </div>
-                
                                 </div>
-                
+                                <div class="col-sm-12 col-md-6 d-flex gap-1 align-items-end">
+                                    <div class="col-sm-8">
+                                        <label for="cacheTtl" class="form-label">Cache TTL &nbsp; <svg
+                                                [matTooltip]=cacheTootip xmlns="http://www.w3.org/2000/svg" width="16"
+                                                height="16" fill="currentColor" class="bi bi-info-circle"
+                                                viewBox="0 0 16 16">
+                                                <path
+                                                    d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                                <path
+                                                    d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                            </svg>
+                                        </label>
+                                        <!-- <p></p> -->
+                                        <input type="text" class=" form-control" id="cacheTtl"
+                                            formControlName="cacheTtl"
+                                            [class.is-invalid]="formGroupThrottling.get('cacheTtl')?.invalid && formGroupThrottling.get('cacheTtl')?.touched" />
+                                        <div class="invalid-feedback"
+                                            *ngIf="formGroupThrottling.get('cacheTtl')?.errors?.['pattern'] && formGroupThrottling.get('cacheTtl')?.touched">
+                                            The amount of time you want to assign followed by its unit (e.g.: `2s`,
+                                            `200ms`). <br>
+                                            Valid
+                                            time units are: ns, us, (or µs), ms, s, m, h.
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option value="1" selected>ns</option>
+                                            <option value="2">us</option>
+                                            <option value="3">ms</option>
+                                            <option value="3">s</option>
+                                            <option value="3">m</option>
+                                            <option value="3">h</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                             </div>
+
                         </div>
-                    </mat-expansion-panel>
-        
-                    <mat-expansion-panel (opened)="formGroupThrottling.value.isIpFilterActive">
-                        <mat-expansion-panel-header collapsedHeight="70px">
-                            <mat-panel-title>
-                                <div class="d-flex justify-content-between toggle-header">
+                    </div>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel (opened)="formGroupThrottling.value.isIpFilterActive">
+                    <mat-expansion-panel-header collapsedHeight="70px">
+                        <mat-panel-title>
+                            <!-- <div class="d-flex justify-content-between toggle-header">
                                     <div>
                                        IP Filter &nbsp; <i class="bi bi-info-circle"
                                        [matTooltip]=ipFilterTooltip></i>
@@ -102,120 +110,226 @@
                                             formControlName="isIpFilterActive">
                                         </mat-slide-toggle>
                                     </div>
+                                </div> -->
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    IP Filter
                                 </div>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        @if (formGroupThrottling.value.isIpFilterActive) {
-                            <div class="row mb-1">
-                                <div class="col-sm-4">
-                                    <label for="cidr" class="form-label">CIDR &nbsp; <svg [matTooltip]=cidrTooltip
-                                            xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                            class="bi bi-info-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path
-                                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg></label>
-                                    <div class="input-group mb-3">
-                                        <input type="text" id="cidr" class="form-control" placeholder="192.168.0.0/24"
-                                            aria-label="192.168.0.0/24" aria-describedby="button-addon2" formControlName="cidr">
-                                        <button class="btn btn-primary" type="button" id="button-addon2"
-                                            (click)="addParameter('cidr')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                        formControlName="isIpFilterActive">
+                                </div>
+                            </div>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    @if (formGroupThrottling.value.isIpFilterActive) {
+                    <div class="row mb-1">
+                        <!-- <div class="col-sm-4">
+                            <label for="cidr" class="form-label">CIDR &nbsp; <svg [matTooltip]=cidrTooltip
+                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-info-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                    <path
+                                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                </svg></label>
+                            <div class="input-group mb-3">
+                                <input type="text" id="cidr" class="form-control" placeholder="192.168.0.0/24"
+                                    aria-label="192.168.0.0/24" aria-describedby="button-addon2" formControlName="cidr">
+                                <button class="btn btn-primary" type="button" id="button-addon2"
+                                    (click)="addParameter('cidr')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                        height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                    </svg></button>
+                            </div>
+                            <div class="mt-3 d-flex flex-wrap gap-1">
+                                <button *ngFor="let attr of cidrArray; let i = index" class="parameter-item">
+                                    {{ attr }}<mat-icon (click)="removeParameter(i,'cidr')"
+                                        class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                </button>
+                            </div>
+                        </div> -->
+                        <div class="col-sm-4">
+                            <div class="input-con d-flex gap-2 flex-column">
+                                <div class="row align-items-end">
+                                    <div class="col-sm-8">
+                                        <label for="cidr" class="form-label">CIDR &nbsp; <i class="bi bi-info-circle"
+                                                [matTooltip]=cidrTooltip></i></label>
+                                        <input type="text" class="form-control" id="cidr" placeholder="192.168.0.0/24"
+                                            formControlName="cidr">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button class="btn btn-primary"
+                                            style="border-radius: 50%; height: 40px; width: 40px;" type="submit"
+                                            (click)="addParameter('cidr')"><svg xmlns="http://www.w3.org/2000/svg"
+                                                width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
+                                                viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd"
                                                     d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                             </svg></button>
                                     </div>
-                                    <div class="mt-3 d-flex flex-wrap gap-1">
+                                    <div class="col-sm-12 d-flex mt-3">
                                         <button *ngFor="let attr of cidrArray; let i = index" class="parameter-item">
                                             {{ attr }}<mat-icon (click)="removeParameter(i,'cidr')"
                                                 class="d-flex align-items-center justify-content-end">close</mat-icon>
                                         </button>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <label for="cidr" class="form-label">Trusted Proxies &nbsp; <svg [matTooltip]=trustedProxTooltip
-                                            xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                            class="bi bi-info-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path
-                                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg></label>
-                                    <div class="input-group mb-3">
-                                        <input type="text" id="cidr" class="form-control" placeholder="10.0.0.0/16"
-                                            aria-label="192.168.0.0/24" aria-describedby="button-addon2"
-                                            formControlName="trustedProxies">
-                                        <button class="btn btn-primary" type="button" id="button-addon2"
-                                            (click)="addParameter('trustedProxies')"><svg xmlns="http://www.w3.org/2000/svg"
-                                                width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
-                                                viewBox="0 0 16 16">
+                            </div>
+                        </div>
+
+
+
+                        <!-- <div class="col-sm-4">
+                            <label for="cidr" class="form-label">Trusted Proxies &nbsp; <svg
+                                    [matTooltip]=trustedProxTooltip xmlns="http://www.w3.org/2000/svg" width="16"
+                                    height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                    <path
+                                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                </svg></label>
+                            <div class="input-group mb-3">
+                                <input type="text" id="cidr" class="form-control" placeholder="10.0.0.0/16"
+                                    aria-label="192.168.0.0/24" aria-describedby="button-addon2"
+                                    formControlName="trustedProxies">
+                                <button class="btn btn-primary" type="button" id="button-addon2"
+                                    (click)="addParameter('trustedProxies')"><svg xmlns="http://www.w3.org/2000/svg"
+                                        width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
+                                        viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                    </svg></button>
+                            </div>
+                            <div class="mt-3 d-flex flex-wrap gap-1">
+                                <button *ngFor="let attr of trustedProxiesArray; let i = index" class="parameter-item">
+                                    {{ attr }}<mat-icon (click)="removeParameter(i,'trustedProxies')"
+                                        class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                </button>
+                            </div>
+                        </div> -->
+
+                        <div class="col-sm-4">
+                            <div class="input-con d-flex gap-2 flex-column">
+                                <div class="row align-items-end">
+                                    <div class="col-sm-8">
+                                        <label for="trustedProxTooltip" class="form-label">Trusted Proxies &nbsp; <i
+                                                class="bi bi-info-circle" [matTooltip]=cidrTooltip></i></label>
+                                        <input type="text" class="form-control" id="trustedProxies"
+                                            placeholder="10.0.0.0/16" formControlName="trustedProxies">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button class="btn btn-primary"
+                                            style="border-radius: 50%; height: 40px; width: 40px;" type="submit"
+                                            (click)="addParameter('trustedProxies')"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd"
                                                     d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                             </svg></button>
                                     </div>
-                                    <div class="mt-3 d-flex flex-wrap gap-1">
-                                        <button *ngFor="let attr of trustedProxiesArray; let i = index" class="parameter-item">
+                                    <div class="col-sm-12 d-flex mt-3">
+                                        <button *ngFor="let attr of trustedProxiesArray; let i = index"
+                                            class="parameter-item">
                                             {{ attr }}<mat-icon (click)="removeParameter(i,'trustedProxies')"
                                                 class="d-flex align-items-center justify-content-end">close</mat-icon>
                                         </button>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <label for="IPAddress" class="form-label">Client IP Headers &nbsp; <svg
-                                            [matTooltip]=clientIPAddTooltip xmlns="http://www.w3.org/2000/svg" width="16"
-                                            height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path
-                                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg></label>
-                                    <div class="input-group mb-3">
-                                        <input type="text" id="IPAddress" class="form-control" aria-label="192.168.0.0/24"
-                                            aria-describedby="button-addon2" formControlName="clientIpHeaders"
-                                            placeholder="X-Forwarded-For">
-                                        <button class="btn btn-primary" type="button" id="button-addon2"
-                                            (click)="addParameter('clientIpHeaders')"><svg xmlns="http://www.w3.org/2000/svg"
-                                                width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
-                                                viewBox="0 0 16 16">
+                            </div>
+                        </div>
+
+
+
+                        <!-- <div class="col-sm-4">
+                            <label for="IPAddress" class="form-label">Client IP Headers &nbsp; <svg
+                                    [matTooltip]=clientIPAddTooltip xmlns="http://www.w3.org/2000/svg" width="16"
+                                    height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                    <path
+                                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                </svg></label>
+                            <div class="input-group mb-3">
+                                <input type="text" id="IPAddress" class="form-control" aria-label="192.168.0.0/24"
+                                    aria-describedby="button-addon2" formControlName="clientIpHeaders"
+                                    placeholder="X-Forwarded-For">
+                                <button class="btn btn-primary" type="button" id="button-addon2"
+                                    (click)="addParameter('clientIpHeaders')"><svg xmlns="http://www.w3.org/2000/svg"
+                                        width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
+                                        viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                    </svg></button>
+                            </div>
+                            <div class="mt-3 d-flex flex-wrap gap-1">
+                                <button *ngFor="let attr of clientIPHeadersArray; let i = index" class="parameter-item">
+                                    {{ attr }}<mat-icon (click)="removeParameter(i,'clientIpHeaders')"
+                                        class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                </button>
+                            </div>
+                        </div> -->
+
+
+
+                        <div class="col-sm-4">
+                            <div class="input-con d-flex gap-2 flex-column">
+                                <div class="row align-items-end">
+                                    <div class="col-sm-8">
+                                        <label for="IPAddress" class="form-label">Client IP Headers &nbsp; <i
+                                                class="bi bi-info-circle" [matTooltip]=clientIPAddTooltip></i></label>
+                                        <input type="text" class="form-control" id="IPAddress"
+                                            placeholder="https://example.com" formControlName="clientIpHeaders">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button class="btn btn-primary"
+                                            style="border-radius: 50%; height: 40px; width: 40px;" type="submit"
+                                            (click)="addParameter('clientIpHeaders')"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd"
                                                     d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                             </svg></button>
                                     </div>
-                                    <div class="mt-3 d-flex flex-wrap gap-1">
-                                        <button *ngFor="let attr of clientIPHeadersArray; let i = index" class="parameter-item">
+                                    <div class="col-sm-12 d-flex mt-3">
+                                        <button *ngFor="let attr of clientIPHeadersArray; let i = index"
+                                            class="parameter-item">
                                             {{ attr }}<mat-icon (click)="removeParameter(i,'clientIpHeaders')"
                                                 class="d-flex align-items-center justify-content-end">close</mat-icon>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-            
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="allowmode"
-                                            formControlName="allowModeActive">
-                                        <label class="form-check-label" for="allowmode">
-                                            Allow mode &nbsp; <svg [matTooltip]=allowTooltip xmlns="http://www.w3.org/2000/svg"
-                                                width="16" height="16" fill="currentColor" class="bi bi-info-circle"
-                                                viewBox="0 0 16 16">
-                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                                <path
-                                                    d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                            </svg>
-                                        </label>
-                                    </div>
-                                    <div>
-            
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="allowmode"
+                                    formControlName="allowModeActive">
+                                <label class="form-check-label" for="allowmode">
+                                    Allow mode &nbsp; <svg [matTooltip]=allowTooltip xmlns="http://www.w3.org/2000/svg"
+                                        width="16" height="16" fill="currentColor" class="bi bi-info-circle"
+                                        viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                        <path
+                                            d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                    </svg>
+                                </label>
                             </div>
-                        }
-                    </mat-expansion-panel>
-        
-        
-                    <mat-expansion-panel (opened)="formGroupThrottling.value.isEndPointRateLimitEnabledActive">
-                        <mat-expansion-panel-header collapsedHeight="70px">
-                            <mat-panel-title>
-                                <div class="d-flex justify-content-between toggle-header">
+                            <div>
+
+                            </div>
+                        </div>
+                    </div>
+                    }@else {
+                    <p>{{ipFilterTooltip}}</p>
+                    }
+                </mat-expansion-panel>
+
+                <mat-expansion-panel (opened)="formGroupThrottling.value.isEndPointRateLimitEnabledActive">
+                    <mat-expansion-panel-header collapsedHeight="70px">
+                        <mat-panel-title>
+                            <!-- <div class="d-flex justify-content-between toggle-header">
                                     <div>
                                        Endpoint Rate Limit &nbsp; <i class="bi bi-info-circle"
                                        [matTooltip]=endpointRateTooltip></i>
@@ -225,91 +339,102 @@
                                             formControlName="isEndPointRateLimitEnabledActive">
                                         </mat-slide-toggle>
                                     </div>
+                                </div> -->
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    Endpoint Rate Limit
                                 </div>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-        
-                        @if(formGroupThrottling.value.isEndPointRateLimitEnabledActive){
-                            <div class="row gap-3">
-                                <div class="col-sm-4">
-                                    <p>Rate Limit &nbsp; <svg [matTooltip]=rateLimitTooltip xmlns="http://www.w3.org/2000/svg"
-                                            width="16" height="16" fill="currentColor" class="bi bi-info-circle"
-                                            viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path
-                                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg> </p>
-                                    <div>
-                                        <input class="input-size1 form-control" type="number" formControlName="rateLimit"
-                                            [class.is-invalid]="formGroupThrottling.get('rateLimit')?.invalid" />
-                                    </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                        formControlName="isEndPointRateLimitEnabledActive">
                                 </div>
-                                <div class="col-sm-4">
-                                    <p>Every &nbsp; <svg [matTooltip]=everyTooltip xmlns="http://www.w3.org/2000/svg" width="16"
-                                            height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path
-                                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg></p>
-                                    <div>
-                                        <input class="input-size1 form-control" type="text" formControlName="every"
-                                            [class.is-invalid]="formGroupThrottling.get('every')?.invalid && formGroupThrottling.get('every')?.touched" />
-                                        <div class="invalid-feedback"
-                                            *ngIf="formGroupThrottling.get('every')?.errors?.['pattern'] && formGroupThrottling.get('every')?.touched">
-                                            The amount of time you want to assign followed by its unit (e.g.: `2s`, `200ms`).
-                                            <br>
-                                            Valid
-                                            time units are: ns, us, (or µs), ms, s, m, h.
-                                        </div>
-                                    </div>
+                            </div>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    @if(formGroupThrottling.value.isEndPointRateLimitEnabledActive){
+                    <div class="row gap-3">
+                        <div class="col-sm-4">
+                            <p>Rate Limit &nbsp; <svg [matTooltip]=rateLimitTooltip xmlns="http://www.w3.org/2000/svg"
+                                    width="16" height="16" fill="currentColor" class="bi bi-info-circle"
+                                    viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                    <path
+                                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                </svg> </p>
+                            <div>
+                                <input class="input-size1 form-control" type="number" formControlName="rateLimit"
+                                    [class.is-invalid]="formGroupThrottling.get('rateLimit')?.invalid" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <p>Every &nbsp; <svg [matTooltip]=everyTooltip xmlns="http://www.w3.org/2000/svg" width="16"
+                                    height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                    <path
+                                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                </svg></p>
+                            <div>
+                                <input class="input-size1 form-control" type="text" formControlName="every"
+                                    [class.is-invalid]="formGroupThrottling.get('every')?.invalid && formGroupThrottling.get('every')?.touched" />
+                                <div class="invalid-feedback"
+                                    *ngIf="formGroupThrottling.get('every')?.errors?.['pattern'] && formGroupThrottling.get('every')?.touched">
+                                    The amount of time you want to assign followed by its unit (e.g.: `2s`, `200ms`).
+                                    <br>
+                                    Valid
+                                    time units are: ns, us, (or µs), ms, s, m, h.
                                 </div>
-                                <div class="col-sm-4">
-                                    <p>Capacity &nbsp; <svg [matTooltip]=capacityTooltip xmlns="http://www.w3.org/2000/svg"
-                                            width="16" height="16" fill="currentColor" class="bi bi-info-circle"
-                                            viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path
-                                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg></p>
-                                    <div>
-                                        <input class="input-size1 form-control" type="number" formControlName="capacity"
-                                            [class.is-invalid]="formGroupThrottling.get('capacity')?.invalid" />
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <p>Default User Quota &nbsp; <svg [matTooltip]=userQuotaTooltip
-                                            xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                            class="bi bi-info-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path
-                                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg></p>
-                                    <div>
-                                        <input class="input-size1 form-control" type="number" formControlName="defaultUserQuota"
-                                            [class.is-invalid]="formGroupThrottling.get('defaultUserQuota')?.invalid" />
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <p>Client Capacity &nbsp; <svg [matTooltip]=clientCapacityTooltip
-                                            xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                            class="bi bi-info-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path
-                                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg></p>
-                                    <div>
-                                        <input class="input-size1 form-control" type="number" formControlName="clientCapacity"
-                                            [class.is-invalid]="formGroupThrottling.get('clientCapacity')?.invalid" />
-                                    </div>
-                                </div>
-                            </div> 
-                        }
-                    </mat-expansion-panel>
-                    
-                    <mat-expansion-panel (opened)="formGroupThrottling.value.isRedisRateLimitEnabledActive">
-                        <mat-expansion-panel-header collapsedHeight="70px">
-                            <mat-panel-title>
-                                <div class="d-flex justify-content-between toggle-header">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <p>Capacity &nbsp; <svg [matTooltip]=capacityTooltip xmlns="http://www.w3.org/2000/svg"
+                                    width="16" height="16" fill="currentColor" class="bi bi-info-circle"
+                                    viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                    <path
+                                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                </svg></p>
+                            <div>
+                                <input class="input-size1 form-control" type="number" formControlName="capacity"
+                                    [class.is-invalid]="formGroupThrottling.get('capacity')?.invalid" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <p>Default User Quota &nbsp; <svg [matTooltip]=userQuotaTooltip
+                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-info-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                    <path
+                                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                </svg></p>
+                            <div>
+                                <input class="input-size1 form-control" type="number" formControlName="defaultUserQuota"
+                                    [class.is-invalid]="formGroupThrottling.get('defaultUserQuota')?.invalid" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <p>Client Capacity &nbsp; <svg [matTooltip]=clientCapacityTooltip
+                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-info-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                    <path
+                                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                </svg></p>
+                            <div>
+                                <input class="input-size1 form-control" type="number" formControlName="clientCapacity"
+                                    [class.is-invalid]="formGroupThrottling.get('clientCapacity')?.invalid" />
+                            </div>
+                        </div>
+                    </div>
+                    }@else {
+                    <p>{{endpointRateTooltip}}</p>
+                    }
+                </mat-expansion-panel>
+
+                <mat-expansion-panel (opened)="formGroupThrottling.value.isRedisRateLimitEnabledActive">
+                    <mat-expansion-panel-header collapsedHeight="70px">
+                        <mat-panel-title>
+                            <!-- <div class="d-flex justify-content-between toggle-header">
                                     <div>
                                        Redis Rate Limit &nbsp; <i class="bi bi-info-circle"
                                        [matTooltip]=redisTooltip></i>
@@ -319,104 +444,123 @@
                                             formControlName="isRedisRateLimitEnabledActive">
                                         </mat-slide-toggle>
                                     </div>
+                                </div> -->
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    Redis Rate Limit
                                 </div>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-        
-                        @if(formGroupThrottling.value.isRedisRateLimitEnabledActive){
-                            <div class="row gap-3">
-                                <div class="row gap-3">
-                                    <div class="col-sm-12 col-md-4">
-                                        <!-- <p>Address</p> -->
-                                        <label for="address" class="form-label">Address &nbsp; <svg [matTooltip]=addressTooltip xmlns="http://www.w3.org/2000/svg" width="16"
-                                            height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path
-                                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg> </label>
-                                        <input type="text" class="input-size form-control" id="address" formControlName="address"
-                                            placeholder="192.168.1.1:6379" />
-                                    </div>
-                                    <div class="col-sm-12 col-md-4">
-                                        <label for="rate" class="form-label">Rate &nbsp; <svg [matTooltip]=rateTooltip xmlns="http://www.w3.org/2000/svg" width="16"
-                                            height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path
-                                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg></label>
-                                        <input type="number" class="input-size form-control" id="rate" formControlName="rate"
-                                            [class.is-invalid]="formGroupThrottling.get('rate')?.invalid" placeholder="100" />
-                                    </div>
-                                </div>
-                                <div class="row gap-3">
-                                    <div class="col-sm-12 col-md-4">
-                                        <label for="periods" class="form-label">Period &nbsp; <svg [matTooltip]=periodTooltip xmlns="http://www.w3.org/2000/svg" width="16"
-                                            height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path
-                                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg></label>
-                                        <input type="text" class="input-size form-control" id="periods" formControlName="periods"
-                                            [class.is-invalid]="formGroupThrottling.get('periods')?.invalid && formGroupThrottling.get('periods')?.touched" />
-                                        <div class="invalid-feedback"
-                                            *ngIf="formGroupThrottling.get('periods')?.errors?.['pattern'] && formGroupThrottling.get('periods')?.touched">
-                                            The amount of time you want to assign followed by its unit (e.g.: `2s`, `200ms`). <br> Valid
-                                            time units are: ns, us, (or µs), ms, s, m, h.
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4">
-                                        <label for="burst" class="form-label">Burst &nbsp; <svg [matTooltip]=burstTooltip xmlns="http://www.w3.org/2000/svg" width="16"
-                                            height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path
-                                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg></label>
-                                        <input type="number" class="input-size form-control" id="burst" formControlName="burst"
-                                            [class.is-invalid]="formGroupThrottling.get('rate')?.invalid" placeholder="10" />
-                                    </div>
-                
-                                </div>
-                                <div class="row gap-3">
-                                    <div class="col-sm-12 col-md-4">
-                                        <label for="tokenizer" class="form-label">Tokenizer &nbsp; <svg [matTooltip]=tokenizerTooltip xmlns="http://www.w3.org/2000/svg" width="16"
-                                            height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path
-                                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg></label>
-                                        <select class="form-select input-size" aria-label="Default select example" id="tokenizer"
-                                            formControlName="tokenizer">
-                                            <option selected>Select Tokenizer</option>
-                                            <option value="JWT">JWT-The JWT token(jti by default)</option>
-                                            <option value="IP">IP-The real IP of the user</option>
-                                            <option value="URL">URL(Hashed as the identifier)</option>
-                                            <option value="path">Path(The requested path)</option>
-                                            <option value="header">Header(as set in Tokenizer field)</option>
-                                            <option value="parameter">Parameter(as set in Tokenizer field)</option>
-                                            <option value="cookie">Cookie(as set in Tokenizer field)</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4">
-                                        <label for="tokenizerField" class="form-label">Tokenizer Field &nbsp; <svg [matTooltip]=tokenizerFieldTooltip xmlns="http://www.w3.org/2000/svg" width="16"
-                                            height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path
-                                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg></label>
-                                        <input type="text" class="input-size form-control" id="tokenizerField"
-                                            formControlName="tokenizerField" placeholder="field" />
-                                    </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                        formControlName="isRedisRateLimitEnabledActive">
                                 </div>
                             </div>
-                        }
-                    </mat-expansion-panel>
-                </mat-accordion>
-            </div>
-     
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    @if(formGroupThrottling.value.isRedisRateLimitEnabledActive){
+                    <div class="row gap-3">
+                        <div class="row gap-3">
+                            <div class="col-sm-12 col-md-4">
+                                <!-- <p>Address</p> -->
+                                <label for="address" class="form-label">Address &nbsp; <svg [matTooltip]=addressTooltip
+                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-info-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                        <path
+                                            d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                    </svg> </label>
+                                <input type="text" class="input-size form-control" id="address"
+                                    formControlName="address" placeholder="192.168.1.1:6379" />
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <label for="rate" class="form-label">Rate &nbsp; <svg [matTooltip]=rateTooltip
+                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-info-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                        <path
+                                            d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                    </svg></label>
+                                <input type="number" class="input-size form-control" id="rate" formControlName="rate"
+                                    [class.is-invalid]="formGroupThrottling.get('rate')?.invalid" placeholder="100" />
+                            </div>
+                        </div>
+                        <div class="row gap-3">
+                            <div class="col-sm-12 col-md-4">
+                                <label for="periods" class="form-label">Period &nbsp; <svg [matTooltip]=periodTooltip
+                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-info-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                        <path
+                                            d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                    </svg></label>
+                                <input type="text" class="input-size form-control" id="periods"
+                                    formControlName="periods"
+                                    [class.is-invalid]="formGroupThrottling.get('periods')?.invalid && formGroupThrottling.get('periods')?.touched" />
+                                <div class="invalid-feedback"
+                                    *ngIf="formGroupThrottling.get('periods')?.errors?.['pattern'] && formGroupThrottling.get('periods')?.touched">
+                                    The amount of time you want to assign followed by its unit (e.g.: `2s`, `200ms`).
+                                    <br> Valid
+                                    time units are: ns, us, (or µs), ms, s, m, h.
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <label for="burst" class="form-label">Burst &nbsp; <svg [matTooltip]=burstTooltip
+                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-info-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                        <path
+                                            d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                    </svg></label>
+                                <input type="number" class="input-size form-control" id="burst" formControlName="burst"
+                                    [class.is-invalid]="formGroupThrottling.get('rate')?.invalid" placeholder="10" />
+                            </div>
+
+                        </div>
+                        <div class="row gap-3">
+                            <div class="col-sm-12 col-md-4">
+                                <label for="tokenizer" class="form-label">Tokenizer &nbsp; <svg
+                                        [matTooltip]=tokenizerTooltip xmlns="http://www.w3.org/2000/svg" width="16"
+                                        height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                        <path
+                                            d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                    </svg></label>
+                                <select class="form-select input-size" aria-label="Default select example"
+                                    id="tokenizer" formControlName="tokenizer">
+                                    <option selected>Select Tokenizer</option>
+                                    <option value="JWT">JWT-The JWT token(jti by default)</option>
+                                    <option value="IP">IP-The real IP of the user</option>
+                                    <option value="URL">URL(Hashed as the identifier)</option>
+                                    <option value="path">Path(The requested path)</option>
+                                    <option value="header">Header(as set in Tokenizer field)</option>
+                                    <option value="parameter">Parameter(as set in Tokenizer field)</option>
+                                    <option value="cookie">Cookie(as set in Tokenizer field)</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <label for="tokenizerField" class="form-label">Tokenizer Field &nbsp; <svg
+                                        [matTooltip]=tokenizerFieldTooltip xmlns="http://www.w3.org/2000/svg" width="16"
+                                        height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                        <path
+                                            d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                    </svg></label>
+                                <input type="text" class="input-size form-control" id="tokenizerField"
+                                    formControlName="tokenizerField" placeholder="field" />
+                            </div>
+                        </div>
+                    </div>
+                    }@else {
+                    <p>{{redisTooltip}}</p>
+                    }
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+
 
         <div class="col-sm-12 mt-3">
             <button class="btn btn-primary" (click)="submit()">Save</button>
         </div>
-        
+
     </form>
 </div>

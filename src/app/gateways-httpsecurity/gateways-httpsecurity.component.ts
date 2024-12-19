@@ -560,8 +560,11 @@ export class GatewaysHttpsecurityComponent {
           // ...(this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value?.length != 0 && {
           "id": this.entireJsonData?.extra_config?.["security/http"]?.id ? this.entireJsonData?.extra_config?.["security/http"]?.id : null,
           // "allowed_hosts": this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value,
-          "allowed_hosts": (this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value?.length != 0 ? this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value : null),
+          // "C": (this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value?.length != 0 ? this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value : null),
           // }),
+          ...(this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value?.length && {
+            "allowed_hosts" : (this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value)
+          }),
           ...(this.formGroupHttpSecurity.get('httpSecurityXSSProtectionForm')?.value && { "browser_xss_filter": this.formGroupHttpSecurity.get('httpSecurityXSSProtectionForm')?.value }),
           // ...(this.formGroupHttpSecurity?.httpSecurityConSecPolicyForm &&{"content_security_policy": this.formGroupHttpSecurity?.httpSecurityConSecPolicyForm}),
           ...(this.formGroupHttpSecurity.get('httpSecurityConSecPolicyForm')?.value && { "content_security_policy": this.formGroupHttpSecurity.get('httpSecurityConSecPolicyForm')?.value }),
