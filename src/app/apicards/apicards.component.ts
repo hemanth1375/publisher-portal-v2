@@ -60,7 +60,7 @@ export class ApicardsComponent implements OnInit , AfterViewInit{
   ngOnInit() {
     // this.isShowParent=true
     console.log(this.isShowParent);
-
+    console.log(this.keycloak.getKeycloakInstance());
     if (this.userId) {
       this.loadCards(this.userId)
     } else {
@@ -68,6 +68,9 @@ export class ApicardsComponent implements OnInit , AfterViewInit{
         .subscribe({
           next: () => {
             const token: any = this.keycloak.getKeycloakInstance().token
+            localStorage.setItem('token',token)
+            console.log(this.keycloak.getKeycloakInstance());
+            
             console.log(this.keycloak.getKeycloakInstance().token);
 
 
@@ -103,7 +106,10 @@ export class ApicardsComponent implements OnInit , AfterViewInit{
       error:(err)=>{
         console.error(err);
         this.showError(err?.error?.message);
-        this.isShowNoApisCard=true
+        if(err?.error?.status==400){
+          this.isShowNoApisCard=true
+        }
+        
       }
     })
   }

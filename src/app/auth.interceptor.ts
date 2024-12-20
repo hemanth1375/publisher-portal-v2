@@ -11,11 +11,6 @@ export class AuthInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-  //   this.keycloak.keycloakEvents$.pipe(filter((e:any) => e.type === KeycloakEventType.OnAuthSuccess))
-  // .subscribe({
-  //   next:()=>{
-  //     console.log(this.keycloak.getKeycloakInstance().token);
-  //   }})
 
       
 

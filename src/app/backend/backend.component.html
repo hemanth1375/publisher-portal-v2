@@ -322,6 +322,8 @@
                     </svg></label>
                   <textarea class="form-control fingerprint" id="templateTest{{i}}" rows="3"
                     formControlName="template"></textarea>
+                    <div *ngIf="getFormGroup(i).get('template')?.hasError('invalidJson')"><span
+                      class="error-message">Please enter a valid JSON.</span></div>
                   <!-- <div class="form-text">The response body you will return to the end-user. You can introduce the variables
                               .resp_headers.xxx, .resp_headers.xxx (with no-op), .resp_status.xxx (with no-op), .resp_body.xxx,
                               .req_params.Xxx, .req_headers.xxx, .req_querystring.xxx, .req_path</div> -->
@@ -404,6 +406,8 @@
                       d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                   </svg></h3>
                 <textarea class="static-text-area form-control" formControlName="martianDslTextarea"></textarea>
+                <div *ngIf="getFormGroup(i).get('martianDslTextarea')?.hasError('invalidJson')"><span
+                  class="error-message">Please enter a valid JSON.</span></div>
 
                 }@else {
                 <p>Transform requests and responses through a simple DSL definition. The input must be a JSON object
@@ -771,6 +775,8 @@
                     </svg></label>
                   <textarea class="form-control fingerprint" id="templateResponse{{i}}" rows="3"
                     formControlName="templateResponse"></textarea>
+                    <div *ngIf="getFormGroup(i).get('templateResponse')?.hasError('invalidJson')"><span
+                      class="error-message">Please enter a valid JSON.</span></div>
                 </div>
 
                 <div class="row">
@@ -1028,7 +1034,7 @@
                       <label for="maxerr{{i}}" class="form-label">Maximum Errors <i class="bi bi-info-circle"
                           [matTooltip]=maxErrors_tooltip></i></label>
                       <input type="number" class="form-control" id="maxerr{{i}}" formControlName="maxError"
-                        [class.is-invalid]="getFormGroup(i).get('maxError')?.invalid">
+                        [class.is-invalid]="getFormGroup(i).get('maxError')?.invalid  && getFormGroup(i).get('maxError')?.touched">
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-6">
@@ -1036,7 +1042,7 @@
                       <label for="inteval{{i}}" class="form-label">Interval <i class="bi bi-info-circle"
                           [matTooltip]=interval_tooltip></i></label>
                       <input type="number" class="form-control" id="interval{{i}}" formControlName="interval"
-                        [class.is-invalid]="getFormGroup(i).get('interval')?.invalid">
+                        [class.is-invalid]="getFormGroup(i).get('interval')?.invalid && getFormGroup(i).get('interval')?.touched">
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-6">
@@ -1044,7 +1050,7 @@
                       <label for="timeout{{i}}" class="form-label">Timeout <i class="bi bi-info-circle"
                           [matTooltip]=timeout_tooltip></i></label>
                       <input type="number" class="form-control" id="timeout{{i}}" formControlName="timeout"
-                        [class.is-invalid]="getFormGroup(i).get('timeout')?.invalid">
+                        [class.is-invalid]="getFormGroup(i).get('timeout')?.invalid  && getFormGroup(i).get('timeout')?.touched">
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-6">
@@ -1087,7 +1093,7 @@
                       <label for="maxRateLimit{{i}}" class="form-label">MaxRateLimit <i class="bi bi-info-circle"
                           [matTooltip]=maxRateLimit_tooltip></i></label>
                       <input type="number" class="form-control" id="maxRateLimit{{i}}" formControlName="maxRateLimit"
-                        [class.is-invalid]="getFormGroup(i).get('maxRateLimit')?.invalid">
+                        [class.is-invalid]="getFormGroup(i).get('maxRateLimit')?.invalid  && getFormGroup(i).get('maxRateLimit')?.touched">
 
                     </div>
                   </div>
@@ -1111,7 +1117,7 @@
                       <label for="capacity{{i}}" class="form-label">Capacity(Burst size) <i class="bi bi-info-circle"
                           [matTooltip]=capacityThrot_tooltip></i></label>
                       <input type="number" class="form-control" id="capacity{{i}}" formControlName="capacity"
-                        [class.is-invalid]="getFormGroup(i).get('capacity')?.invalid">
+                        [class.is-invalid]="getFormGroup(i).get('capacity')?.invalid && getFormGroup(i).get('capacity')?.touched">
 
                     </div>
                   </div>
@@ -1164,7 +1170,7 @@
                       <label for="clientId{{i}}" class="form-label">CLIENT ID <i class="bi bi-info-circle"
                           [matTooltip]=clientId_tooltip></i></label>
                       <input type="text" class="form-control" id="clientId{{i}}" formControlName="clientId"
-                        [class.is-invalid]="getFormGroup(i).get('clientId')?.invalid">
+                        [class.is-invalid]="getFormGroup(i).get('clientId')?.invalid  && getFormGroup(i).get('clientId')?.touched">
 
                     </div>
                   </div>
@@ -1173,7 +1179,7 @@
                       <label for="clientSecret{{i}}" class="form-label">CLIENT SECRET <i class="bi bi-info-circle"
                           [matTooltip]=clientSecret_tooltip></i></label>
                       <input type="text" class="form-control" id="clientSecret{{i}}" formControlName="clientSecret"
-                        [class.is-invalid]="getFormGroup(i).get('clientSecret')?.invalid">
+                        [class.is-invalid]="getFormGroup(i).get('clientSecret')?.invalid && getFormGroup(i).get('clientSecret')?.touched">
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-6">
@@ -1181,7 +1187,7 @@
                       <label for="tokenUrl{{i}}" class="form-label">Token URL <i class="bi bi-info-circle"
                           [matTooltip]=tokenUrl_tooltip></i></label>
                       <input type="text" class="form-control" id="tokenUrl{{i}}" formControlName="tokenUrl"
-                        [class.is-invalid]="getFormGroup(i).get('tokenUrl')?.invalid">
+                        [class.is-invalid]="getFormGroup(i).get('tokenUrl')?.invalid && getFormGroup(i).get('tokenUrl')?.touched">
 
                     </div>
                   </div>
@@ -1672,6 +1678,8 @@
                       [matTooltip]=bodyEditConn_tooltip></i></label>
                   <textarea class="form-control fingerprint" id="templateConnect{{i}}" rows="3"
                     formControlName="templateConnect"></textarea>
+                    <div *ngIf="getFormGroup(i).get('templateConnect')?.hasError('invalidJson')"><span
+                      class="error-message">Please enter a valid JSON.</span></div>
 
                 </div>
 
@@ -2396,7 +2404,21 @@
         <!-- <mat-accordion>
               
                 </mat-accordion> -->
+                <div *ngIf="getFormGroup(i).hasError('policyRequired')">
+                  <p>At least one of 'Request Policy', 'Response Policy', or 'JWT Policy' must have policies.</p>
+                </div>
       </form>
+      <div class="row mt-2 p-2" >
+        <ngb-alert [type]="'success'" *ngIf="successMessage" >
+            {{ successMessage }}
+        </ngb-alert>
+    </div>
+ 
+    <div class="row mt-2 p-2" >
+        <ngb-alert [type]="'danger'" *ngIf="errorMessage">
+            {{ errorMessage }}
+        </ngb-alert>
+    </div>
       <!-- Buttons -->
       <div class="d-flex justify-content-end gap-2 mt-3">
         <button mat-raised-button color="primary" *ngIf="item.isNew" (click)="saveBackend(i)">
