@@ -47,6 +47,7 @@ import { GatewayTelemetryComponent } from './gateway-telemetry/gateway-telemetry
 import { GatewaysHttpsecurityComponent } from './gateways-httpsecurity/gateways-httpsecurity.component';
 import { ToastComponent } from './toast/toast.component';
 import { GatewayApiMonetizationComponent } from './gateway-api-monetization/gateway-api-monetization.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 
 // keycloak
@@ -124,7 +125,8 @@ function initializeKeycloak(keycloak: KeycloakService){
     MatChipsModule,
     MatExpansionModule,
     MatSlideToggleModule,
-    NgbToastModule
+    NgbToastModule,
+    MatRadioModule
     
   ],
   providers: [KeycloakService,

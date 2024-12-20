@@ -19,6 +19,16 @@ export class GatewayService {
     return this.http.post(url, body);
   }
 
+  addServiceSettings(gatewayServiceSettingsId: any, body: any) {
+    const url = urls.addOrUpdateServiceSetting + `?krakendId=${gatewayServiceSettingsId}`;
+    return this.http.post(url, body);
+  }
+
+  getGtwyServiceSettings(gatewayServiceSettingsId: any) {
+    const url = urls.getEndpointById + `?krakendId=${gatewayServiceSettingsId}`;
+    return this.http.get(url);
+  }
+
   
 
 }

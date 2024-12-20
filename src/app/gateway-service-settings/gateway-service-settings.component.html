@@ -2,436 +2,479 @@
     <form [formGroup]="formGroupService">
         <div class="row">
             <div class="col-sm-12">
-            <mat-accordion [multi]="true" >
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <div class="d-flex justify-content-between toggle-header">
-                                <div>HTTP Server Settings</div>                                                                
+                <mat-accordion [multi]="true">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>HTTP Server Settings</div>
+                                </div>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <label for="name" class="form-label">Name &nbsp; <i class="bi bi-info-circle"
+                                        [matTooltip]=nameInfo></i> </label>
+                                <input type="text" class="input-size form-control" id="name" formControlName="name"
+                                    [class.is-invalid]="formGroupService.get('name')?.invalid" />
+                                <div *ngIf="formGroupService.get('name')?.invalid" class="text-danger">
+                                    name is required !
+                                </div>
+
                             </div>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6">
-                            <label for="name" class="form-label">Name &nbsp; <i class="bi bi-info-circle" [matTooltip]=nameInfo></i> </label>
-                            <input type="text" class="input-size form-control" id="name" formControlName="name"
-                                        [class.is-invalid]="formGroupService.get('name')?.invalid" />
-                                    <div *ngIf="formGroupService.get('name')?.invalid" class="text-danger">
-                                        name is required !
-                                    </div>
-                                    
-                                    </div>
-                        <div class="col-sm-12 col-md-6">
-                            <label for="port" class="form-label">Port &nbsp; <i class="bi bi-info-circle" [matTooltip]=portInfo></i> </label>
-                            <input type="number" class="input-size form-control" id="port" formControlName="port"
-                                        [class.is-invalid]="formGroupService.get('port')?.invalid" />
-                                    <div *ngIf="formGroupService.get('port')?.invalid" class="text-danger">
-                                        port is required !
-                                    </div>
-                                    
+                            <div class="col-sm-12 col-md-6">
+                                <label for="port" class="form-label">Port &nbsp; <i class="bi bi-info-circle"
+                                        [matTooltip]=portInfo></i> </label>
+                                <input type="number" class="input-size form-control" id="port" formControlName="port"
+                                    [class.is-invalid]="formGroupService.get('port')?.invalid" />
+                                <div *ngIf="formGroupService.get('port')?.invalid" class="text-danger">
+                                    port is required !
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
-                </mat-expansion-panel>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <div class="d-flex justify-content-between toggle-header">
-                                <div>Hosts (Upstream services or backends)</div>                                                                
-                            </div>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-4">
-                            <label for="host" class="form-label">Add here the hosts KrakenD can use as upstream services
-                                to retrieve the data.</label>
-                             <!-- <input type="text" class="input-size form-control" id="name" formControlName="host"/>  -->
-                            <div class="d-flex gap-2">
-                                <input type="text" class="form-control" id="host" formControlName="host">
-                                <!-- <button type="button" class="btn btn-outline-primary"
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>Hosts (Upstream services or backends)</div>
+                                </div>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <label for="host" class="form-label">Add here the hosts KrakenD can use as upstream
+                                    services
+                                    to retrieve the data.</label>
+                                <!-- <input type="text" class="input-size form-control" id="name" formControlName="host"/>  -->
+                                <div class="d-flex gap-2">
+                                    <input type="text" class="form-control" id="host" formControlName="host">
+                                    <!-- <button type="button" class="btn btn-outline-primary"
                                     (click)="addParameter('host')">Add</button> -->
-                                    <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('host')"><svg
+                                    <button class="btn btn-primary"
+                                        style="border-radius: 50%; height: 40px; width: 40px;" type="submit"
+                                        (click)="addParameter('host')"><svg xmlns="http://www.w3.org/2000/svg"
+                                            width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
+                                            viewBox="0 0 16 16">addParameter('regExpMatch')
+                                            <path fill-rule="evenodd"
+                                                d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                        </svg></button>
+                                </div>
+                                <div class="form-text">The address where KrakenD connects to. Some valid examples can be
+                                    https://myapi, amqp://host, 192.0.2.1:25, my.service.tld. When using gRPC use the
+                                    syntax
+                                    host:port</div>
+                                <div class="mt-3 d-flex">
+                                    <button *ngFor="let item of hostArray; let i = index" class="parameter-item">
+                                        {{ item }}<mat-icon (click)="removeParameter(i,'host')"
+                                            class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="hostRadio" id="staticAddress">
+                                    <label class="form-check-label" for="staticAddress">
+                                        Static address resolution (default) &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=staticAddInfo></i>
+                                    </label>
+
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="hostRadio" id="dns">
+                                    <label class="form-check-label" for="dns">
+                                        DNS SRV &nbsp; <i class="bi bi-info-circle" [matTooltip]=dnssrvInfo></i>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="sanitize" checked>
+                                    <label class="form-check-label" for="sanitize">
+                                        Disable sanitize &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=disableSanitizeInfo></i>
+                                    </label>
+
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>Debug Endpoints &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=debugEndPointsInfo></i></div>
+                                </div>
+
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="enableDebug"
+                                    formControlName="enableDebug" checked>
+                                <label class="form-check-label" for="enableDebug">
+                                    Enable /__debug/ endpoint
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="enableEcho"
+                                    formControlName="enableEcho" checked>
+                                <label class="form-check-label" for="enableEcho">
+                                    Enable /__echo/ endpoint
+                                </label>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>gRPC Catalog &nbsp;
+                                        <i class="bi bi-info-circle" [matTooltip]=gRPCinfo></i>
+                                    </div>
+                                    <!-- <div>
+                                            <mat-slide-toggle class="example-margin" color="blue" formControlName="isgRPCActive"></mat-slide-toggle>
+                                        </div> -->
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input custom-switch" type="checkbox" role="switch"
+                                            formControlName="isgRPCActive" id="flexSwitchCheckDefault">
+                                    </div>
+                                </div>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        @if (formGroupService.value.isgRPCActive) {
+                        <div class="col-sm-12 col-md-6">
+                            <label for="directory" class="form-label">Directory or File</label>
+                            <!-- <input type="text" class="input-size form-control" id="name" formControlName="host"/> -->
+                            <div class="d-flex gap-2">
+                                <input type="text" class="form-control" id="directory" formControlName="directory">
+                                <!-- <button type="button" class="btn btn-outline-primary"
+                                            (click)="addParameter('directory')">Add</button> -->
+                                <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                                    type="submit" (click)="addParameter('directory')"><svg
                                         xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-plus-lg" viewBox="0 0 16 16">addParameter('regExpMatch')
                                         <path fill-rule="evenodd"
                                             d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                     </svg></button>
                             </div>
-                            <div class="form-text">The address where KrakenD connects to. Some valid examples can be
-                                https://myapi, amqp://host, 192.0.2.1:25, my.service.tld. When using gRPC use the syntax
-                                host:port</div>
+                            <div class="form-text">The paths to the different .pb files you want to load, or the paths
+                                to
+                                directories containing .pb files. Relative paths point to /etc/krakend by default.</div>
                             <div class="mt-3 d-flex">
-                                <button *ngFor="let item of hostArray; let i = index" class="parameter-item">
-                                    {{ item }}<mat-icon (click)="removeParameter(i,'host')"
+                                <button *ngFor="let item of directoryArray; let i = index" class="parameter-item">
+                                    {{ item }}<mat-icon (click)="removeParameter(i,'directory')"
                                         class="d-flex align-items-center justify-content-end">close</mat-icon>
                                 </button>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="hostRadio" id="staticAddress">
-                                <label class="form-check-label" for="staticAddress">
-                                    Static address resolution (default) &nbsp; <i class="bi bi-info-circle" [matTooltip]=staticAddInfo></i> 
-                                </label>
-                                
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="hostRadio" id="dns">
-                                <label class="form-check-label" for="dns">
-                                    DNS SRV &nbsp; <i class="bi bi-info-circle" [matTooltip]=dnssrvInfo></i> 
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="sanitize" checked>
-                                <label class="form-check-label" for="sanitize">
-                                    Disable sanitize &nbsp; <i class="bi bi-info-circle" [matTooltip]=disableSanitizeInfo></i> 
-                                </label>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </mat-expansion-panel>
-
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <div class="d-flex justify-content-between toggle-header">
-                                <div>Debug Endpoints &nbsp; <i class="bi bi-info-circle" [matTooltip]=debugEndPointsInfo></i></div>
-                            </div>
-
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <div class="col-sm-12 col-md-4">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="enableDebug" checked>
-                            <label class="form-check-label" for="enableDebug">
-                                Enable /__debug/ endpoint
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="enableEcho" checked>
-                            <label class="form-check-label" for="enableEcho">
-                                Enable /__echo/ endpoint
-                            </label>
-                        </div>
-                    </div>
-                </mat-expansion-panel>    
-                <mat-expansion-panel >
-                            <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    <div class="d-flex justify-content-between toggle-header">
-                                        <div>gRPC Catalog &nbsp;
-                                            <i class="bi bi-info-circle" [matTooltip]=gRPCinfo></i>
-                                        </div>
-                                        <!-- <div>
-                                            <mat-slide-toggle class="example-margin" color="blue" formControlName="isgRPCActive"></mat-slide-toggle>
-                                        </div> -->
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input custom-switch" type="checkbox" role="switch" formControlName="isgRPCActive" id="flexSwitchCheckDefault">
-                                        </div>
-                                    </div>
-                                </mat-panel-title>
-                            </mat-expansion-panel-header>
-                            @if (formGroupService.value.isgRPCActive) {
-                                <div class="col-sm-12 col-md-6">
-                                    <label for="directory" class="form-label">Directory or File</label>
-                                    <!-- <input type="text" class="input-size form-control" id="name" formControlName="host"/> -->
-                                    <div class="d-flex gap-2">
-                                        <input type="text" class="form-control" id="directory" formControlName="directory">
-                                        <!-- <button type="button" class="btn btn-outline-primary"
-                                            (click)="addParameter('directory')">Add</button> -->
-                                            <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('directory')"><svg
-                                                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                class="bi bi-plus-lg" viewBox="0 0 16 16">addParameter('regExpMatch')
-                                                <path fill-rule="evenodd"
-                                                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                            </svg></button>
-                                    </div>
-                                    <div class="form-text">The paths to the different .pb files you want to load, or the paths to
-                                        directories containing .pb files. Relative paths point to /etc/krakend by default.</div>
-                                    <div class="mt-3 d-flex">
-                                        <button *ngFor="let item of directoryArray; let i = index" class="parameter-item">
-                                            {{ item }}<mat-icon (click)="removeParameter(i,'directory')"
-                                                class="d-flex align-items-center justify-content-end">close</mat-icon>
-                                        </button>
-                                    </div>
+                        }
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>Default Timeouts and TTL &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=timeOutsAndTTL></i> </div>
                                 </div>
-                                }
-                </mat-expansion-panel>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <div class="d-flex justify-content-between toggle-header">
-                                <div>Default Timeouts and TTL &nbsp; <i class="bi bi-info-circle" [matTooltip]=timeOutsAndTTL></i> </div>
+
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <label for="backendTimeout" class="form-label">Backend Timeout &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=backendTimeoutInfo></i></label>
+                                <input type="text" class="input-size form-control" id="backendTimeout"
+                                    formControlName="backendTimeout"
+                                    [class.is-invalid]="formGroupService.get('backendTimeout')?.invalid && formGroupService.get('backendTimeout')?.touched" />
+                                <div class="invalid-feedback"
+                                    *ngIf="formGroupService.get('backendTimeout')?.errors?.['pattern'] && formGroupService.get('backendTimeout')?.touched">
+                                    Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                                </div>
+
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <label for="defaultCache" class="form-label">Default Cache TTL &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=defaultCacheInfo></i> </label>
+                                <input type="text " class="input-size form-control" id="defaultCache"
+                                    formControlName="defaultCache"
+                                    [class.is-invalid]="formGroupService.get('defaultCache')?.invalid && formGroupService.get('defaultCache')?.touched" />
+                                <div class="invalid-feedback"
+                                    *ngIf="formGroupService.get('defaultCache')?.errors?.['pattern'] && formGroupService.get('defaultCache')?.touched">
+                                    Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                                </div>
+
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <label for="httpReadTimeout" class="form-label">Http Read Timeout &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=httpReadTimeOutInfo></i> </label>
+                                <input type="text" class="input-size form-control" id="httpReadTimeout"
+                                    formControlName="httpReadTimeout"
+                                    [class.is-invalid]="formGroupService.get('httpReadTimeout')?.invalid && formGroupService.get('httpReadTimeout')?.touched" />
+                                <div class="invalid-feedback"
+                                    *ngIf="formGroupService.get('httpReadTimeout')?.errors?.['pattern'] && formGroupService.get('httpReadTimeout')?.touched">
+                                    Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                                </div>
+
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <label for="httpWriteTimeout" class="form-label">Http Write Timeout &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=httpWriteTimeoutInfo></i> </label>
+                                <input type="text" class="input-size form-control" id="httpWriteTimeout"
+                                    formControlName="httpWriteTimeout"
+                                    [class.is-invalid]="formGroupService.get('httpWriteTimeout')?.invalid && formGroupService.get('httpWriteTimeout')?.touched" />
+                                <div class="invalid-feedback"
+                                    *ngIf="formGroupService.get('httpWriteTimeout')?.errors?.['pattern'] && formGroupService.get('httpWriteTimeout')?.touched">
+                                    Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                                </div>
+
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <label for="httpIdleTimeout" class="form-label">Http Idle Timeout &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=httpIdleTimeoutInfo></i> </label>
+                                <input type="text" class="input-size form-control" id="httpIdleTimeout"
+                                    formControlName="httpIdleTimeout"
+                                    [class.is-invalid]="formGroupService.get('httpIdleTimeout')?.invalid && formGroupService.get('httpIdleTimeout')?.touched" />
+                                <div class="invalid-feedback"
+                                    *ngIf="formGroupService.get('httpIdleTimeout')?.errors?.['pattern'] && formGroupService.get('httpIdleTimeout')?.touched">
+                                    Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                                </div>
+
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <label for="httpReadHeaderTimeout" class="form-label">Http Read Header Timeout &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=httpReadHeaderTimeoutInfo></i> </label>
+                                <input type="text" class="input-size form-control" id="httpReadHeaderTimeout"
+                                    formControlName="httpReadHeaderTimeout"
+                                    [class.is-invalid]="formGroupService.get('httpReadHeaderTimeout')?.invalid && formGroupService.get('httpReadHeaderTimeout')?.touched" />
+                                <div class="invalid-feedback"
+                                    *ngIf="formGroupService.get('httpReadHeaderTimeout')?.errors?.['pattern'] && formGroupService.get('httpReadHeaderTimeout')?.touched">
+                                    Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
+                                </div>
+
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>Options</div>
+                                </div>
+
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <label for="defaultOutputEncoding" class="form-label">Default Output encoding &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=defaultOutputEncodingInfo></i></label>
+                                <select name="" class="form-select" id="defaultOutputEncoding"
+                                    formControlName="defaultOutputEncoding">
+                                    <option value="json">JSON</option>
+                                    <option value="negotiate">Negotiate content</option>
+                                    <option value="string">String (text/plain)</option>
+                                    <option value="no-op">No-op (just proxy)</option>
+                                </select>
+
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="nonRestfulResource"
+                                        checked formControlName="nonRestfulResource">
+                                    <label class="form-check-label" for="nonRestfulResource">
+                                        Allow non-RESTful resource naming &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=nonRestFulInfo></i>
+                                    </label>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="serverSequential"
+                                        formControlName="serverSequential">
+                                    <label class="form-check-label" for="serverSequential">
+                                        Start the server sequentially &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=serverSqntialInfo></i>
+                                    </label>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="enableDebugOptions"
+                                        formControlName="enableDebugOptions">
+                                    <label class="form-check-label" for="enableDebugOptions">
+                                        Enable the /__debug/ endpoint &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=enableOptionsInfo></i>
+                                    </label>
+
+                                </div>
                             </div>
 
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-4">
-                            <label for="backendTimeout" class="form-label">Backend Timeout &nbsp; <i class="bi bi-info-circle" [matTooltip]=backendTimeoutInfo></i></label>
-                            <input type="text" class="input-size form-control" id="backendTimeout"
-                                formControlName="backendTimeout"
-                                [class.is-invalid]="formGroupService.get('backendTimeout')?.invalid && formGroupService.get('backendTimeout')?.touched" />
-                            <div class="invalid-feedback"
-                                *ngIf="formGroupService.get('backendTimeout')?.errors?.['pattern'] && formGroupService.get('backendTimeout')?.touched">
-                                Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
-                            </div>
-                          
                         </div>
-                        <div class="col-sm-12 col-md-4">
-                            <label for="defaultCache" class="form-label">Default Cache TTL &nbsp; <i class="bi bi-info-circle" [matTooltip]=defaultCacheInfo></i> </label>
-                            <input type="text " class="input-size form-control" id="defaultCache" formControlName="defaultCache"
-                                [class.is-invalid]="formGroupService.get('defaultCache')?.invalid && formGroupService.get('defaultCache')?.touched" />
-                            <div class="invalid-feedback"
-                                *ngIf="formGroupService.get('defaultCache')?.errors?.['pattern'] && formGroupService.get('defaultCache')?.touched">
-                                Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
-                            </div>
-        
-                        </div>
-                        <div class="col-sm-12 col-md-4">
-                            <label for="httpReadTimeout" class="form-label">Http Read Timeout &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpReadTimeOutInfo></i> </label>
-                            <input type="text" class="input-size form-control" id="httpReadTimeout"
-                                formControlName="httpReadTimeout"
-                                [class.is-invalid]="formGroupService.get('httpReadTimeout')?.invalid && formGroupService.get('httpReadTimeout')?.touched" />
-                            <div class="invalid-feedback"
-                                *ngIf="formGroupService.get('httpReadTimeout')?.errors?.['pattern'] && formGroupService.get('httpReadTimeout')?.touched">
-                                Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
-                            </div>
-                           
-                        </div>
-                        <div class="col-sm-12 col-md-4">
-                            <label for="httpWriteTimeout" class="form-label">Http Write Timeout &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpWriteTimeoutInfo></i> </label>
-                            <input type="text" class="input-size form-control" id="httpWriteTimeout"
-                                formControlName="httpWriteTimeout"
-                                [class.is-invalid]="formGroupService.get('httpWriteTimeout')?.invalid && formGroupService.get('httpWriteTimeout')?.touched" />
-                            <div class="invalid-feedback"
-                                *ngIf="formGroupService.get('httpWriteTimeout')?.errors?.['pattern'] && formGroupService.get('httpWriteTimeout')?.touched">
-                                Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
-                            </div>
-    
-                        </div>
-                        <div class="col-sm-12 col-md-4">
-                            <label for="httpIdleTimeout" class="form-label">Http Idle Timeout &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpIdleTimeoutInfo></i> </label>
-                            <input type="text" class="input-size form-control" id="httpIdleTimeout"
-                                formControlName="httpIdleTimeout"
-                                [class.is-invalid]="formGroupService.get('httpIdleTimeout')?.invalid && formGroupService.get('httpIdleTimeout')?.touched" />
-                            <div class="invalid-feedback"
-                                *ngIf="formGroupService.get('httpIdleTimeout')?.errors?.['pattern'] && formGroupService.get('httpIdleTimeout')?.touched">
-                                Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
-                            </div>
-                           
-                        </div>
-                        <div class="col-sm-12 col-md-4">
-                            <label for="httpReadHeaderTimeout" class="form-label">Http Read Header Timeout &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpReadHeaderTimeoutInfo></i> </label>
-                            <input type="text" class="input-size form-control" id="httpReadHeaderTimeout"
-                                formControlName="httpReadHeaderTimeout"
-                                [class.is-invalid]="formGroupService.get('httpReadHeaderTimeout')?.invalid && formGroupService.get('httpReadHeaderTimeout')?.touched" />
-                            <div class="invalid-feedback"
-                                *ngIf="formGroupService.get('httpReadHeaderTimeout')?.errors?.['pattern'] && formGroupService.get('httpReadHeaderTimeout')?.touched">
-                                Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
-                            </div>
-                          
-                        </div>
-                    </div>
-                </mat-expansion-panel>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <div class="d-flex justify-content-between toggle-header">
-                                <div>Options</div>
-                            </div>
-
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-4">
-                            <label for="defaultOutputEncoding" class="form-label">Default Output encoding &nbsp; <i class="bi bi-info-circle" [matTooltip]=defaultOutputEncodingInfo></i></label>
-                            <select name="" class="form-select" id="defaultOutputEncoding"
-                                formControlName="defaultOutputEncoding">
-                                <option value="json">JSON</option>
-                                <option value="negotiate">Negotiate content</option>
-                                <option value="string">String (text/plain)</option>
-                                <option value="no-op">No-op (just proxy)</option>
-                            </select>
-                            
-                        </div>
-                        <div class="col-sm-12 col-md-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="nonRestfulResource" checked
-                                    formControlName="nonRestfulResource">
-                                <label class="form-check-label" for="nonRestfulResource">
-                                    Allow non-RESTful resource naming &nbsp; <i class="bi bi-info-circle" [matTooltip]=nonRestFulInfo></i>
-                                </label>
-                        
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="serverSequential"
-                                    formControlName="serverSequential">
-                                <label class="form-check-label" for="serverSequential">
-                                    Start the server sequentially &nbsp; <i class="bi bi-info-circle" [matTooltip]=serverSqntialInfo></i>
-                                </label>
-                               
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="enableDebugOptions"
-                                    formControlName="enableDebugOptions">
-                                <label class="form-check-label" for="enableDebugOptions">
-                                    Enable the /__debug/ endpoint &nbsp; <i class="bi bi-info-circle" [matTooltip]=enableOptionsInfo></i>
-                                </label>
-                           
-                            </div>
-                        </div>
-
-                    </div>
-                </mat-expansion-panel>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <div class="d-flex justify-content-between toggle-header">
-                                <div>JWK Shared Cache &nbsp; <i class="bi bi-info-circle" [matTooltip]=jwkShareInfo></i> </div>
-                                <!-- <div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>JWK Shared Cache &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=jwkShareInfo></i> </div>
+                                    <!-- <div>
                                     <mat-slide-toggle class="example-margin" color="blue" formControlName="isJwkSharedActive" (change)="onToggleChangeJwk()"></mat-slide-toggle>
                                 </div> -->
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input custom-switch" type="checkbox" role="switch" formControlName="isJwkSharedActive" (change)="onToggleChangeJwk()" id="flexSwitchCheckDefault">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input custom-switch" type="checkbox" role="switch"
+                                            formControlName="isJwkSharedActive" (change)="onToggleChangeJwk()"
+                                            id="flexSwitchCheckDefault">
+                                    </div>
                                 </div>
-                            </div>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
 
                         @if (formGroupService.value.isJwkSharedActive) {
                         <!-- <h3 class="main-heading">JWK Shared Cache</h3> -->
                         <div class="col-sm-12 col-md-4">
-                            <label for="sharedCacheDuration" class="form-label">Shared Cache Duration &nbsp; <i class="bi bi-info-circle" [matTooltip]=jwkCacheDurationInfo></i> </label>
+                            <label for="sharedCacheDuration" class="form-label">Shared Cache Duration &nbsp; <i
+                                    class="bi bi-info-circle" [matTooltip]=jwkCacheDurationInfo></i> </label>
                             <input type="text" class="input-size form-control" id="sharedCacheDuration"
                                 formControlName="sharedCacheDuration"
                                 [class.is-invalid]="formGroupService.get('sharedCacheDuration')?.invalid && formGroupService.get('sharedCacheDuration')?.touched" />
-                         
+
                         </div>
                         }
-                </mat-expansion-panel>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <div class="d-flex justify-content-between toggle-header">
-                                <div>Gzip Compression</div>
-                            </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>Gzip Compression</div>
+                                </div>
 
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <div class="row">
-                        <p>Gzip compression is <b>enabled by default.</b> Only on Enterprise edition.</p>
-                        <div class="col-sm-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="gzipCompression"
-                                    formControlName="disablegZip">
-                                <label class="form-check-label" for="gzipCompression">
-                                    Disable Gzip compression even when clients requests it.
-                                </label>
-                            </div>
-                        </div>
-
-                    </div>
-                </mat-expansion-panel>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <div class="d-flex justify-content-between toggle-header">
-                                <div>Enable Https</div>
-                                <!-- <div>
-                                    <mat-slide-toggle formControlName="isEnableHttpsActive"></mat-slide-toggle>
-                                </div> -->
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input custom-switch" type="checkbox" role="switch" formControlName="isEnableHttpsActive" id="flexSwitchCheckDefault">
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="row">
+                            <p>Gzip compression is <b>enabled by default.</b> Only on Enterprise edition.</p>
+                            <div class="col-sm-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="gzipCompression"
+                                        formControlName="disablegZip">
+                                    <label class="form-check-label" for="gzipCompression">
+                                        Disable Gzip compression even when clients requests it.
+                                    </label>
                                 </div>
                             </div>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    @if(!formGroupService.value.isEnableHttpsActive){
+
+                        </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>Enable Https</div>
+                                    <!-- <div>
+                                    <mat-slide-toggle formControlName="isEnableHttpsActive"></mat-slide-toggle>
+                                </div> -->
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input custom-switch" type="checkbox" role="switch"
+                                            formControlName="isEnableHttpsActive" id="flexSwitchCheckDefault">
+                                    </div>
+                                </div>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        @if(!formGroupService.value.isEnableHttpsActive){
                         <p>Mark this option to enable TLS in the listening port.</p>
                         }@else{
                         <div class="col-sm-12 col-md-6">
-                            <label for="publicKey" class="form-label">Public Key &nbsp; <i class="bi bi-info-circle" [matTooltip]=publicKeyInfo></i> </label>
-                            <input type="text" class="input-size form-control" id="publicKey" formControlName="publicKey" />
-                          
+                            <label for="publicKey" class="form-label">Public Key &nbsp; <i class="bi bi-info-circle"
+                                    [matTooltip]=publicKeyInfo></i> </label>
+                            <input type="text" class="input-size form-control" id="publicKey"
+                                formControlName="publicKey" />
+
                         </div>
                         <div class="col-sm-12 col-md-6">
-                            <label for="privateKey" class="form-label">Private Key &nbsp; <i class="bi bi-info-circle" [matTooltip]=privateKeyInfo></i> </label>
-                            <input type="text" class="input-size form-control" id="privateKey" formControlName="privateKey" />
-                            
+                            <label for="privateKey" class="form-label">Private Key &nbsp; <i class="bi bi-info-circle"
+                                    [matTooltip]=privateKeyInfo></i> </label>
+                            <input type="text" class="input-size form-control" id="privateKey"
+                                formControlName="privateKey" />
+
                         </div>
                         }
-                </mat-expansion-panel>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <div class="d-flex justify-content-between toggle-header">
-                                <div>URL Rewrite</div>
-                                <!-- <div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>URL Rewrite</div>
+                                    <!-- <div>
                                     <mat-slide-toggle formControlName="isUrlRewriteActive"></mat-slide-toggle>
                                 </div> -->
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input custom-switch" type="checkbox" role="switch" formControlName="isUrlRewriteActive" id="flexSwitchCheckDefault">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input custom-switch" type="checkbox" role="switch"
+                                            formControlName="isUrlRewriteActive" id="flexSwitchCheckDefault">
+                                    </div>
                                 </div>
-                            </div>
 
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    @if(!formGroupService.value.isUrlRewriteActive){
-                        <p>The url-rewrite plugin allows you to define a set of URLs or regular expressions that are handled by
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        @if(!formGroupService.value.isUrlRewriteActive){
+                        <p>The url-rewrite plugin allows you to define a set of URLs or regular expressions that are
+                            handled by
                             an endpoint of your choice.</p>
                         }@else{
                         <div class="row">
                             <div class="col-sm-12 col-md-2">
-                                <label for="literalMatch" class="form-label">Literal Match &nbsp; <i class="bi bi-info-circle" [matTooltip]=literalMatchInfo></i></label>
+                                <label for="literalMatch" class="form-label">Literal Match &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=literalMatchInfo></i></label>
                                 <input type="text" class="input-size form-control" id="literalMatch"
                                     formControlName="literalMatch" />
-                          
+
                             </div>
                             <div class="col-sm-12 col-md-2">
-                                <label for="literalReplacement" class="form-label">Literal Replacement &nbsp; <i class="bi bi-info-circle" [matTooltip]=literalReplacementInfo></i></label>
+                                <label for="literalReplacement" class="form-label">Literal Replacement &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=literalReplacementInfo></i></label>
                                 <input type="text" class="input-size form-control" id="literalReplacement"
                                     formControlName="literalReplacement" />
-                               
+
                             </div>
                             <div class="col-sm-12 col-md-2">
                                 <!-- <button class="btn btn-outline-primary" (click)="addParameter('literalMatch')">Add</button> -->
-                                <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('literalMatch')"><svg
-                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                </svg></button>
+                                <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                                    type="submit" (click)="addParameter('literalMatch')"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                    </svg></button>
                             </div>
-        
+
                             <div class="col-sm-12 col-md-2">
-                                <label for="regexpMatch" class="form-label">Regexp Match &nbsp; <i class="bi bi-info-circle" [matTooltip]=regExMatchInfo></i></label>
+                                <label for="regexpMatch" class="form-label">Regexp Match &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=regExMatchInfo></i></label>
                                 <input type="text" class="input-size form-control" id="regexpMatch"
                                     formControlName="regexpMatch" />
-                                
+
                             </div>
                             <div class="col-sm-12 col-md-2">
-                                <label for="endpointReplacement" class="form-label">Endpoint Replacement &nbsp; <i class="bi bi-info-circle" [matTooltip]=endpointReplaceInfo></i></label>
+                                <label for="endpointReplacement" class="form-label">Endpoint Replacement &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=endpointReplaceInfo></i></label>
                                 <input type="text" class="input-size form-control" id="endpointReplacement"
                                     formControlName="endpointReplacement" />
-                              
+
                             </div>
                             <div class="col-sm-12 col-md-2">
                                 <!-- <button class="btn btn-outline-primary" (click)="addParameter('regExpMatch')">Add</button> -->
-                                <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('regExpMatch')"><svg
-                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-plus-lg" viewBox="0 0 16 16">addParameter('regExpMatch')
-                                    <path fill-rule="evenodd"
-                                        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                </svg></button>
+                                <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                                    type="submit" (click)="addParameter('regExpMatch')"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-plus-lg" viewBox="0 0 16 16">addParameter('regExpMatch')
+                                        <path fill-rule="evenodd"
+                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                    </svg></button>
                             </div>
-        
+
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-6 mt-3 d-flex">
@@ -443,52 +486,56 @@
                             </div>
                             <div class="col-sm-12 col-md-6 mt-3 d-flex">
                                 <button *ngFor="let attr of regExpObjectMap | keyvalue" class="parameter-item">
-                                    {{ attr.key }} -> {{attr.value}}<mat-icon (click)="removeParameter(attr.key ,'regExpMatch')"
+                                    {{ attr.key }} -> {{attr.value}}<mat-icon
+                                        (click)="removeParameter(attr.key ,'regExpMatch')"
                                         class="d-flex align-items-center justify-content-end">close</mat-icon>
                                 </button>
                             </div>
                         </div>
                         }
-                </mat-expansion-panel>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <div class="d-flex justify-content-between toggle-header">
-                                <div>Virtualhost</div>
-                                <!-- <div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>Virtualhost</div>
+                                    <!-- <div>
                                     <mat-slide-toggle formControlName="isVirtualHostActive"></mat-slide-toggle>
                                 </div> -->
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input custom-switch" type="checkbox" role="switch" formControlName="isVirtualHostActive" id="flexSwitchCheckDefault">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input custom-switch" type="checkbox" role="switch"
+                                            formControlName="isVirtualHostActive" id="flexSwitchCheckDefault">
+                                    </div>
                                 </div>
-                            </div>
 
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    @if(!formGroupService.value.isVirtualHostActive){
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        @if(!formGroupService.value.isVirtualHostActive){
                         <p>Run different configurations of KrakenD endpoints based on the host accessing the server.</p>
                         }@else{
                         <div class="col-sm-12 col-md-6">
-                            <label for="virtualHost" class="form-label">Hosts &nbsp; <i class="bi bi-info-circle" [matTooltip]=hostsInfo></i> </label>
+                            <label for="virtualHost" class="form-label">Hosts &nbsp; <i class="bi bi-info-circle"
+                                    [matTooltip]=hostsInfo></i> </label>
                             <!-- <input type="text" class="input-size form-control" id="name" formControlName="host"/> -->
                             <div class="d-flex gap-2">
                                 <input type="text" class="form-control" id="virtualHost" formControlName="virtualHost">
                                 <!-- <button type="button" class="btn btn-outline-primary"
                                     (click)="addParameter('virtualHost')">Add</button> -->
-                                    <!-- <button class="btn btn-primary" type="button" id="button-addon2"
+                                <!-- <button class="btn btn-primary" type="button" id="button-addon2"
                                     (click)="addParameter('virtualHost')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                         height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd"
                                             d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                     </svg></button> -->
-                                    <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;" type="submit" (click)="addParameter('virtualHost')"><svg
+                                <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                                    type="submit" (click)="addParameter('virtualHost')"><svg
                                         xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-plus-lg" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd"
                                             d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                     </svg></button>
                             </div>
-                          
+
                             <div class="mt-3 d-flex">
                                 <button *ngFor="let host of virtualHostArray; let i = index" class="parameter-item">
                                     {{ host }}<mat-icon (click)="removeParameter(i,'virtualHost')"
@@ -497,173 +544,215 @@
                             </div>
                         </div>
                         }
-                </mat-expansion-panel>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <div class="d-flex justify-content-between toggle-header">
-                                <div>GeoIp</div>
-                                <!-- <div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>GeoIp</div>
+                                    <!-- <div>
                                     <mat-slide-toggle formControlName="isGeoIpActive"></mat-slide-toggle>
                                 </div> -->
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input custom-switch" type="checkbox" role="switch" formControlName="isGeoIpActive" id="flexSwitchCheckDefault">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input custom-switch" type="checkbox" role="switch"
+                                            formControlName="isGeoIpActive" id="flexSwitchCheckDefault">
+                                    </div>
                                 </div>
-                            </div>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    @if(!formGroupService.value.isGeoIpActive){
-                        <p>Load Maxmind's GeoIP2 City database (commercial and free versions) and enrich all KrakenD calls to
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        @if(!formGroupService.value.isGeoIpActive){
+                        <p>Load Maxmind's GeoIP2 City database (commercial and free versions) and enrich all KrakenD
+                            calls to
                             your backends with geographical data.</p>
                         }@else{
                         <div class="col-sm-12 col-md-6">
-                            <label for="databasePath" class="form-label">Database Path &nbsp; <i class="bi bi-info-circle" [matTooltip]=databasePathInfo></i></label>
+                            <label for="databasePath" class="form-label">Database Path &nbsp; <i
+                                    class="bi bi-info-circle" [matTooltip]=databasePathInfo></i></label>
                             <input type="text" class="input-size form-control" id="databasePath"
                                 formControlName="databasePath" />
-                           
-        
+
+
                         </div>
                         }
-                </mat-expansion-panel>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <div class="d-flex justify-content-between toggle-header">
-                                <div>Static server</div>
-                                <!-- <div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>Static server</div>
+                                    <!-- <div>
                                     <mat-slide-toggle formControlName="isStaticServerActive"></mat-slide-toggle>
                                 </div> -->
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input custom-switch" type="checkbox" role="switch" formControlName="isStaticServerActive" id="flexSwitchCheckDefault">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input custom-switch" type="checkbox" role="switch"
+                                            formControlName="isStaticServerActive" id="flexSwitchCheckDefault">
+                                    </div>
                                 </div>
-                            </div>
 
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    @if(!formGroupService.value.isStaticServerActive){
-                        <p>It works similarly to a regular web server; it loads content from the disk and presents it to the
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        @if(!formGroupService.value.isStaticServerActive){
+                        <p>It works similarly to a regular web server; it loads content from the disk and presents it to
+                            the
                             users for a given path.</p>
                         }@else{
                         <div class="col-sm-12 col-md-4">
-                            <label for="staticServerPath" class="form-label">Path &nbsp; <i class="bi bi-info-circle" [matTooltip]=pathInfo></i></label>
+                            <label for="staticServerPath" class="form-label">Path &nbsp; <i class="bi bi-info-circle"
+                                    [matTooltip]=pathInfo></i></label>
                             <input type="text" class="input-size form-control" id="staticServerPath"
                                 formControlName="staticServerPath" />
-                          
-        
+
+
                         </div>
                         <div class="col-sm-12 col-md-4">
-                            <label for="staticServerPrefix" class="form-label">Prefix &nbsp; <i class="bi bi-info-circle" [matTooltip]=prefixInfo></i></label>
+                            <label for="staticServerPrefix" class="form-label">Prefix &nbsp; <i
+                                    class="bi bi-info-circle" [matTooltip]=prefixInfo></i></label>
                             <input type="text" class="input-size form-control" id="staticServerPrefix"
                                 formControlName="staticServerPrefix" />
-                            
-        
+
+
                         </div>
                         <div class="col-sm-12 col-md-4">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="directoryList"
                                     formControlName="directoryList">
                                 <label class="form-check-label" for="directoryList">
-                                    Directory Listing &nbsp; <i class="bi bi-info-circle" [matTooltip]=directoryListInfo></i>
+                                    Directory Listing &nbsp; <i class="bi bi-info-circle"
+                                        [matTooltip]=directoryListInfo></i>
                                 </label>
-                               
+
                             </div>
                         </div>
-                        }
-                </mat-expansion-panel>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <div class="d-flex justify-content-between toggle-header">
-                                <div>
-                                    Rate Limiting
-                                </div>
-                                <!-- <div>
-                                    <mat-slide-toggle formControlName="isRateLimitingActive" (change)="onToggleChangeRateLimit()"></mat-slide-toggle>
-                                </div> -->
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input custom-switch" type="checkbox" role="switch" formControlName="isRateLimitingActive" (change)="onToggleChangeRateLimit()" id="flexSwitchCheckDefault">
-                                </div>
+                        <div class="col-sm-12 col-md-4">
+                            <label for="staticServerSkip" class="form-label">Skip &nbsp; <i class="bi bi-info-circle"
+                                    [matTooltip]=SkipInfo></i> </label>
+                            <div class="d-flex gap-2">
+                                <input type="text" class="form-control" id="staticServerSkip"
+                                    formControlName="staticServerSkip">
+                                <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                                    type="submit" (click)="addParameter('staticServerSkip')"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                    </svg></button>
+                            </div>
+                            <div class="mt-3 d-flex">
+                                <button *ngFor="let host of staticServerSkipArray; let i = index"
+                                    class="parameter-item">
+                                    {{ host }}<mat-icon (click)="removeParameter(i,'staticServerSkip')"
+                                        class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                </button>
                             </div>
 
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    @if(!formGroupService.value.isRateLimitingActive){
+                        </div>
+
+                        }
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>
+                                        Rate Limiting
+                                    </div>
+                                    <!-- <div>
+                                    <mat-slide-toggle formControlName="isRateLimitingActive" (change)="onToggleChangeRateLimit()"></mat-slide-toggle>
+                                </div> -->
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input custom-switch" type="checkbox" role="switch"
+                                            formControlName="isRateLimitingActive" (change)="onToggleChangeRateLimit()"
+                                            id="flexSwitchCheckDefault">
+                                    </div>
+                                </div>
+
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        @if(!formGroupService.value.isRateLimitingActive){
                         <p>Puts a limit on the maximum number of requests users can do globally to the service.</p>
                         }@else{
                         <div class="col-sm-12 col-md-4">
-                            <label for="rateLimit" class="form-label">Rate Limit &nbsp; <i class="bi bi-info-circle" [matTooltip]=rateLimitInfo></i></label>
-                            <input type="number" class="input-size form-control" id="rateLimit" formControlName="rateLimit"
+                            <label for="rateLimit" class="form-label">Rate Limit &nbsp; <i class="bi bi-info-circle"
+                                    [matTooltip]=rateLimitInfo></i></label>
+                            <input type="number" class="input-size form-control" id="rateLimit"
+                                formControlName="rateLimit"
                                 [class.is-invalid]="formGroupService.get('rateLimit')?.invalid && formGroupService.get('rateLimit')?.touched" />
-                            
+
                         </div>
                         <div class="col-sm-12 col-md-4">
-                            <label for="every" class="form-label">Every &nbsp; <i class="bi bi-info-circle" [matTooltip]=everyInfo></i></label>
+                            <label for="every" class="form-label">Every &nbsp; <i class="bi bi-info-circle"
+                                    [matTooltip]=everyInfo></i></label>
                             <input type="text" class="input-size form-control" id="every" formControlName="every" />
-                            
+
                         </div>
                         <div class="col-sm-12 col-md-4">
-                            <label for="capacity" class="form-label">Capacity &nbsp; <i class="bi bi-info-circle" [matTooltip]=capacityInfo></i></label>
-                            <input type="number" class="input-size form-control" id="capacity" formControlName="capacity"
+                            <label for="capacity" class="form-label">Capacity &nbsp; <i class="bi bi-info-circle"
+                                    [matTooltip]=capacityInfo></i></label>
+                            <input type="number" class="input-size form-control" id="capacity"
+                                formControlName="capacity"
                                 [class.is-invalid]="formGroupService.get('capacity')?.invalid && formGroupService.get('capacity')?.touched" />
-                          
+
                         </div>
                         <div class="col-sm-12 col-md-4">
-                            <label for="defaultUserQuota" class="form-label">Default user quota &nbsp; <i class="bi bi-info-circle" [matTooltip]=defaultUserQuotaInfo></i></label>
+                            <label for="defaultUserQuota" class="form-label">Default user quota &nbsp; <i
+                                    class="bi bi-info-circle" [matTooltip]=defaultUserQuotaInfo></i></label>
                             <input type="number" class="input-size form-control" id="defaultUserQuota"
                                 formControlName="defaultUserQuota"
                                 [class.is-invalid]="formGroupService.get('defaultUserQuota')?.invalid && formGroupService.get('defaultUserQuota')?.touched" />
-                         
+
                         </div>
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-sm-12 col-md-8">
                             <label for="uniqueIdentifier" class="form-label">A Unique user identified by</label>
-                            <div><mat-radio-group aria-label="Select an option" formControlName="uniqueStrategy">
-                                    <!-- <mat-radio-button value="ip">Its Originating Ip</mat-radio-button>
-                                    <mat-radio-button value="header">A header</mat-radio-button> -->
-                                </mat-radio-group>
+                            <div class="d-flex">
+                                <div >
+                                    <mat-radio-group aria-label="Select an option"
+                                        formControlName="uniqueStrategy">
+                                        <mat-radio-button value="ip">Its Originating Ip</mat-radio-button>
+                                        <mat-radio-button value="header">A header</mat-radio-button>                                        
+                                    </mat-radio-group>
+                                </div>
+                                <div>
+                                    @if(this.formGroupService.get('uniqueStrategy')?.value === 'header'){
+                                        <div class="forFlex">
+                                            <input type="text" class="form-control " formControlName="headerValue" />
+                                        </div>
+                                        }
+                                </div>
                             </div>
-                            @if(this.formGroupService.get('uniqueStrategy')?.value === 'header'){
-                            <div>
-                                <input type="text" class="form-control" formControlName="headerValue" />
-                            </div>
-                            }
-        
+                            
                         </div>
                         <div class="col-sm-12 col-md-4">
-                            <label for="clientCapacity" class="form-label">Client Capacity &nbsp; <i class="bi bi-info-circle" [matTooltip]=clientCapacityInfo></i></label>
+                            <label for="clientCapacity" class="form-label">Client Capacity &nbsp; <i
+                                    class="bi bi-info-circle" [matTooltip]=clientCapacityInfo></i></label>
                             <input type="number" class="input-size form-control" id="clientCapacity"
                                 formControlName="clientCapacity"
                                 [class.is-invalid]="formGroupService.get('clientCapacity')?.invalid && formGroupService.get('clientCapacity')?.touched" />
-                          
+
                         </div>
                         }
-                </mat-expansion-panel>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <div class="d-flex justify-content-between toggle-header">
-                                <div>
-                                    HTTP Client settings (Advanced)
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>
+                                        HTTP Client settings (Advanced)
+                                    </div>
                                 </div>
-                                <!-- <div>
-                                    <mat-slide-toggle formControlName="isHttpClientSetAdv"></mat-slide-toggle>
-                                </div> -->
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input custom-switch" type="checkbox" role="switch" formControlName="isHttpClientSetAdv" id="flexSwitchCheckDefault">
-                                </div>
-                            </div>
 
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    @if(!formGroupService.value.isHttpClientSetAdv){
-                        <!-- <p>Puts a limit on the maximum number of requests users can do globally to the service.</p> -->
-                        }@else{
-                        <p>These are specific settings to deal with the HTTP client used to query your backends. You usually
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                      
+                        <p>These are specific settings to deal with the HTTP client used to query your backends. You
+                            usually
                             don't need to set any of these values</p>
                         <h3>Timeouts</h3>
                         <div class="col-sm-12 d-flex gap-3 mb-3">
-        
+
                             <div class="col-sm-12 col-md-4">
-                                <label for="httpClientSetAdvConnTimeout" class="form-label">IDLE Connection Timeout &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpClientSetAdvConnTimeoutInfo></i> </label>
+                                <label for="httpClientSetAdvConnTimeout" class="form-label">IDLE Connection Timeout
+                                    &nbsp; <i class="bi bi-info-circle"
+                                        [matTooltip]=httpClientSetAdvConnTimeoutInfo></i> </label>
                                 <input type="text" class="input-size form-control" id="httpClientSetAdvConnTimeout"
                                     formControlName="httpClientSetAdvConnTimeoutForm"
                                     [class.is-invalid]="formGroupService.get('httpClientSetAdvConnTimeoutForm')?.invalid && formGroupService.get('httpClientSetAdvConnTimeoutForm')?.touched">
@@ -674,9 +763,11 @@
                                 <div class="form-text">
                                 </div>
                             </div>
-        
+
                             <div class="col-sm-12 col-md-4">
-                                <label for="httpClientSetAdvHeaderTimeout" class="form-label">Response Header Timeout &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpClientSetAdvHeaderTimeoutInfo></i> </label>
+                                <label for="httpClientSetAdvHeaderTimeout" class="form-label">Response Header Timeout
+                                    &nbsp; <i class="bi bi-info-circle"
+                                        [matTooltip]=httpClientSetAdvHeaderTimeoutInfo></i> </label>
                                 <input type="text" class="input-size form-control" id="httpClientSetAdvHeaderTimeout"
                                     formControlName="httpClientSetAdvHeaderTimeoutForm"
                                     [class.is-invalid]="formGroupService.get('httpClientSetAdvHeaderTimeoutForm')?.invalid && formGroupService.get('httpClientSetAdvHeaderTimeoutForm')?.touched" />
@@ -684,10 +775,12 @@
                                     *ngIf="formGroupService.get('httpClientSetAdvHeaderTimeoutForm')?.errors?.['pattern'] && formGroupService.get('httpClientSetAdvHeaderTimeoutForm')?.touched">
                                     Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
                                 </div>
-                                
+
                             </div>
                             <div class="col-sm-12 col-md-4">
-                                <label for="httpClientSetAdvContinueTimeout" class="form-label">Expect Continue Timeout &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpClientSetAdvContinueTimeoutInfo></i> </label>
+                                <label for="httpClientSetAdvContinueTimeout" class="form-label">Expect Continue Timeout
+                                    &nbsp; <i class="bi bi-info-circle"
+                                        [matTooltip]=httpClientSetAdvContinueTimeoutInfo></i> </label>
                                 <input type="text" class="input-size form-control" id="httpClientSetAdvContinueTimeout"
                                     formControlName="httpClientSetAdvContinueTimeoutForm"
                                     [class.is-invalid]="formGroupService.get('httpClientSetAdvContinueTimeoutForm')?.invalid && formGroupService.get('httpClientSetAdvContinueTimeoutForm')?.touched" />
@@ -695,63 +788,76 @@
                                     *ngIf="formGroupService.get('httpClientSetAdvContinueTimeoutForm')?.errors?.['pattern'] && formGroupService.get('httpClientSetAdvContinueTimeoutForm')?.touched">
                                     Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
                                 </div>
-                               
+
                             </div>
                         </div>
-        
+
                         <hr>
                         <h3>Connections</h3>
                         <div class="col-sm-12 d-flex gap-3 mb-3">
                             <div class="col">
                                 <!-- Column 1 content -->
-                                <label for="httpClientSetAdvMaxIdleConn" class="form-label">Maximum IDLE connections &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpClientSetAdvMaxIdleConnInfo></i> </label>
+                                <label for="httpClientSetAdvMaxIdleConn" class="form-label">Maximum IDLE connections
+                                    &nbsp; <i class="bi bi-info-circle"
+                                        [matTooltip]=httpClientSetAdvMaxIdleConnInfo></i> </label>
                                 <input type="text" class="input-size form-control" id="httpClientSetAdvMaxIdleConn"
                                     formControlName="httpClientSetAdvMaxIdleConnForm">
-                          
+
                             </div>
                             <div class="col">
                                 <!-- Column 2 content -->
-                                <label for="httpClientSetAdvMaxIdleConnPerHost" class="form-label">Maximum IDLE connections per
-                                    host &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpClientSetAdvMaxIdleConnPerHostInfo></i> </label>
-                                <input type="text" class="input-size form-control" id="httpClientSetAdvMaxIdleConnPerHost"
+                                <label for="httpClientSetAdvMaxIdleConnPerHost" class="form-label">Maximum IDLE
+                                    connections per
+                                    host &nbsp; <i class="bi bi-info-circle"
+                                        [matTooltip]=httpClientSetAdvMaxIdleConnPerHostInfo></i> </label>
+                                <input type="text" class="input-size form-control"
+                                    id="httpClientSetAdvMaxIdleConnPerHost"
                                     formControlName="httpClientSetAdvMaxIdleConnPerHostForm">
-                   
+
                             </div>
                             <div class="col">
                                 <!-- Column 3 content -->
-                                <input class="form-check-input" type="checkbox" value="" id="httpClientSetAdvAllowInsecureConns"
-                                    checked formControlName="httpClientSetAdvAllowInsecureConnsForm">&nbsp;
+                                <input class="form-check-input" type="checkbox" value=""
+                                    id="httpClientSetAdvAllowInsecureConns" checked
+                                    formControlName="httpClientSetAdvAllowInsecureConnsForm">&nbsp;
                                 <label class="form-check-label" for="httpClientSetAdvAllowInsecureConns">
-                                    Allow insecure connections &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpClientSetAdvAllowInsecureConnsInfo></i> 
+                                    Allow insecure connections &nbsp; <i class="bi bi-info-circle"
+                                        [matTooltip]=httpClientSetAdvAllowInsecureConnsInfo></i>
                                 </label>
-                            
+
                             </div>
                             <div class="col">
                                 <!-- Column 4 content -->
-                                <input class="form-check-input" type="checkbox" value="" id="httpClientSetAdvDisableKeepAlives"
-                                    checked formControlName="httpClientSetAdvDisableKeepAlivesForm">&nbsp;
+                                <input class="form-check-input" type="checkbox" value=""
+                                    id="httpClientSetAdvDisableKeepAlives" checked
+                                    formControlName="httpClientSetAdvDisableKeepAlivesForm">&nbsp;
                                 <label class="form-check-label" for="httpClientSetAdvDisableKeepAlives">
-                                    Disable Keep-Alives &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpClientSetAdvDisableKeepAlivesInfo></i> 
+                                    Disable Keep-Alives &nbsp; <i class="bi bi-info-circle"
+                                        [matTooltip]=httpClientSetAdvDisableKeepAlivesInfo></i>
                                 </label>
-                              
+
                             </div>
                             <div class="col">
                                 <!-- Column 5 content -->
-                                <input class="form-check-input" type="checkbox" value="" id="httpClientSetAdvDisableCompression"
-                                    checked formControlName="httpClientSetAdvDisableCompressionForm">&nbsp;
+                                <input class="form-check-input" type="checkbox" value=""
+                                    id="httpClientSetAdvDisableCompression" checked
+                                    formControlName="httpClientSetAdvDisableCompressionForm">&nbsp;
                                 <label class="form-check-label" for="httpClientSetAdvDisableCompression">
-                                    Disable Compression &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpClientSetAdvDisableCompressionInfo></i> 
+                                    Disable Compression &nbsp; <i class="bi bi-info-circle"
+                                        [matTooltip]=httpClientSetAdvDisableCompressionInfo></i>
                                 </label>
-                                
+
                             </div>
                         </div>
-        
+
                         <hr>
                         <h3>Dial settings</h3>
                         <div class="col-sm-12 d-flex gap-3 mb-3">
-        
+
                             <div class="col-sm-12 col-md-4">
-                                <label for="httpClientSetAdvDialerTimeout" class="form-label">Dialer Timeout &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpClientSetAdvDialerTimeoutInfo></i> </label>
+                                <label for="httpClientSetAdvDialerTimeout" class="form-label">Dialer Timeout &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=httpClientSetAdvDialerTimeoutInfo></i>
+                                </label>
                                 <input type="text" class="input-size form-control" id="httpClientSetAdvDialerTimeout"
                                     formControlName="httpClientSetAdvDialerTimeoutForm" placeholder="0s"
                                     [class.is-invalid]="formGroupService.get('httpClientSetAdvDialerTimeoutForm')?.invalid && formGroupService.get('httpClientSetAdvDialerTimeoutForm')?.touched">
@@ -762,20 +868,25 @@
                                 <div class="form-text">
                                 </div>
                             </div>
-        
+
                             <div class="col-sm-12 col-md-4">
-                                <label for="httpClientSetAdvDialerFallerDelay" class="form-label">Dialer Fallback Delay &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpClientSetAdvDialerFallerDelayInfo></i> </label>
-                                <input type="text" class="input-size form-control" id="httpClientSetAdvDialerFallerDelay"
+                                <label for="httpClientSetAdvDialerFallerDelay" class="form-label">Dialer Fallback Delay
+                                    &nbsp; <i class="bi bi-info-circle"
+                                        [matTooltip]=httpClientSetAdvDialerFallerDelayInfo></i> </label>
+                                <input type="text" class="input-size form-control"
+                                    id="httpClientSetAdvDialerFallerDelay"
                                     formControlName="httpClientSetAdvDialerFallerDelayForm" placeholder="0s"
                                     [class.is-invalid]="formGroupService.get('httpClientSetAdvDialerFallerDelayForm')?.invalid && formGroupService.get('httpClientSetAdvDialerFallerDelayForm')?.touched" />
                                 <div class="invalid-feedback"
                                     *ngIf="formGroupService.get('httpClientSetAdvDialerFallerDelayForm')?.errors?.['pattern'] && formGroupService.get('httpClientSetAdvDialerFallerDelayForm')?.touched">
                                     Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
                                 </div>
-                                
+
                             </div>
                             <div class="col-sm-12 col-md-4">
-                                <label for="httpClientSetAdvDialerKeepAlive" class="form-label">Dialer Keep-Alive &nbsp; <i class="bi bi-info-circle" [matTooltip]=httpClientSetAdvDialerKeepAliveInfo></i> </label>
+                                <label for="httpClientSetAdvDialerKeepAlive" class="form-label">Dialer Keep-Alive &nbsp;
+                                    <i class="bi bi-info-circle" [matTooltip]=httpClientSetAdvDialerKeepAliveInfo></i>
+                                </label>
                                 <input type="text" class="input-size form-control" id="httpClientSetAdvDialerKeepAlive"
                                     formControlName="httpClientSetAdvDialerKeepAliveForm" placeholder="0s"
                                     [class.is-invalid]="formGroupService.get('httpClientSetAdvDialerKeepAliveForm')?.invalid && formGroupService.get('httpClientSetAdvDialerKeepAliveForm')?.touched" />
@@ -783,22 +894,22 @@
                                     *ngIf="formGroupService.get('httpClientSetAdvDialerKeepAliveForm')?.errors?.['pattern'] && formGroupService.get('httpClientSetAdvDialerKeepAliveForm')?.touched">
                                     Please enter a valid cache TTL (e.g., `10ms`, `5s`, `1h`).
                                 </div>
-                                
+
                             </div>
                         </div>
-                        }
-                </mat-expansion-panel>
-            </mat-accordion>
+                        
+                    </mat-expansion-panel>
+                </mat-accordion>
 
 
-            
-        
-           
-            <div class="col-sm-12 mt-3">
-                <!-- <button mat-raised-button (click)="submitForm()">Submit</button> -->
-                <button class="btn btn-primary" (click)="submit()">Save</button>
+
+
+
+                <div class="col-sm-12 mt-3">
+                    <!-- <button mat-raised-button (click)="submitForm()">Submit</button> -->
+                    <button class="btn btn-primary" (click)="submit()">Save</button>
+                </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
 </div>

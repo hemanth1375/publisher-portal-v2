@@ -26,4 +26,5 @@ export const urls={
     deleteBackend:host+"/krakend/endpoint/backend/deletedBackend",
     addOrUPdateHttpSecurity :host + "/krakend/extraconfig/httpSecurity/addOrUpdateHttpSecurity",
     
+    addOrUpdateServiceSetting: host + "/krakend/extraconfig/serviceSetting/addOrUpdateServiceSetting"
 }

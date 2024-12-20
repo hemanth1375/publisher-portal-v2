@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EndpointService } from '../services/endpoint.service';
+import { ActivatedRoute } from '@angular/router';
+import { GatewayService } from '../services/gateway.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-gateway-service-settings',
@@ -56,19 +59,21 @@ export class GatewayServiceSettingsComponent {
   httpClientSetAdvContinueTimeoutInfo = "Time to wait for a server's first response headers after fully writing the request headers if the request has an 'Expect: 100-continue' header. Zero means no timeout"
   httpClientSetAdvHeaderTimeoutInfo = "Time to wait for a server's response headers after fully writing the request. This time does not include the time to read the response body."
   httpClientSetAdvConnTimeoutInfo = "Maximum amount of time an idle (keep-alive) connection will remain idle before closing itself. Zero means no limit"
-  
+  SkipInfo = "An array with all the prefix URLs that despite they could match with the prefix, you don’t want to treat them as static content and pass them to the router."
 
 
   formGroupService: FormGroup;
   objectMap: Map<string, string> = new Map();
   regExpObjectMap: Map<string, string> = new Map();
   endPointData:any;
+  gatewayServiceSettingsId: any;
+  gatewayServiceSettingsData: any;
 
   @Input() formData: any;
   @Output() serviceSettingsFormSubmitted = new EventEmitter<any>();
 
 
-  constructor(private formBuilder: FormBuilder, private endpointService:EndpointService) {
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private getwayService:GatewayService, private toastService: ToastService) {
     this.formGroupService = this.formBuilder.group({
       isgRPCActive: [false], 
       isEnableHttpsActive: [false],
@@ -85,8 +90,12 @@ export class GatewayServiceSettingsComponent {
       hostArrayValue: [[]],
       directory: [],
       directoryArrayValue: [[]],
+      enableDebug: [false],
+      enableEcho: [false],
       virtualHost: [],
       virtualHostArrayValue: [[]],
+      staticServerSkip: [],
+      staticServerSkipArrayValue: [[]],
       backendTimeout: ['', Validators.pattern("^[0-9]+(ns|ms|us|µs|s|m|h)$")],
       defaultCache: ['', Validators.pattern("^[0-9]+(ns|ms|us|µs|s|m|h)$")],
       disablegZip: [true],
@@ -110,7 +119,7 @@ export class GatewayServiceSettingsComponent {
       staticServerPrefix: [null],
       directoryList: [true],
       rateLimit: [null],
-      every: [null],
+      every: ['', Validators.pattern("^[0-9]+(ns|ms|us|µs|s|m|h)$")],
       capacity: [null],
       defaultUserQuota: [null],
       clientCapacity: [null],
@@ -202,6 +211,7 @@ export class GatewayServiceSettingsComponent {
   hostArray: any = [];
   directoryArray: any = [];
   virtualHostArray: any = [];
+  staticServerSkipArray: any = [];
 
   updateMapControl() {
     // Convert Map to array of key-value pairs
@@ -236,7 +246,7 @@ export class GatewayServiceSettingsComponent {
     this.updateMapControlRegExp();  // Sync form control with updated Map
   }
 
-  addParameter(fieldName: 'host' | 'directory' | 'virtualHost' | 'literalMatch' | 'regExpMatch') {
+  addParameter(fieldName: 'host' | 'directory' | 'virtualHost' | 'literalMatch' | 'regExpMatch' | 'staticServerSkip') {
     const fieldValue = this.formGroupService.get(fieldName)?.value;
 
     if (fieldName) {
@@ -264,6 +274,9 @@ export class GatewayServiceSettingsComponent {
         if (originalObject && renamedObject) {
           this.addToMapRegExp(originalObject, renamedObject)
         }
+      }else if (fieldName === 'staticServerSkip') {
+        this.staticServerSkipArray.push(fieldValue);
+        this.formGroupService.get('staticServerSkipArrayValue')?.setValue([...this.staticServerSkipArray]);
       }
       this.formGroupService.get('literalMatch')?.reset();
       this.formGroupService.get('literalReplacement')?.reset();
@@ -273,7 +286,7 @@ export class GatewayServiceSettingsComponent {
     }
   }
 
-  removeParameter(index: any, fieldName: 'host' | 'directory' | 'virtualHost' | 'literalMatch' | 'regExpMatch') {
+  removeParameter(index: any, fieldName: 'host' | 'directory' | 'virtualHost' | 'literalMatch' | 'regExpMatch' | 'staticServerSkip') {
     if (fieldName === "host") {
       this.hostArray.splice(index, 1);
       this.formGroupService.get('hostArrayValue')?.setValue([...this.hostArray]);
@@ -289,109 +302,131 @@ export class GatewayServiceSettingsComponent {
       this.removeFromMap(index);
     } else if (fieldName === 'regExpMatch') {
       this.removeFromMapRegExp(index);
-    }
+    }else if (fieldName === 'staticServerSkip') {
+      this.staticServerSkipArray.splice(index, 1);
+      this.formGroupService.get('staticServerSkipArrayValue')?.setValue([...this.staticServerSkipArray]);
+    } 
 
   }
 
   apiData: any;
   entireJsondata: any;
+  directory: any[] = [];
+  virtualHost : any[] = [];
+  staticServerSkip : any[] = [];
+  host: any[] = [];
+
+
   ngOnInit() {
 
-    this.formGroupService.get('uniqueStrategy')?.valueChanges.subscribe((value) => {
-      if (value === 'ip') {
-        this.formGroupService.get('headerValue')?.reset();
-      }
+    this.route.parent?.paramMap.subscribe(params => {
+      this.gatewayServiceSettingsId = params.get('id');
+      console.log('Parent ID:', this.gatewayServiceSettingsId);
     });
-    // this.sharedService.getEntireJsonData$().subscribe((data:any) => {
-    //   this.entireJsondata = data;
 
-    // })
-    console.log(this.entireJsondata);
-    console.log(this.entireJsondata?.extra_config?.["server/static-filesystem"]?.prefix);
-    if (this.entireJsondata != undefined) {
-      this.hostArray = this.entireJsondata?.host ?? [];
-      this.directoryArray=this.entireJsondata?.extra_config?.grpc?.catalog ?? [];
+    this.getwayService.getGtwyServiceSettings(this.gatewayServiceSettingsId).subscribe({
+      next:(res)=>{
+        console.log(res);
+        this.gatewayServiceSettingsData = res;
+
+        if(this.gatewayServiceSettingsData){
+          this.directoryArray = this.gatewayServiceSettingsData?.extra_config?.grpc?.catalog ?? [];
+          this.virtualHostArray = this.gatewayServiceSettingsData?.extra_config?.["server/virtualhost"]?.hosts ?? [];
+          this.staticServerSkipArray = this.gatewayServiceSettingsData?.extra_config?.["server/static-filesystem"]?.skip ?? [];
+          // this.host = this.gatewayServiceSettingsData?.endpoints?.backend?.host ?? [];
+        }
+        this.formGroupService.patchValue({
+          isgRPCActive  : !! this.gatewayServiceSettingsData?.extra_config?.grpc,
+          isJwkSharedActive  : !! this.gatewayServiceSettingsData?.extra_config?.["auth/validator"],
+          isEnableHttpsActive : !! this.gatewayServiceSettingsData?.tls,
+          isUrlRewriteActive : !! this.gatewayServiceSettingsData?.extra_config?.["plugin/http-server"]?.name?.includes("url-rewrite"),
+          isVirtualHostActive : !! this.gatewayServiceSettingsData?.extra_config?.["server/virtualhost"],
+          isGeoIpActive : !! this.gatewayServiceSettingsData?.extra_config?.["plugin/http-server"]?.name?.includes("geoip"),
+          isStaticServerActive : !! this.gatewayServiceSettingsData?.extra_config?.["server/static-filesystem"],
+          isRateLimitingActive: !!this.gatewayServiceSettingsData?.extra_config?.["qos/ratelimit/service"],
+          name : this.gatewayServiceSettingsData?.name,
+          port : this.gatewayServiceSettingsData?.port,
+          enableDebug : this.gatewayServiceSettingsData?.debug_endpoint,
+          enableEcho : this.gatewayServiceSettingsData?.echo_endpoint,
+          backendTimeout : this.gatewayServiceSettingsData?.timeout,
+          defaultCache : this.gatewayServiceSettingsData?.cache_ttl,
+          httpReadTimeout : this.gatewayServiceSettingsData?.read_timeout,
+          httpWriteTimeout : this.gatewayServiceSettingsData?.write_timeout,
+          httpIdleTimeout : this.gatewayServiceSettingsData?.idle_timeout,
+          httpReadHeaderTimeout : this.gatewayServiceSettingsData?.read_header_timeout,
+          defaultOutputEncoding : this.gatewayServiceSettingsData?.output_encoding,
+          nonRestfulResource : this.gatewayServiceSettingsData?.disable_rest,
+          serverSequential : this.gatewayServiceSettingsData?.sequential_start,
+          enableDebugOptions : this.gatewayServiceSettingsData?.debug_endpoint,
+          sharedCacheDuration : this.gatewayServiceSettingsData?.extra_config?.["auth/validator"]?.shared_cache_duration,
+          disablegZip : this.gatewayServiceSettingsData?.extra_config?.router?.disable_gzip,
+          publicKey : this.gatewayServiceSettingsData?.tls?.public_key,
+          privateKey : this.gatewayServiceSettingsData?.tls?.private_key,
+
+          // literalMatch : this.gatewayServiceSettingsData?.extra_config?.["plugin/http-server"]?.["url-rewrite"],
+          // literalReplacement : this.gatewayServiceSettingsData?.extra_config?.["plugin/http-server"]?.["url-rewrite"],
+          
+          databasePath : this.gatewayServiceSettingsData?.extra_config?.["plugin/http-server"]?.geoip?.citydb_path,
+          staticServerPath : this.gatewayServiceSettingsData?.extra_config?.["server/static-filesystem"]?.path,
+          staticServerPrefix : this.gatewayServiceSettingsData?.extra_config?.["server/static-filesystem"]?.prefix,
+          directoryList : this.gatewayServiceSettingsData?.extra_config?.["server/static-filesystem"]?.["directory_listing"],
+          rateLimit: this.gatewayServiceSettingsData?.extra_config?.["qos/ratelimit/service"]?.max_rate,
+          every: this.gatewayServiceSettingsData?.extra_config?.["qos/ratelimit/service"]?.every,
+          capacity: this.gatewayServiceSettingsData?.extra_config?.["qos/ratelimit/service"]?.capacity,
+          defaultUserQuota: this.gatewayServiceSettingsData?.extra_config?.["qos/ratelimit/service"]?.client_max_rate,
+          clientCapacity: this.gatewayServiceSettingsData?.extra_config?.["qos/ratelimit/service"]?.client_capacity,
+          uniqueStrategy: this.gatewayServiceSettingsData?.extra_config?.["qos/ratelimit/service"]?.strategy,
+          headerValue:  this.gatewayServiceSettingsData?.extra_config?.["qos/ratelimit/service"]?.key,
+          httpClientSetAdvConnTimeoutForm: this.gatewayServiceSettingsData?.idle_connection_timeout ,
+          httpClientSetAdvHeaderTimeoutForm: this.gatewayServiceSettingsData?.response_header_timeout,
+          httpClientSetAdvContinueTimeoutForm: this.gatewayServiceSettingsData?.expect_continue_timeout,
+          httpClientSetAdvMaxIdleConnForm: this.gatewayServiceSettingsData?.max_idle_connections,
+          httpClientSetAdvMaxIdleConnPerHostForm: this.gatewayServiceSettingsData?.max_idle_connections_per_host,
+          httpClientSetAdvAllowInsecureConnsForm: this.gatewayServiceSettingsData?.client_tls?.allow_insecure_connections,
+          httpClientSetAdvDisableKeepAlivesForm: this.gatewayServiceSettingsData?.disable_keep_alives,
+          httpClientSetAdvDisableCompressionForm: this.gatewayServiceSettingsData?.disable_compression,
+          httpClientSetAdvDialerTimeoutForm: this.gatewayServiceSettingsData?.dialer_timeout,
+          httpClientSetAdvDialerFallerDelayForm: this.gatewayServiceSettingsData?.dialer_fallback_delay,
+          httpClientSetAdvDialerKeepAliveForm: this.gatewayServiceSettingsData?.dialer_keep_alive,
+        })
+      },
+      error:(err)=>{
+        console.error(err);
+      }
+    })
+
+    // this.formGroupService.get('uniqueStrategy')?.valueChanges.subscribe((value) => {
+    //   if (value === 'ip') {
+    //     this.formGroupService.get('headerValue')?.reset();
+    //   }
+    // });
+
+   
+    // console.log(this.entireJsondata);
+    // console.log(this.entireJsondata?.extra_config?.["server/static-filesystem"]?.prefix);
+    // if (this.entireJsondata != undefined) {
+    //   this.hostArray = this.entireJsondata?.host ?? [];
+    //   this.directoryArray=this.entireJsondata?.extra_config?.grpc?.catalog ?? [];
       // this.objectMap=this.entireJsondata?.extra_config?.["plugin/http-server"]?.["url-rewrite"]?.literal && Object.entries(this.entireJsondata?.extra_config?.["plugin/http-server"]?.["url-rewrite"]?.literal)
       // console.log(this.objectMap);
       
-    }
+    // }
 
-    this.formGroupService.patchValue({
-      isgRPCActive: !!this.entireJsondata?.extra_config?.grpc,
-      isEnableHttpsActive: !!this.entireJsondata?.tls,
-      isUrlRewriteActive: !!this.entireJsondata?.extra_config?.["plugin/http-server"]?.name?.includes("url-rewrite"),
-      isVirtualHostActive: !!this.entireJsondata?.extra_config?.["server/virtualhost"],
-      isGeoIpActive: !!this.entireJsondata?.extra_config?.["plugin/http-server"]?.name?.includes("geoip"),
-      isStaticServerActive: !!this.entireJsondata?.extra_config?.["server/static-filesystem"],
-      isRateLimitingActive: !!this.entireJsondata?.extra_config?.["qos/ratelimit/service"],
-      isHttpClientSetAdv: false,
-      isJwkSharedActive: !!this.entireJsondata?.extra_config?.["auth/validator"],
-      name: this.entireJsondata?.name,
-      port: this.entireJsondata?.port,
-      hostArrayValue: this.entireJsondata?.host,
-      backendTimeout: this.entireJsondata?.timeout,
-      defaultCache: this.entireJsondata?.cache_ttl,
-      directoryArrayValue: this.entireJsondata?.extra_config?.grpc?.catalog,
-      staticServerPrefix: this.entireJsondata?.extra_config?.["server/static-filesystem"]?.prefix,
-      staticServerPath: this.entireJsondata?.extra_config?.["server/static-filesystem"]?.path,
-      directoryList: this.entireJsondata?.extra_config?.["server/static-filesystem"]?.directory_listing,
-      disablegZip: this.entireJsondata?.extra_config?.router?.disable_gzip,
-      databasePath: this.entireJsondata?.extra_config?.["plugin/http-server"]?.geoip?.citydb_path,
-      sharedCacheDuration: this.entireJsondata?.extra_config?.["auth/validator"]?.shared_cache_duration,
-      // literalMatchObjectMapValue:this.entireJsondata["plugin/http-server"]["url-rewrite"]?.literal,
-      // regExpMatchObjectMapValue:this.entireJsondata["plugin/http-server"]["url-rewrite"]?.regexp,
-      publicKey: this.entireJsondata?.tls?.public_key,
-      privateKey: this.entireJsondata?.tls?.private_key,
-      httpReadTimeout: this.entireJsondata?.read_timeout,
-      httpWriteTimeout: this.entireJsondata?.write_timeout,
-      httpIdleTimeout: this.entireJsondata?.idle_timeout,
-      httpReadHeaderTimeout: this.entireJsondata?.read_header_timeout,
-      // host: [null],
-      // directory: [],
-      // virtualHost: [],
-      // virtualHostArrayValue: [[]],
-      // defaultOutputEncoding: [null],
-      // nonRestfulResource: [null],
-      // serverSequential: [null],
-      // enableDebugOptions: [null],
-      // literalReplacement: [null],
-      // literalMatch: [null],
-      // regexpMatch: [null],
-      // endpointReplacement: [null],
-      rateLimit: this.entireJsondata?.extra_config?.["qos/ratelimit/service"]?.max_rate,
-      every: this.entireJsondata?.extra_config?.["qos/ratelimit/service"]?.every,
-      capacity: this.entireJsondata?.extra_config?.["qos/ratelimit/service"]?.capacity,
-      defaultUserQuota: this.entireJsondata?.extra_config?.["qos/ratelimit/service"]?.client_max_rate,
-      clientCapacity: this.entireJsondata?.extra_config?.["qos/ratelimit/service"]?.client_capacity,
-      httpClientSetAdvConnTimeoutForm: this.entireJsondata?.idle_connection_timeout ,
-      httpClientSetAdvHeaderTimeoutForm: this.entireJsondata?.response_header_timeout,
-      httpClientSetAdvContinueTimeoutForm: this.entireJsondata?.expect_continue_timeout,
-      httpClientSetAdvMaxIdleConnForm: this.entireJsondata?.max_idle_connections,
-      httpClientSetAdvMaxIdleConnPerHostForm: this.entireJsondata?.max_idle_connections_per_host,
-      httpClientSetAdvAllowInsecureConnsForm: this.entireJsondata?.client_tlS?.allow_insecure_connections,
-      httpClientSetAdvDisableKeepAlivesForm: this.entireJsondata?.disable_keep_alives,
-      httpClientSetAdvDisableCompressionForm: this.entireJsondata?.disable_compression,
-      httpClientSetAdvDialerTimeoutForm: this.entireJsondata?.dialer_timeout,
-      httpClientSetAdvDialerFallerDelayForm: this.entireJsondata?.dialer_fallback_delay,
-      httpClientSetAdvDialerKeepAliveForm: this.entireJsondata?.dialer_keep_alive,
+    // this.formGroupService.patchValue({
+    //   literalMatchObjectMapValue:this.entireJsondata["plugin/http-server"]["url-rewrite"]?.literal,
+    //   regExpMatchObjectMapValue:this.entireJsondata["plugin/http-server"]["url-rewrite"]?.regexp,
+    // })
 
-      // literalMatchObjectMapValue: [[]],
-      // regExpMatchObjectMapValue: [[]],
-      uniqueStrategy: this.entireJsondata?.extra_config?.["qos/ratelimit/service"]?.strategy,
-      headerValue:  this.entireJsondata?.extra_config?.["qos/ratelimit/service"]?.key,
-      grpcId: this.entireJsondata?.extra_config?.grpc?.id
-    })
+    // this.formGroupService.valueChanges.subscribe(value => {
+    //   console.log(value);
 
-    this.formGroupService.valueChanges.subscribe(value => {
-      console.log(value);
-
-      this.serviceSettingsFormSubmitted.emit(value);
-    });
+    //   this.serviceSettingsFormSubmitted.emit(value);
+    // });
     // this.apiCardsService.getData$().subscribe((data:any) => {
     //   this.apiData = data;
 
     // });
-    console.log(this.apiData);
+
   }
 
   submitForm() {
@@ -411,46 +446,145 @@ export class GatewayServiceSettingsComponent {
     //   }
     // })
   }
-  emitValue() {
-    // this.serviceSettingsFormSubmitted.emit(this.formGroupService.value);
-    console.log(this.formGroupService.value);
-    // this.formGroupService.get('literalMatchObjectMapValue')?.value.map((item:any,index:any)=>{
-    //  return item
+  
+  showSuccess(message:string) {
+    this.toastService.show(message, { type: 'success' });
+  }
 
-    // })
-    // const val=this.formGroupService.get('literalMatchObjectMapValue')?.value;
 
-    // if (this.formGroupService.valid) {
-    //   this.sharedService.setServiceSettingData(this.formGroupService.value)
-    //   this._snackBar.open('Saved Successfully', 'OK', {
-    //     duration: 3000
-    //   });
-    // } else {
-    //   this._snackBar.open('Please fill required details', 'OK', {
-    //     duration: 3000
-    //   });
-    // }
-
+  showError(message:string){
+    this.toastService.show(message , {type:"error"})
   }
 
   submit(){
-  //   const body = {
-  //     ...(this.formGroupService.value?.isSpFilterActive && {
-  //       "security/policies": {
-  //         ...(!!this.endPointData?.extra_config?.["security/policies"] && {"id":this.endPointData?.extra_config?.["security/policies"]?.id}),
-  //         "req": {
-  //           "policies": this.formGroupPolicies.value?.secReqPolicyArrayValue,
-  //           "error": {
-  //             "body": this.formGroupPolicies.value?.secReqErrorBody,
-  //             "status": this.formGroupPolicies.value?.secReqErrorStCode,
-  //             "content_type": this.formGroupPolicies.value?.secReqErrorContentType
-  //           }
-  //         }
-  //       }
-  //     })
+
+    const literalObj = this.formGroupService?.value?.literalMatchObjectMapValue?.reduce((acc:any, [key, value]:any) => {
+      acc[key] = value;
+      return acc;
+    }, {});
+
+
+    console.log(this.formGroupService.value);
+    const body = {
+      "name": this.formGroupService.get('name')?.value,
+      "port": this.formGroupService.get('port')?.value,
+      "debug_endpoint": this.formGroupService.value?.enableDebug,
+      "echo_endpoint": this.formGroupService.value?.enableEcho,
+      "timeout": this.formGroupService.value?.backendTimeout,
+      "cache_ttl": this.formGroupService.value?.defaultCache,
+      "read_timeout" : this.formGroupService.value?.httpReadTimeout,
+      "write_timeout": this.formGroupService.value?.httpWriteTimeout,
+      "idle_timeout" : this.formGroupService.value?.httpIdleTimeout,
+      "read_header_timeout" : this.formGroupService.value?.httpReadHeaderTimeout,
+      "output_encoding" : this.formGroupService.value?.defaultOutputEncoding,
+      "disable_rest" : this.formGroupService.value?.nonRestfulResource,
+      "sequential_start": this.formGroupService.value?.serverSequential,
       
 
-  //   }
+      ...((this.formGroupService.value?.isgRPCActive || this.formGroupService.value?.isJwkSharedActive || this.formGroupService.value?.disablegZip || this.formGroupService.value?.isVirtualHostActive || this.formGroupService.value?.isStaticServerActive || this.formGroupService.value?.isRateLimitingActive  || this.formGroupService.value?.isGeoIpActive || this.formGroupService.value?.isUrlRewriteActive) && {
+        "extra_config":{
+          ...(this.formGroupService.value?.isgRPCActive && {
+            "grpc": {
+              ...(!!this.gatewayServiceSettingsData?.extra_config?.grpc && {"id":this.gatewayServiceSettingsData?.extra_config?.grpc?.id}),
+              ...(this.formGroupService.value?.directoryArrayValue.length>0 &&{"catalog": this.formGroupService.value?.directoryArrayValue})
+            }}),
+          ...(this.formGroupService.value?.isJwkSharedActive && {
+            "auth/validator":{
+              ...(!!this.gatewayServiceSettingsData?.extra_config?.["auth/validator"] && {"id":this.gatewayServiceSettingsData?.extra_config?.["auth/validator"]?.id}),
+              "shared_cache_duration": this.formGroupService.value?.sharedCacheDuration
+            }}),
+          ...(this.formGroupService.value?.disablegZip && {
+            "router":{
+              ...(!!this.gatewayServiceSettingsData?.extra_config?.router && {"id":this.gatewayServiceSettingsData?.extra_config?.router?.id}),
+              "disable_gzip": this.formGroupService.value?.disablegZip
+            }}),
+          ...(this.formGroupService.value?.isVirtualHostActive && {
+            "server/virtualhost":{
+              ...(!!this.gatewayServiceSettingsData?.extra_config?.["server/virtualhost"] && {"id":this.gatewayServiceSettingsData?.extra_config?.["server/virtualhost"]?.id}),
+              "hosts": this.formGroupService.value?.virtualHostArrayValue
+            }}),
+          ...(this.formGroupService.value?.isStaticServerActive && {
+            "server/static-filesystem":{
+              ...(!!this.gatewayServiceSettingsData?.extra_config?.["server/static-filesystem"] && {"id":this.gatewayServiceSettingsData?.extra_config?.["server/static-filesystem"]?.id}),
+              "prefix": this.formGroupService.value?.staticServerPrefix,
+              "path" : this.formGroupService.value?.staticServerPath,
+              "directory_listing": this.formGroupService.value?.directoryList,
+              "skip": this.formGroupService.value?.staticServerSkipArrayValue
+            }}),
+          ...(this.formGroupService.value?.isRateLimitingActive && {
+            "qos/ratelimit/service":{
+              ...(!!this.gatewayServiceSettingsData?.extra_config?.["qos/ratelimit/service"] && {"id":this.gatewayServiceSettingsData?.extra_config?.["qos/ratelimit/service"]?.id}),
+              "capacity": this.formGroupService.value?.capacity,
+              "max_rate" : this.formGroupService.value?.rateLimit,
+              "every": this.formGroupService.value?.every,
+              "client_max_rate": this.formGroupService.value?.defaultUserQuota,
+              "strategy": this.formGroupService.value?.uniqueStrategy,
+              "client_capacity": this.formGroupService.value?.clientCapacity,
+              "key": this.formGroupService.value?.headerValue,
+            }}),
+          ...((this.formGroupService.value?.isGeoIpActive || this.formGroupService.value?.isUrlRewriteActive) && {
+            "plugin/http-server":{
+              ...(this.formGroupService.value?.isGeoIpActive && {
+                "geoip": {
+                  ...(!!this.gatewayServiceSettingsData?.extra_config?.["plugin/http-server"]?.geoip && {"id":this.gatewayServiceSettingsData?.extra_config?.["plugin/http-server"]?.geoip.id}),
+                  "citydb_path":this.formGroupService.value?.databasePath
+                }}),
+              ...(this.formGroupService.value?.isUrlRewriteActive && {
+                "url-rewrite": {
+                  ...(!!this.gatewayServiceSettingsData?.extra_config?.["plugin/http-server"]?.["url-rewrite"] && {"id":this.gatewayServiceSettingsData?.extra_config?.["plugin/http-server"]?.["url-rewrite"].id}),
+                  ...(this.formGroupService.value?.literalMatchObjectMapValue?.length>0 && {
+                    "literal": literalObj}),
+                  ...(this.formGroupService.value?.regExpMatchObjectMapValue?.length>0 && {
+                    "regexp": this.formGroupService.value?.regExpMatchObjectMapValue}),
+                }}),
+
+              
+              
+            }}),
+        
+  
+
+        }}),
+
+
+  
+
+      "idle_connection_timeout": this.formGroupService.value?.httpClientSetAdvConnTimeoutForm ,
+      "response_header_timeout": this.formGroupService.value?.httpClientSetAdvHeaderTimeoutForm,
+      "expect_continue_timeout": this.formGroupService.value?.httpClientSetAdvContinueTimeoutForm,
+      "max_idle_connections": this.formGroupService.value?.httpClientSetAdvMaxIdleConnForm,
+      "max_idle_connections_per_host": this.formGroupService.value?.httpClientSetAdvMaxIdleConnPerHostForm,
+      "disable_keep_alives": this.formGroupService.value?.httpClientSetAdvDisableKeepAlivesForm,
+      "disable_compression": this.formGroupService.value?.httpClientSetAdvDisableCompressionForm,
+      "dialer_timeout": this.formGroupService.value?.httpClientSetAdvDialerTimeoutForm,
+      "dialer_fallback_delay": this.formGroupService.value?.httpClientSetAdvDialerFallerDelayForm,
+      "dialer_keep_alive": this.formGroupService.value?.httpClientSetAdvDialerKeepAliveForm,
+      
+      ...(this.formGroupService?.value.httpClientSetAdvAllowInsecureConnsForm && {
+        "client_tls": {
+       "allow_insecure_connections": this.formGroupService?.value.httpClientSetAdvAllowInsecureConnsForm
+        }}),
+
+      ...(this.formGroupService.value?.isEnableHttpsActive && {
+        "tls": {
+        "public_key": this.formGroupService.value?.publicKey,
+        "private_key": this.formGroupService.value?.privateKey,
+        }})
+      
+
+    }
+    console.log(body);
+
+    this.getwayService.addServiceSettings(this.gatewayServiceSettingsId, body).subscribe({
+      next:(res : any)=>{
+        console.log(res)
+        this.showSuccess(res?.message);
+      },
+      error:(err)=>{
+        console.error(err)
+        this.showError(err?.message);
+      }
+    })
   }
 
 
