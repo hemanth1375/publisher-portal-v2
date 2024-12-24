@@ -553,7 +553,208 @@ export class BackendComponent {
         control?.updateValueAndValidity();
       });
     });
+    group.get('isStaticServerActive')?.valueChanges.subscribe((value:any) => {
+      const pathControl = group.get('staticUrl');
+      
+      
+    
+      if (value) {
+        pathControl?.setValidators([Validators.required]);
+       
+      } else {
+        pathControl?.clearValidators();
+        
+      }
+    
+      // Update the validity of all controls
+      [pathControl].forEach((control) => {
+        control?.updateValueAndValidity();
+      });
+    });
+    group.get('AdvResManipulationActive')?.valueChanges.subscribe((value:any) => {
+      const exprControl = group.get('expression');
+      
+      
+    
+      if (value) {
+        exprControl?.setValidators([Validators.required]);
+       
+      } else {
+        exprControl?.clearValidators();
+        
+      }
+    
+      // Update the validity of all controls
+      [exprControl].forEach((control) => {
+        control?.updateValueAndValidity();
+      });
+    });
+    group.get('isGoogleCloudActive')?.valueChanges.subscribe((value:any) => {
+      const audienceControl = group.get('audience');
+      
+      
+    
+      if (value) {
+        audienceControl?.setValidators([Validators.required]);
+       
+      } else {
+        audienceControl?.clearValidators();
+        
+      }
+    
+      // Update the validity of all controls
+      [audienceControl].forEach((control) => {
+        control?.updateValueAndValidity();
+      });
+    });
 
+    group.get('isResSchValidatorActive')?.valueChanges.subscribe((value:any) => {
+      const responseSchemaControl = group.get('responseSchema');
+      
+      
+    
+      if (value) {
+        responseSchemaControl?.setValidators([Validators.required]);
+       
+      } else {
+        responseSchemaControl?.clearValidators();
+        
+      }
+    
+      // Update the validity of all controls
+      [responseSchemaControl].forEach((control) => {
+        control?.updateValueAndValidity();
+      });
+    });
+
+    group.get('isRestToGraphqlActive')?.valueChanges.subscribe((value:any) => {
+      const restToGraphTypeControl = group.get('restTographQLOpTypeForm');
+      const restToGraphQueryPathControl = group.get('restTographQLQueryPathForm');
+      
+      
+    
+      if (value) {
+        restToGraphTypeControl?.setValidators([Validators.required]);
+        restToGraphQueryPathControl?.setValidators([Validators.required]);
+       
+      } else {
+        restToGraphTypeControl?.clearValidators();
+        restToGraphQueryPathControl?.clearValidators();
+        
+      }
+    
+      // Update the validity of all controls
+      [restToGraphTypeControl,restToGraphQueryPathControl].forEach((control) => {
+        control?.updateValueAndValidity();
+      });
+    });
+
+    group.get('isNtlmAuthActive')?.valueChanges.subscribe((value:any) => {
+      const userControl = group.get('user');
+      const passwordControl = group.get('password');
+      
+      
+    
+      if (value) {
+        userControl?.setValidators([Validators.required]);
+        passwordControl?.setValidators([Validators.required]);
+       
+      } else {
+        userControl?.clearValidators();
+        passwordControl?.clearValidators();
+        
+      }
+    
+      // Update the validity of all controls
+      [userControl,passwordControl].forEach((control) => {
+        control?.updateValueAndValidity();
+      });
+    });
+
+    group.get('isPublicPublisherActive')?.valueChanges.subscribe((value:any) => {
+      const topicUrlControl = group.get('publicPubTopicURLForm');
+      
+      
+    
+      if (value) {
+        topicUrlControl?.setValidators([Validators.required]);
+       
+      } else {
+        topicUrlControl?.clearValidators();
+        
+      }
+    
+      // Update the validity of all controls
+      [topicUrlControl].forEach((control) => {
+        control?.updateValueAndValidity();
+      });
+    });
+
+    group.get('isPublicSubscriberActive')?.valueChanges.subscribe((value:any) => {
+      const pubSubUrlControl = group.get('publicSubSubscriptionURLForm');
+      
+      
+    
+      if (value) {
+        pubSubUrlControl?.setValidators([Validators.required]);
+       
+      } else {
+        pubSubUrlControl?.clearValidators();
+        
+      }
+    
+      // Update the validity of all controls
+      [pubSubUrlControl].forEach((control) => {
+        control?.updateValueAndValidity();
+      });
+    });
+
+    group.get('isAMQPconsumerActive')?.valueChanges.subscribe((value:any) => {
+      const amqpNameControl = group.get('amqpConsumerQueueNameForm');
+      const amqpExchangeControl = group.get('amqpConsumerExchangeForm');
+      const amqpRoutingKeysArrayControl = group.get('amqpConsumerRoutingKeysFormArray');
+      
+      
+    
+      if (value) {
+        amqpNameControl?.setValidators([Validators.required]);
+        amqpExchangeControl?.setValidators([Validators.required]);
+        amqpRoutingKeysArrayControl?.setValidators([Validators.required]);
+       
+      } else {
+        amqpNameControl?.clearValidators();
+        amqpExchangeControl?.clearValidators();
+        amqpRoutingKeysArrayControl?.clearValidators();
+        
+      }
+    
+      // Update the validity of all controls
+      [amqpNameControl,amqpExchangeControl,amqpRoutingKeysArrayControl].forEach((control) => {
+        control?.updateValueAndValidity();
+      });
+    });
+
+    group.get('isAMQPproducerActive')?.valueChanges.subscribe((value:any) => {
+      const amqpProdExchangeControl = group.get('amqpProducerExchangeForm');
+      const amqpProdNameControl = group.get('amqpProducerQueueNameForm');
+      
+      
+    
+      if (value) {
+        amqpProdExchangeControl?.setValidators([Validators.required]);
+        amqpProdNameControl?.setValidators([Validators.required]);
+       
+      } else {
+        amqpProdExchangeControl?.clearValidators();
+        amqpProdNameControl?.clearValidators();
+        
+      }
+    
+      // Update the validity of all controls
+      [amqpProdExchangeControl,amqpProdNameControl].forEach((control) => {
+        control?.updateValueAndValidity();
+      });
+    });
     group.get('isProxyRateLimitActive')?.valueChanges.subscribe((value:any) => {
       const maxRateLimitControl = group.get('maxRateLimit');
       const everyControl = group.get('every');
@@ -1271,26 +1472,91 @@ export class BackendComponent {
 
     }
     console.log(backendBody);
-    const errors = this.getFormGroup(index).errors;
-    // if(this.getFormGroup(index).valid){}
-    if(this.getFormGroup(index).get('martianDslTextarea')?.hasError('invalidJson')){
-this.showErrorAlert("invalid json")
-    }else if (errors?.['policyRequired']) {
-      this.showErrorAlert(errors?.['policyRequired']);
-    }else if(this.getFormGroup(index).valid){
-    this.mainSer.addBackend(this.endpointId, backendBody).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        // this.fetchItemsFromBackend();
-        this.router.navigate([`apis/viewapi/${this.endpointId}/overview`])
-      },
-      error: (err: any) => {
-        console.log(err);
-        this.showError(err?.message);
+//     const errors = this.getFormGroup(index).errors;
+//     // if(this.getFormGroup(index).valid){}
+//     if(this.getFormGroup(index).get('martianDslTextarea')?.hasError('invalidJson')){
+// this.showErrorAlert("invalid json")
+//     }else if (errors?.['policyRequired']) {
+//       this.showErrorAlert(errors?.['policyRequired']);
+//     }else if(this.getFormGroup(index).valid){
+//     this.mainSer.addBackend(this.endpointId, backendBody).subscribe({
+//       next: (res: any) => {
+//         console.log(res);
+//         // this.fetchItemsFromBackend();
+//         this.router.navigate([`apis/viewapi/${this.endpointId}/overview`])
+//       },
+//       error: (err: any) => {
+//         console.log(err);
+//         this.showError(err?.message);
 
+//       }
+//     })
+//   }
+
+
+
+const securityPolicies = backendBody?.extra_config?.['security/policies'];
+let isValid = true;
+
+// Check for invalid JSON in form fields
+if (this.getFormGroup(index).get('template')?.hasError('invalidJson')) {
+  this.showErrorAlert("Invalid JSON in Body Manipulation and Generation");
+  isValid = false;
+} else if (this.getFormGroup(index).get('templateResponse')?.hasError('invalidJson')) {
+  this.showErrorAlert("Invalid JSON in Response Manipulation with Go templates");
+  isValid = false;
+} else if (this.getFormGroup(index).get('templateConnect')?.hasError('invalidJson')) {
+  this.showErrorAlert("Invalid JSON in Rest to SOAP in Connectivity Options");
+  isValid = false;
+} else if (this.getFormGroup(index).get('martianDslTextarea')?.hasError('invalidJson')) {
+  this.showErrorAlert("Invalid JSON in Martian DSL");
+  isValid = false;
+}
+
+// Check for policy requirement errors
+const errors = this.getFormGroup(index).errors;
+if (isValid && errors?.['policyRequired']) {
+  this.showErrorAlert(errors['policyRequired']);
+  isValid = false;
+}
+
+// Validate security policies
+if (isValid && securityPolicies) {
+  const keys = ['req', 'resp', 'jwt'];
+  const enabledKeys = keys.filter(key => securityPolicies[key]);
+
+  if (enabledKeys.length === 0) {
+    this.showErrorAlert("At least one policy (req, resp, or jwt) must be enabled with its policies defined");
+    isValid = false;
+  } else {
+    for (const key of enabledKeys) {
+      const policies = securityPolicies[key];
+      if (!Object.keys(policies).includes('policies')) {
+        this.showErrorAlert(`Policy required for ${key}`);
+        isValid = false;
+        break; // Stop further checks if any policy is missing
       }
-    })
+    }
   }
+}
+
+// Proceed with API call only if all checks pass
+if (isValid && this.getFormGroup(index).valid) {
+  this.mainSer.addBackend(this.endpointId, backendBody).subscribe({
+    next: (res: any) => {
+      console.log(res);
+      // this.fetchItemsFromBackend();
+      this.router.navigate([`apis/viewapi/${this.endpointId}/overview`])
+    },
+    error: (err: any) => {
+      console.log(err);
+      this.showError(err?.message);
+
+    }
+  })
+}else{
+  this.showErrorAlert('Please fill required fields')
+}
 
     // this.http.post('https://api.example.com/items', data).subscribe((response: any) => {
     //   this.items[index] = { ...data, id: response.id, isNew: false }; // Update item with ID and mark as not new
@@ -1538,49 +1804,74 @@ this.showErrorAlert("invalid json")
 
 
     }
-    const errors = this.getFormGroup(index).errors;
-    if(this.getFormGroup(index).get('template')?.hasError('invalidJson')){
-      this.showErrorAlert("invalid json in Body manipulation and Generation");
-          } else if(this.getFormGroup(index).get('templateResponse')?.hasError('invalidJson')){
-            this.showErrorAlert("invalid json in Response Manipulation with Go templates");
-          }else if(this.getFormGroup(index).get('templateConnect')?.hasError('invalidJson')){
-            this.showErrorAlert("invalid json in Rest to soap in connectivity Options");
-          }else if(this.getFormGroup(index).get('martianDslTextarea')?.hasError('invalidJson')){
-            this.showErrorAlert("invalid json in Martian DSL");
-          }else if (errors?.['policyRequired']) {
-               this.showErrorAlert(errors?.['policyRequired']);
-             }
+    console.log(backendBody?.extra_config?.['security/policies']?.req);
+    
+    // const errors = this.getFormGroup(index).errors;
+    // let isValid = true;
 
-          // else if (errors?.policyRequired) {
-          //   this.showError(errors.policyRequired);
-          // } else if (errors?.reqPolicyError) {
-          //   this.showError(errors.reqPolicyError);
-          // } else if (errors?.resPolicyError) {
-          //   this.showError(errors.resPolicyError);
-          // } else if (errors?.jwtPolicyError) {
-          //   this.showError(errors.jwtPolicyError);
-          // }
-          else {
-    this.mainSer.updateBackend(backendId, backendBody).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        // this.fetchItemsFromBackend();
-        this.router.navigate([`apis/viewapi/${this.endpointId}/overview`])
-        // this.communucationSer.updateShowParent(false);
-        // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        //   this.router.navigate([
-        //     '/apis/viewapi',
-        //     this.endpointId, // Assuming 'apiId' is a dynamic route parameter
-        //     'backends'
-        //   ]);
-        // });
-      },
-      error: (err: any) => {
-        console.log(err);
-        this.showError(err?.message);
+    // Check for invalid JSON in form fields
+    const securityPolicies = backendBody?.extra_config?.['security/policies'];
+let isValid = true;
+
+// Check for invalid JSON in form fields
+if (this.getFormGroup(index).get('template')?.hasError('invalidJson')) {
+  this.showErrorAlert("Invalid JSON in Body Manipulation and Generation");
+  isValid = false;
+} else if (this.getFormGroup(index).get('templateResponse')?.hasError('invalidJson')) {
+  this.showErrorAlert("Invalid JSON in Response Manipulation with Go templates");
+  isValid = false;
+} else if (this.getFormGroup(index).get('templateConnect')?.hasError('invalidJson')) {
+  this.showErrorAlert("Invalid JSON in Rest to SOAP in Connectivity Options");
+  isValid = false;
+} else if (this.getFormGroup(index).get('martianDslTextarea')?.hasError('invalidJson')) {
+  this.showErrorAlert("Invalid JSON in Martian DSL");
+  isValid = false;
+}
+
+// Check for policy requirement errors
+const errors = this.getFormGroup(index).errors;
+if (isValid && errors?.['policyRequired']) {
+  this.showErrorAlert(errors['policyRequired']);
+  isValid = false;
+}
+
+// Validate security policies
+if (isValid && securityPolicies) {
+  const keys = ['req', 'resp', 'jwt'];
+  const enabledKeys = keys.filter(key => securityPolicies[key]);
+
+  if (enabledKeys.length === 0) {
+    this.showErrorAlert("At least one policy (req, resp, or jwt) must be enabled with its policies defined");
+    isValid = false;
+  } else {
+    for (const key of enabledKeys) {
+      const policies = securityPolicies[key];
+      if (!Object.keys(policies).includes('policies')) {
+        this.showErrorAlert(`Policy required for ${key}`);
+        isValid = false;
+        break; // Stop further checks if any policy is missing
       }
-    })
+    }
   }
+}
+
+// Proceed with API call only if all checks pass
+if (isValid && this.getFormGroup(index).valid) {
+  this.mainSer.updateBackend(backendId, backendBody).subscribe({
+    next: (res: any) => {
+      console.log(res);
+      this.router.navigate([`apis/viewapi/${this.endpointId}/overview`]);
+    },
+    error: (err: any) => {
+      console.log(err);
+      this.showError(err?.message);
+    }
+  });
+}else{
+  this.showErrorAlert('Please fill required fields')
+}
+
+    
   // else{
    
   // }

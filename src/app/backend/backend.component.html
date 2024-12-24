@@ -245,7 +245,7 @@
                   <div class="row">
                     <div class="col-sm-12 col-md-6">
                       <div class="mb-3">
-                        <label for="staticUrl{{i}}" class="form-label">URL &nbsp; <svg [matTooltip]=staticUrl_tooltip
+                        <label for="staticUrl{{i}}" class="form-label">Path &nbsp; <svg [matTooltip]=staticUrl_tooltip
                             xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-info-circle" viewBox="0 0 16 16">
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
@@ -253,7 +253,7 @@
                               d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                           </svg></label>
                         <input type="text" class="form-control" id="staticUrl{{i}}" formControlName="staticUrl"
-                          placeholder="/etc/krakend/assets">
+                          placeholder="/etc/krakend/assets"[class.is-invalid]="getFormGroup(i).get('staticUrl')?.invalid  && getFormGroup(i).get('staticUrl')?.touched">
 
                       </div>
                     </div>
@@ -693,7 +693,7 @@
                         d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                     </svg></label>
                   <input type="text" id="exp{{i}}" class="form-control" formControlName="expression"
-                    placeholder="people[?age > `20`].[name, age]">
+                    placeholder="people[?age > `20`].[name, age]"[class.is-invalid]="getFormGroup(i).get('expression')?.invalid  && getFormGroup(i).get('expression')?.touched">
 
                 </div>
 
@@ -1271,7 +1271,7 @@
                     <label for="audienceGoogle{{i}}" class="form-label">Audience <i class="bi bi-info-circle"
                         [matTooltip]=audienceAuth_tooltip></i></label>
                     <input type="text" class="form-control" id="audienceGoogle{{i}}" formControlName="audience"
-                      placeholder="https://hello-there.a.run.app">
+                      placeholder="https://hello-there.a.run.app"[class.is-invalid]="getFormGroup(i).get('audience')?.invalid  && getFormGroup(i).get('audience')?.touched">
 
                   </div>
                 </div>
@@ -1300,7 +1300,7 @@
                   <div class="mb-3">
                     <label for="{{i}}" class="form-label">User <i class="bi bi-info-circle"
                         [matTooltip]=user_tooltip></i></label>
-                    <input type="text" class="form-control" id="user{{i}}" formControlName="user">
+                    <input type="text" class="form-control" id="user{{i}}" formControlName="user"[class.is-invalid]="getFormGroup(i).get('user')?.invalid  && getFormGroup(i).get('user')?.touched">
 
                   </div>
                 </div>
@@ -1308,7 +1308,7 @@
                   <div class="mb-3">
                     <label for="password{{i}}" class="form-label">Password <i class="bi bi-info-circle"
                         [matTooltip]=password_tooltip></i></label>
-                    <input type="password" class="form-control" id="password{{i}}" formControlName="password">
+                    <input type="password" class="form-control" id="password{{i}}" formControlName="password"[class.is-invalid]="getFormGroup(i).get('password')?.invalid  && getFormGroup(i).get('password')?.touched">
 
                   </div>
                 </div>
@@ -1596,7 +1596,7 @@
                 @if(getFormGroup(i).value.isResSchValidatorActive){
                 <div class="col-sm-12 col-md-9">
                   <textarea name="" id="responseSchema{{i}}" class="static-text-area"
-                    formControlName="responseSchema"></textarea><br>
+                    formControlName="responseSchema" [class.is-invalid]="getFormGroup(i).get('responseSchema')?.invalid  && getFormGroup(i).get('responseSchema')?.touched"></textarea><br>
                   <p>Write your JSON schema directly in this field, with any number of fields or validations you need.
                   </p>
                   
@@ -1771,7 +1771,7 @@
                     <label for="restTographQLOpType{{i}}" class="form-label">Operation Type <i class="bi bi-info-circle"
                         [matTooltip]=restToGraphType_tooltip></i></label>
                     <select class="form-select input-size" id="restTographQLOpType{{i}}"
-                      formControlName="restTographQLOpTypeForm">
+                      formControlName="restTographQLOpTypeForm"[class.is-invalid]="getFormGroup(i).get('restTographQLOpTypeForm')?.invalid  && getFormGroup(i).get('restTographQLOpTypeForm')?.touched">
                       <option selected></option>
                       <option value="query" selected>query</option>
                       <option value="mutation">mutation</option>
@@ -1794,7 +1794,7 @@
                     <label for="restTographQLQueryPath{{i}}" class="form-label">Query path <i class="bi bi-info-circle"
                         [matTooltip]=restToGraphQueryPath_tooltip></i></label>
                     <input type="text" class="input-size form-control" id="restTographQLQueryPath{{i}}"
-                      formControlName="restTographQLQueryPathForm">
+                      formControlName="restTographQLQueryPathForm"[class.is-invalid]="getFormGroup(i).get('restTographQLQueryPathForm')?.invalid  && getFormGroup(i).get('restTographQLQueryPathForm')?.touched">
                   </div>
                   <div class="col-sm-12 col-md-6">
 
@@ -1894,7 +1894,7 @@
                     <label for="amqpConsumerQueueName{{i}}" class="form-label">Queue Name <i class="bi bi-info-circle"
                         [matTooltip]=amqpConsName_tooltip></i></label>
                     <input type="text" class="input-size form-control" id="amqpConsumerQueueName{{i}}"
-                      formControlName="amqpConsumerQueueNameForm">
+                      formControlName="amqpConsumerQueueNameForm" [class.is-invalid]="getFormGroup(i).get('amqpConsumerQueueNameForm')?.invalid  && getFormGroup(i).get('amqpConsumerQueueNameForm')?.touched">
 
 
 
@@ -1904,7 +1904,7 @@
                     <label for="amqpConsumerExchange{{i}}" class="form-label">Exchange <i class="bi bi-info-circle"
                         [matTooltip]=amqpConExchange_tooltip></i></label>
                     <input type="text" class="input-size form-control" id="amqpConsumerExchange{{i}}"
-                      formControlName="amqpConsumerExchangeForm">
+                      formControlName="amqpConsumerExchangeForm"[class.is-invalid]="getFormGroup(i).get('amqpConsumerExchangeForm')?.invalid  && getFormGroup(i).get('amqpConsumerExchangeForm')?.touched">
 
 
                   </div>
@@ -2267,7 +2267,7 @@
                   <label for="publicSubSubscriptionURL{{i}}">Subscription URL <i class="bi bi-info-circle"
                       [matTooltip]=pubSubUrl_tooltip></i></label>
                   <input type="text" id="publicSubSubscriptionURL{{i}}" class="form-control input-size"
-                    formControlName="publicSubSubscriptionURLForm">
+                    formControlName="publicSubSubscriptionURLForm" [class.is-invalid]="getFormGroup(i).get('publicSubSubscriptionURLForm')?.invalid  && getFormGroup(i).get('publicSubSubscriptionURLForm')?.touched">
 
 
                 </div>
@@ -2326,7 +2326,7 @@
                   <label for="publicPubSubscriptionURL">Topic URL <i class="bi bi-info-circle"
                       [matTooltip]=pubSubPublisherUrl_tooltip></i></label>
                   <input type="text" id="publicPubTopicURL{{i}}" class="form-control input-size"
-                    formControlName="publicPubTopicURLForm">
+                    formControlName="publicPubTopicURLForm" [class.is-invalid]="getFormGroup(i).get('publicPubTopicURLForm')?.invalid  && getFormGroup(i).get('publicPubTopicURLForm')?.touched">
 
 
                 </div>
@@ -2356,13 +2356,13 @@
                     <label for="amqpProducerQueueName{{i}}">Queue name <i class="bi bi-info-circle"
                         [matTooltip]=amqpProName_tooltip></i></label>
                     <input type="text" id="amqpProducerQueueName{{i}}" class="form-control input-size"
-                      formControlName="amqpProducerQueueNameForm">
+                      formControlName="amqpProducerQueueNameForm" [class.is-invalid]="getFormGroup(i).get('amqpProducerQueueNameForm')?.invalid  && getFormGroup(i).get('amqpProducerQueueNameForm')?.touched">
                   </div>
                   <div class="col-sm-12 col-md-6">
                     <label for="amqpProducerExchange{{i}}">Exchange <i class="bi bi-info-circle"
                         [matTooltip]=amqpProExchange_tooltip></i></label>
                     <input type="text" id="amqpProducerExchange{{i}}" class="form-control input-size"
-                      formControlName="amqpProducerExchangeForm">
+                      formControlName="amqpProducerExchangeForm" [class.is-invalid]="getFormGroup(i).get('amqpProducerExchangeForm')?.invalid  && getFormGroup(i).get('amqpProducerExchangeForml')?.touched">
 
                   </div>
                 </div>
