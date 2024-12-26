@@ -16,7 +16,7 @@ import { ApplicationService } from '../services/application.service';
 export class ApplicationComponent {
 
   // displayedColumns: string[] = ['name', 'owner', 'policy', 'workstatus', 'subscriptions', 'actions'];
-  displayedColumns: string[] = ['clientId', 'name', 'protocol', 'description', 'baseUrl','action'];
+  displayedColumns: string[] = ['clientId', 'name', 'protocol', 'description', 'baseUrl', 'action'];
 
   // dataSource = this.applicationResults;
   private subscription: Subscription
@@ -28,7 +28,7 @@ export class ApplicationComponent {
     this.router.navigate([`viewapplication/${applicationId}/overview`], { relativeTo: this.route })
     this.isShowApplication = false
   }
-  applicationId:any
+  applicationId: any
   isShowApplication: boolean = true
   // isShowParent: boolean = true
   entireJsonData: any
@@ -38,21 +38,21 @@ export class ApplicationComponent {
     this.isShowApplication = false
   }
 
-deleteApplication(applicationId:any){
+  deleteApplication(applicationId: any) {
 
-  this.applicationSrv.deleteApplications(applicationId).subscribe({
-    next:(res:any)=>{
-      console.log("result",res)
-      this.getApplications()
+    this.applicationSrv.deleteApplications(applicationId).subscribe({
+      next: (res: any) => {
+        console.log("result", res)
+        this.getApplications()
 
-    },
-    error:(err:any)=>{
-      console.log("error",err)  
-    }
-  })
+      },
+      error: (err: any) => {
+        console.log("error", err)
+      }
+    })
 
 
-}
+  }
 
   goToviewApplication(item: any) {
     this.router.navigate(['viewapplication'], {
@@ -97,10 +97,14 @@ deleteApplication(applicationId:any){
         console.log("result", res);
         this.applicationResults = res.applications
         console.log("applicationResults", this.applicationResults);
+
       },
       error: (err) => {
         console.log("error", err);
-
+        if (err.error.code === 400) {
+          this.applicationResults = []
+          console.log("applicationResults", this.applicationResults);
+        }
       }
     })
   }
@@ -109,7 +113,7 @@ deleteApplication(applicationId:any){
 
     // this.route.parent?.paramMap.subscribe(params => {
     //   console.log(params);
-      
+
     //   this.consumerId = params.get('consumerId');
     //   console.log('consumerId:', this.consumerId);
 
@@ -130,7 +134,7 @@ deleteApplication(applicationId:any){
     this.route.paramMap.subscribe(params => {
       this.consumerId = params.get('consumerId');
       console.log('consumerId ID:', this.consumerId);
-          if (this.consumerId) {
+      if (this.consumerId) {
         this.applicationSrv.getApplication(this.consumerId).subscribe({
           next: (res) => {
             console.log("result", res);
