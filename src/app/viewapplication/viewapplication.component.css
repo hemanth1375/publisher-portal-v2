@@ -1,0 +1,65 @@
+.toggle-header {
+    width: 100%;
+}
+
+.parameter-item {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    background-color: white;
+    color: black;
+    border-radius: 8px;
+    border: 2px solid rgba(151, 71, 255, 1);
+    padding: 0px 12px 0px 12px;
+}
+
+.parameter-item mat-icon {
+    font-size: 16px;
+}
+
+.sidemenu{
+    background: linear-gradient(to right,rgba(5, 35, 48, 1),rgba(10, 40, 52, 0.93));
+    /* min-width:220px !important; */
+    /* height:90vh; */
+    min-height: 100vh;
+  }
+  .side-menu mat-nav-list{
+    position: fixed !important;
+  }
+  .anchor-head{
+    color:white;
+  }
+  .mat-icon-styles{
+    margin-right:12px;
+    display: flex;
+    
+  }
+  .mat-icon-styles mat-icon{
+    font-size: 20px;
+    color: white;
+  }
+  .about-api-card{
+    height:auto;
+    border-bottom:1px solid black;
+  }
+  .about-name-section{
+    border-right:1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .img-bg{
+    background-color: rgba(6, 70, 122, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  .icon-support h3, p{
+    margin: 0px;
+  }
+
+  

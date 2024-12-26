@@ -11,11 +11,11 @@ import { ToastService } from '../services/toast.service';
 })
 export class ConnectivityComponent implements OnInit {
 
-
+  websocketsToolTip = "Communications using the WebSocket Protocol (RFC-6455) to enable two-way communication between a client to a backend host through the API gateway."
   concurrentCallsToolTip = "Number of parallel requests you want to send to the backend for the same request. Fastest request is taken and the rest are discarded. Recommended values 1-3 "
   connectEventToolTip = "Notifies in the log when there is the client connect event"
   backoffStrategyToolTip = "When the connection to your event source gets interrupted for whatever reason, KrakenD keeps trying to reconnect until it succeeds or until it reaches the max_retries. The backoff strategy  defines the delay in seconds in between consecutive failed retries"
-  readBufferSizeToolTip = "The find expression or literal you want to use.Connections buffer network input and output to reduce the number of system calls when reading messages. You can set the maximum buffer size for reading (in bytes)."
+  readBufferSizeToolTip = "Connections buffer network input and output to reduce the number of system calls when reading messages. You can set the maximum buffer size for reading (in bytes)."
   messageBufferSizeToolTip = "Sets the maximum buffer size for messages (in bytes)."
   writeWaitToolTip = "Sets the maximum time KrakenD will wait until the write times out. "
   maxRetriesActiveToolTip = "The maximum number of times you will allow KrakenD to retry reconnecting to a broken messaging system. Use a value h3= 0 for unlimited retries."
@@ -24,7 +24,7 @@ export class ConnectivityComponent implements OnInit {
   maxWriteBufferSizeToolTip = "Sets the maximum size of client messages (in bytes)."
   pongWaitToolTip = "Sets the maximum time KrakenD will wait until the pong times out."
   returnErrToolTip = "Provides an error &#123,error:reason here &#125; to the client when KrakenD was unable to send the message to the backend"
-  disconnectEventToolTip="Notifies in the log when there is a client disconnect event"
+  disconnectEventToolTip = "Notifies in the log when there is a client disconnect event"
 
   conCallsToolTip = "The concurrent requests are an excellent technique to improve the response times and decrease error rates by requesting in parallel the same information multiple times."
   seqProxyTooltip = "Calls backends sequentially instead of in parallel, so you can inject data from a previous call in the url_pattern of the next call. injecting variables like {resp0_XXXX} where 0 is the index of the backend and XXXX the attribute. E.g: {resp1_hotel_id} takes the field hotel_id from the first backend call (index starts at 0)."

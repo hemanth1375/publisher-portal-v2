@@ -21,33 +21,79 @@ import { GatewayServiceSettingsComponent } from './gateway-service-settings/gate
 import { GatewayTelemetryComponent } from './gateway-telemetry/gateway-telemetry.component';
 import { GatewaysHttpsecurityComponent } from './gateways-httpsecurity/gateways-httpsecurity.component';
 import { GatewayApiMonetizationComponent } from './gateway-api-monetization/gateway-api-monetization.component';
+import { SecurityAuthComponent } from './security-auth/security-auth.component';
+import { ConsumersComponent } from './consumers/consumers.component';
+import { CreateconsumersComponent } from './createconsumers/createconsumers.component';
+import { ConsumercardsComponent } from './consumercards/consumercards.component';
+import { ConsumerViewComponent } from './consumer-view/consumer-view.component';
+import { ApplicationComponent } from './application/application.component';
+import { CreateapplicationComponent } from './createapplication/createapplication.component';
+import { ViewapplicationComponent } from './viewapplication/viewapplication.component';
+import { ApplicationoverviewComponent } from './applicationoverview/applicationoverview.component';
+import { ApikeysComponent } from './apikeys/apikeys.component';
+import { SubscriptionsComponent } from './subscriptions/subscriptions.component';
 
 const routes: Routes = [
-  {path:"apis",component:ApicardsComponent,children:[
-    {path:"createapi",component:CreateapiComponent},
-    {path:"viewapi/:id",component:ViewapiComponent,children:[
-      {path:"overview",component:ApiOverviewComponent},
-      {path:"parameter",component:ParameterForwardingComponent},
-      {path:"auth",component:AuthComponent},
-      {path:"backends",component:BackendComponent},
-      {path:"throttling",component:ThrottlingComponent},
-      {path:"deployments",component:DeploymentComponent},
-      {path:"policies",component:PoliciesComponent},
-      {path:"response",component:ResponseManipulationComponent},
-      {path:"connectivity",component:ConnectivityComponent},
-      {path:"openapi",component:OpenapiComponent}
-    ]}
-  ]},
-  {path:"gateways",component:GatewaycardsComponent,children:[
-    {path:"creategateway",component:CreategatewayComponent},
-    {path:"viewgateway/:id", component:ViewgatewayComponent,children:[
-      {path:"dashboard",component:GatewayDashboardComponent},
-      {path:"service",component:GatewayServiceSettingsComponent},
-      {path:"telemetry",component:GatewayTelemetryComponent},
-      {path:"httpsecurity",component:GatewaysHttpsecurityComponent},
-      {path:"apimonetize",component:GatewayApiMonetizationComponent}
-    ]}
-  ]},
+  {
+    path: "apis", component: ApicardsComponent, children: [
+      { path: "createapi", component: CreateapiComponent },
+      {
+        path: "viewapi/:id", component: ViewapiComponent, children: [
+          { path: "overview", component: ApiOverviewComponent },
+          { path: "parameter", component: ParameterForwardingComponent },
+          { path: "auth", component: AuthComponent },
+          { path: "backends", component: BackendComponent },
+          { path: "throttling", component: ThrottlingComponent },
+          { path: "deployments", component: DeploymentComponent },
+          { path: "policies", component: PoliciesComponent },
+          { path: "response", component: ResponseManipulationComponent },
+          { path: "connectivity", component: ConnectivityComponent },
+          { path: "openapi", component: OpenapiComponent }
+        ]
+      }
+    ]
+  },
+  {
+    path: "gateways", component: GatewaycardsComponent, children: [
+      { path: "creategateway", component: CreategatewayComponent },
+      {
+        path: "viewgateway/:id", component: ViewgatewayComponent, children: [
+          { path: "dashboard", component: GatewayDashboardComponent },
+          { path: "service", component: GatewayServiceSettingsComponent },
+          { path: "telemetry", component: GatewayTelemetryComponent },
+          { path: "httpsecurity", component: GatewaysHttpsecurityComponent },
+          { path: "apimonetize", component: GatewayApiMonetizationComponent }
+        ]
+      }
+    ]
+  },
+  {
+    path: "authsecurity", component: SecurityAuthComponent,
+  },
+  {
+    path: "consumers", component: ConsumercardsComponent, children: [
+      { path: "createconsumer", component: CreateconsumersComponent },
+      // {
+      //   path: "viewconsumer", component: ConsumerViewComponent, children: [
+      //   ]
+      // },
+      {
+        path: "application", component: ApplicationComponent, children: [{
+          path: "createapplication", component: CreateapplicationComponent
+        }, {
+          path: "viewapplication/:id", component: ViewapplicationComponent, children: [
+            { path: "overview", component: ApplicationoverviewComponent },
+            { path: "productionkeys", component: ApikeysComponent },
+            { path: "oauthtokens", component: ApikeysComponent },
+            { path: "apikeys", component: ApikeysComponent },
+            { path: "subscription", component: SubscriptionsComponent }
+          ]
+        }
+        ]
+      },
+
+    ]
+  },
   { path: '', redirectTo: '/apis', pathMatch: 'full' }
   // {path:"gateways",component:GatewaycardsComponent}
 ];

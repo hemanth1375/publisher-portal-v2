@@ -1,5 +1,6 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import {MatTableModule} from '@angular/material/table';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -48,6 +49,18 @@ import { GatewaysHttpsecurityComponent } from './gateways-httpsecurity/gateways-
 import { ToastComponent } from './toast/toast.component';
 import { GatewayApiMonetizationComponent } from './gateway-api-monetization/gateway-api-monetization.component';
 import { MatRadioModule } from '@angular/material/radio';
+
+import { SecurityAuthComponent } from './security-auth/security-auth.component';
+import { ConsumersComponent } from './consumers/consumers.component';
+import { ConsumercardsComponent } from './consumercards/consumercards.component';
+import { CreateconsumersComponent } from './createconsumers/createconsumers.component';
+import { ConsumerViewComponent } from './consumer-view/consumer-view.component';
+import { ApplicationComponent } from './application/application.component';
+import { CreateapplicationComponent } from './createapplication/createapplication.component';
+import { ViewapplicationComponent } from './viewapplication/viewapplication.component';
+import { ApplicationoverviewComponent } from './applicationoverview/applicationoverview.component';
+import { ApikeysComponent } from './apikeys/apikeys.component';
+import { SubscriptionsComponent } from './subscriptions/subscriptions.component';
 
 
 // keycloak
@@ -102,11 +115,23 @@ function initializeKeycloak(keycloak: KeycloakService){
     GatewayTelemetryComponent,
     GatewaysHttpsecurityComponent,
     ToastComponent,
-    GatewayApiMonetizationComponent
+    GatewayApiMonetizationComponent,
+    SecurityAuthComponent,
+    ConsumersComponent,
+    ConsumercardsComponent,
+    CreateconsumersComponent,
+    ConsumerViewComponent,
+    ApplicationComponent,
+    CreateapplicationComponent,
+    ViewapplicationComponent,
+    ApplicationoverviewComponent,
+    ApikeysComponent,
+    SubscriptionsComponent
 
   ],
   imports: [
     BrowserModule,
+    MatTableModule,
     AppRoutingModule,MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule,
     FormsModule,
     MatFormFieldModule,

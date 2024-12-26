@@ -1,0 +1,338 @@
+<div class="container">
+    <form [formGroup]="configForm">
+        <!-- General Settings -->
+        <div class="row gap-2">
+            <div class="col-sm-12">
+                <h1>General Settings</h1>
+            </div>
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class=" d-flex flex-column  justify-content-between">
+                            <label for="protocol">Protocol</label>
+                            <input type="text" class="form-control " id="protocol" formControlName="protocol"
+                                value="OpenID Connect" placeholder="Enter protocol" readonly />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="d-flex flex-column  justify-content-between">
+                            <label for="clientId">Client ID</label>
+                            <input type="text" id="clientId" class="form-control" formControlName="clientId"
+                                placeholder="Enter client ID" />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="d-flex flex-column  justify-content-between">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" class="form-control " formControlName="name"
+                                placeholder="Enter name" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label for="description">Description</label>
+                        <textarea id="description" class="form-control" formControlName="description"
+                            placeholder="Enter description"></textarea>
+                    </div>
+                    <div class="col-sm-4 d-flex justify-content-start align-items-center">
+                        <!-- <div class="d-flex justify-content-between align-items-center ">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                                formControlName="alwaysDisplayInConsole">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">
+                                Always Display In Console</label>
+                        </div> -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked
+                                formControlName="alwaysDisplayInConsole">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Always Display In Console
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Access Settings -->
+        <div class="row gap-2">
+            <div class="col-sm-12">
+                <h1>Access settings</h1>
+            </div>
+            <div class="col-sm-12">
+                <label for="rootUrl">Root URL</label>
+                <input type="text" id="rootUrl" class="form-control form-width" formControlName="rootUrl"
+                    placeholder="Enter root URL" />
+            </div>
+            <div class="col-sm-12">
+                <label for="baseUrl">Home URL</label>
+                <input type="text" id="baseUrl" class="form-control form-width" formControlName="baseUrl"
+                    placeholder="Enter base URL" />
+            </div>
+            <!-- <div class="col-sm-12">
+                <label for="redirectUris">Redirect URIs</label>
+                <textarea id="redirectUris" formControlName="redirectUris"
+                    placeholder="Enter redirect URIs (comma-separated)" class="form-control form-width"></textarea>
+            </div> -->
+            <div class="col-sm-12">
+                <div class="input-con d-flex gap-2 flex-column">
+                    <div class="row align-items-end">
+                        <div class="col-sm-4">
+                            <label for="redirectUrls" class="form-label">Redirect URIs</label>
+                            <input type="text" class="form-control" id="redirectUrls" placeholder="https://example.com"
+                                formControlName="redirectUriForm">
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                                type="submit" (click)="addParameter('redirectUriForm')"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                </svg></button>
+                        </div>
+                        <div class="col-sm-12 d-flex mt-3">
+                            <button *ngFor="let attr of redirectUriFormArray; let i = index" class="parameter-item">
+                                {{ attr }}<mat-icon (click)="removeParameter(i,'redirectUriForm')"
+                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-sm-12">
+                <label for="webOrigins">Web Origins</label>
+                <textarea id="webOrigins" formControlName="webOrigins" placeholder="Enter web origins (comma-separated)"
+                    class="form-control form-width"></textarea>
+            </div> -->
+            <div class="col-sm-12">
+                <div class="input-con d-flex gap-2 flex-column">
+                    <div class="row align-items-end">
+                        <div class="col-sm-4">
+                            <label for="webOrigins" class="form-label">Web Origins</label>
+                            <input type="text" class="form-control" id="webOrigins" placeholder="https://example.com"
+                                formControlName="webOriginsUriForm">
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-primary" style="border-radius: 50%; height: 40px; width: 40px;"
+                                type="submit" (click)="addParameter('webOriginsUriForm')"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                </svg></button>
+                        </div>
+                        <div class="col-sm-12 d-flex mt-3">
+                            <button *ngFor="let attr of webOriginsUriFormArray; let i = index" class="parameter-item">
+                                {{ attr }}<mat-icon (click)="removeParameter(i,'webOriginsUriForm')"
+                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- //Capability config -->
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>Capability config</h1>
+            </div>
+            <div class="col-sm-12">
+                <!-- <label><input type="checkbox" formControlName="publicClient " />Client
+                    Authentication</label> -->
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                        formControlName="publicClient">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Client
+                        Authentication</label>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <!-- <label><input type="checkbox" formControlName="authorizationServicesEnabled " />
+                    Authorization Services
+                    Enabled</label> -->
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                        formControlName="authorizationServicesEnabled">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Authorization</label>
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <div class="row gap-2">
+                    <div class="col-sm-12">
+                        Authentication flow
+                    </div>
+                    <div class="col-sm-12">
+
+
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"
+                                        checked formControlName="standardFlowEnabled">
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Standard flow
+                                    </label>
+                                </div>
+                                <!-- <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                                        formControlName="implicitFlowEnabled">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">
+                                        Impact Flow Enabled </label>
+                                </div> -->
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"
+                                        checked formControlName="directAccessGrantsEnabled">
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Direct access grants
+                                    </label>
+                                </div>
+                                <!-- <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                                        formControlName="serviceAccountsEnabled">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">
+                                        Services Accounts </label>
+                                </div> -->
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"
+                                        checked formControlName="implicitFlowEnabled">
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Impact flow enabled
+                                    </label>
+                                </div>
+                                <!-- <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                                        formControlName="implicitFlowEnabled">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">
+                                        Impact Flow Enabled </label>
+                                </div> -->
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"
+                                        checked formControlName="serviceAccountsEnabled">
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Services adcounts
+                                    </label>
+                                </div>
+                                <!-- <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                                        formControlName="serviceAccountsEnabled">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">
+                                        Services Accounts </label>
+                                </div> -->
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="flexCheckChecked" checked
+                                        formControlName="oauth2deviceauthorizationgrantenabled">
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        OAuth2 Device Authorization Enabled
+                                    </label>
+                                </div>
+                                <!-- <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                                        formControlName="oauth2.device.authorization.grant.enabled">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">
+                                        OAuth2 Device Authorization Enabled </label>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="flexCheckChecked" checked
+                                        formControlName="oidccibagrantenabled">
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        OIDC CIBA Grant Enabled
+                                    </label>
+                                </div>
+
+                                <!-- <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                                        formControlName="oidc.ciba.grant.enabled">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">
+                                        OIDC CIBA Grant Enabled </label>
+                                </div> -->
+                            </div>
+                        </div>
+
+                        <!-- <div class="col-sm-12">
+                            <label><input type="checkbox" formControlName="serviceAccountsEnabled" /> Service
+                                Accounts</label>
+                        </div> -->
+                        <!-- <div class="col-sm-12">
+                            <label><input type="checkbox" formControlName="implicitFlowEnabled" /> Implicit
+                                Flow Enabled</label>
+                        </div> -->
+                        <!-- <div class="col-sm-12">
+                            <label><input type="checkbox" formControlName="directAccessGrantsEnabled" /> Direct
+                                Access
+                                Grants</label>
+                        </div> -->
+                        <!-- <div class="col-sm-12">
+                            <label>
+                                <input type="checkbox" formControlName="oauth2.device.authorization.grant.enabled" />
+                                OAuth2 Device Authorization Enabled
+                            </label>
+                        </div> -->
+                        <!-- <div class="col-sm-12">
+                            <label>
+                                <input type="checkbox" formControlName="oidc.ciba.grant.enabled" />
+                                OIDC CIBA Grant Enabled
+                            </label>
+                        </div> -->
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- //Logout Settings -->
+        <div class="row">
+            <div class="col-sm-12">
+                <h1> Logout Settings</h1>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked
+                        formControlName="frontchannelLogout">
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Frontchannel Logout
+                    </label>
+                </div>
+                <!-- <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                        formControlName="frontchannelLogout">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">
+                        Frontchannel Logout </label>
+                </div> -->
+            </div>
+        </div>
+
+        <div class="row my-2"> 
+            <div class="col-sm-12 d-flex align-items-center justify-content-center">
+                <div class="d-flex justify-content-between align-items-center">
+                    <button type="submit" class="btn btn-primary" (click)="onSubmitConfigForm()">Save</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,66 @@
+.heading-with-toggle h3 {
+    margin: 0px;
+}
+
+.main-con h2 {
+    margin: 0px;
+}
+
+.input-with-helper-text {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    ;
+}
+
+.input-with-helper-text p {
+    font-size: 13px;
+}
+
+.parameter-item {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  background-color: white;
+  color: black;
+  border-radius:8px;
+  border: 2px solid rgba(151, 71, 255, 1);
+  padding: 0px 12px 0px 12px;
+}
+
+.parameter-item mat-icon {
+  font-size: 16px;
+}
+.fingerprint {
+    background: black;
+    color: white;
+}
+
+ 
+.toggle-header{
+    width: 100%;
+  }
+
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    width: 300px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card h3 {
+    margin-top: 0;
+  }
+  
+  .card p {
+    margin: 0.5rem 0;
+  }
+  

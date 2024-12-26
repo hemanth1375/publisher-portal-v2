@@ -17,7 +17,13 @@ export class GatewaysHttpsecurityComponent {
   krakendId: any
   selectedValues: string[] = []; // Array to store selected values
   formGroupHttpSecurity: FormGroup;
-
+  httpSecurityIpFilterToolTip = "The IP filtering plugin allows you to restrict the traffic to your API gateway based on the IP address. It works in two different modes (allow or deny) where you define the list of IPs (CIDR blocks) that are authorized to use the API, or that are denied from using the API."
+  basicAuthToolTip = "The Basic Authentication plugin protects the access to selected endpoints using basic username and password credentials via <b>htpasswd"
+  httpSecurityToolTip = "Enforces HTTP security policies such as AllowedHosts, SSL Options, HSTS, XSS, HPKP"
+  ipFilterPluginToolTip = "The IP filtering plugin allows you to restrict the traffic to your API gateway based on the IP address.It works in two different modes (allow or deny) where you define the list of IPs (CIDR blocks) that are authorized to use the API, or that are denied from using the API."
+  multiProviderToolTip = "The JWK aggregator plugin allows KrakenD to validate tokens issued by multiple Identity Providers."
+  corsToolTip = "Enable Cross-Origin Resource Sharing (CORS) module when the API is consumed by browsers in different domains."
+  botDetectorToolTip = "Detect and reject bots carrying out scraping, content theft, and form spam."
   allowedOriginsToolTip = "Add those origins you would like to accept. Or use * for any origins"
   allowedHeadersToolTip = "Only the headers added here will be allowed"
   exposeHeadersToolTip = "Headers that are safe to expose to the API of a CORS API specification"
@@ -563,7 +569,7 @@ export class GatewaysHttpsecurityComponent {
           // "C": (this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value?.length != 0 ? this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value : null),
           // }),
           ...(this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value?.length && {
-            "allowed_hosts" : (this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value)
+            "allowed_hosts": (this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value)
           }),
           ...(this.formGroupHttpSecurity.get('httpSecurityXSSProtectionForm')?.value && { "browser_xss_filter": this.formGroupHttpSecurity.get('httpSecurityXSSProtectionForm')?.value }),
           // ...(this.formGroupHttpSecurity?.httpSecurityConSecPolicyForm &&{"content_security_policy": this.formGroupHttpSecurity?.httpSecurityConSecPolicyForm}),

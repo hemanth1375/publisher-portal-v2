@@ -12,6 +12,8 @@
                                 <div class="d-flex justify-content-between toggle-header">
                                     <div>
                                         Documentation (OpenAPI)
+                                         &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=docTooltip></i>
 
                                         @if(formGroupOpenapi.value.isDocumentationActive){
                                         &nbsp; <i class="bi bi-info-circle" [matTooltip]=generalOpenApiTooltip></i>
@@ -153,9 +155,10 @@
                             <!-- <div class="form-text">Deprecated in OAS3. Write an example response in JSON format to show as an
                                     example in the documentation</div> -->
                         </div>
-                        } @else {
-                        {{docTooltip}}
                         }
+                        <!-- @else {
+                        {{docTooltip}}
+                        } -->
                     </mat-expansion-panel>
                 </mat-accordion>
 

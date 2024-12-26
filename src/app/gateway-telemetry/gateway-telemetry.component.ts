@@ -15,6 +15,12 @@ export class GatewayTelemetryComponent {
   headerObjectMap: Map<string, string> = new Map();
   levelToolTip = "The reporting level, from more to less verbosity"
   TelemertyFormGroup: FormGroup;
+
+  newRelicToolTip = "Push KrakenD metrics and distributed traces to your New Relic dashboard."
+  opencensusToolTip = "The Opencensus middleware provides several integrations to export tracing and metrics to different third party systems."
+  metricsApiToolTip = "The metrics API listens in a new address and exposes a /__stats/ endpoint with all the KrakenD metrics."
+  openTelementryToolTip = "The OpenTelemetry middleware provides several integrations to export tracing and metrics to different third party systems."
+  loggingToolTip = "Extend the default logging behaviour"
   logprefixToolTip = "Prepend a string before the the log lines"
   opTypeToolTip = "The format of the log record"
   syslogFacilityToolTip = "Facility to send the messages as set in the rsyslog standard"

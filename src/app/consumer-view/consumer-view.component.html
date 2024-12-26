@@ -1,0 +1,162 @@
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-sm-12">
+            <mat-accordion>
+                <form [formGroup]="formBasicAuthGroup" multi="true">
+                    <mat-expansion-panel (opened)="formBasicAuthGroup.value.isBasicAuthActive">
+                        <mat-expansion-panel-header collapsedHeight="70px">
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>Basic Authentication</div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                            formControlName="isBasicAuthActive" />
+                                    </div>
+                                </div>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <!-- Content shown when Basic Auth is not active -->
+                        <!-- <p *ngIf="!formBasicAuthGroup.get('isBasicAuthActive')?.value">
+                            The Basic Authentication plugin protects the access to selected endpoints using basic
+                            username and password
+                            credentials via <code>htpasswd</code>.
+                        </p> -->
+
+                        <!-- Content shown when Basic Auth is active -->
+                        <ng-container *ngIf="formBasicAuthGroup.get('isBasicAuthActive')?.value">
+                            <p>
+                                Basic authentication is now required by this endpoint. You can change the path of the
+                                <code>.htpasswd</code> file under <strong>HTTP Security</strong>.
+                            </p>
+
+                            <div class="mb-3 col-sm-6">x
+                                <label for="htpasswdPath" class="form-label">.htpasswd File Path</label>
+                                <input type="text" class="form-control" id="htpasswdPath" formControlName="htpasswdPath"
+                                    placeholder="Enter the path to your .htpasswd file" />
+                                <div class="form-text">Specify the full path to your .htpasswd file.</div>
+                            </div>
+
+                            <button mat-raised-button color="primary" type="submit" (click)="onSubmitBasicAuthInfo()">
+                                Save
+                            </button>
+                        </ng-container>
+                    </mat-expansion-panel>
+                </form>
+
+                <form [formGroup]="apiKeysForm" (ngSubmit)="onSubmitApiKeyAuthInfo()">
+                    <mat-expansion-panel (opened)="apiKeysForm.value.isAPIKeyAuthActive">
+                        <mat-expansion-panel-header collapsedHeight="70px">
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>API Key Authentication <i class="bi bi-info-circle"
+                                            [matTooltip]=apikeyToolTip></i></div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                            formControlName="isAPIKeyAuthActive" />
+                                    </div>
+                                </div>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        @if (apiKeysForm.value?.isAPIKeyAuthActive) {
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <label for="key" class="form-label">API Key</label>
+                                <input type="text" id="key" class="form-control" aria-describedby="keyHelper"
+                                    formControlName="APIKey" placeholder="11a7ec0f-e89d-421d-b9bd-22463eab78dd">
+                                <div id="keyHelper" class="form-text">
+                                    Use the randomly generated API Key or use a unique string of your choice
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <label for="accessRole" class="form-label">Role</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="e.g:admin"
+                                        aria-label="Recipient's username" formControlName="apiRole"
+                                        aria-describedby="button-addon2">
+                                    <button class="btn btn-dark" type="button" id="button-addon2"
+                                        (click)="addParameter('apiRole')">Add Role</button>
+                                </div>
+                                <div id="roleHelper" class="form-text">
+                                    Roles, plans, levels, or permissions are different ways to name the different levels
+                                    of
+                                    access this API key
+                                    has granted in the system. Each endpoint can define the different roles that see the
+                                    endpoint.
+                                </div>
+                                <!-- <div class=" col-sm-12 mt-3 d-flex">
+                                    <button *ngFor="let attr of apiRolesArray; let i = index" class="parameter-item">
+                                        {{ attr }}<mat-icon (click)="removeParameter(i,'apiRole')"
+                                            class="d-flex align-items-center justify-content-end">x</mat-icon>
+                                    </button>
+                                </div> -->
+                                <div class="col-sm-12 d-flex mt-3">
+                                    <button *ngFor="let attr of apiRolesArray; let i = index" class="parameter-item">
+                                        {{ attr }}<mat-icon (click)="removeParameter(i,'apiRole')"
+                                            class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <label for="desc" class="form-label">Description</label>
+                                <input type="text" id="desc" class="form-control" aria-describedby="descHelper"
+                                    formControlName="description">
+                                <div id="descHelper" class="form-text">
+                                    Notes, customer name, purpose, or description of this new API Key for easier
+                                    identification in the future.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 d-flex justify-content-center align-items-center">
+                                <button class="btn btn-dark" (click)="addKey()">Add Key</button>
+                            </div>
+                        </div>
+                        <!-- <div class="row">
+                    <div class="col-sm-12">
+                        <button mat-raised-button type="submit">Save</button>
+                    </div>
+                </div> -->
+                        }
+                        <!-- @else {
+                        <div class="row">
+                            <p>The API key authentication enables a Role-Based Access Control (RBAC) mechanism by
+                                reading the
+                                Authorization header of incoming requests. For all your desired endpoints, KrakenD
+                                rejects
+                                requests from users that do not provide a valid key or are trying to access a resource
+                                with
+                                insufficient permissions for the user's role</p>
+                        </div>
+                        } -->
+
+                        @if(keysArray && keysArray.length>0){
+                        <div class="row" *ngFor="let card of keysArray">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-title">API Key Details</div>
+                                    <div class="card-item">
+                                        <span>Key Name:</span> {{card?.APIKey}}
+                                    </div>
+                                    <div class="card-item">
+                                        <!-- <span>Roles:</span> {{ card.rolesArrayValue.join(', ') }} -->
+                                        {{ card.rolesArrayValue?.length ? card.rolesArrayValue.join(', ') : 'No roles
+                                        assigned' }}
+                                    </div>
+                                    <div class="card-item">
+                                        <span>Description:</span> {{ card.description}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </mat-expansion-panel>
+                </form>
+            </mat-accordion>
+        </div>
+    </div>
+</div>

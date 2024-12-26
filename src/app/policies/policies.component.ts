@@ -12,6 +12,23 @@ import { CustomValidators } from '../shared/validators/custom-validators';
 })
 export class PoliciesComponent implements OnInit {
 
+  resonseJsonSchemaToolTip = "Write your JSON schema directly in this field, with any number of fields or validations you need."
+  jsonSchemaToolTIp = "Write your JSON schema directly in this field, with any number of fields or validations you need."
+  disableMacrosToolTip = "Advanced macros can be disabled when not used for a faster evaluation."
+  autoJoinPoliciesTip = "All policies concatenate with an AND operation to evaluate a single expression. Faster, but harder to debug."
+  enableDebugToolTip = "Evaluation results are printed in the console."
+  jwtValidationToolTip = "Policy. Example: has(JWT.user_id) && 'legal' == JWT.department"
+  secResErrorContentToolTip = "The Content-Type header you'd like to send with the error response. When unset, uses text/plain by default."
+  secResErrorBodyToolTip = "Empty string to return the validation error, or write a string with the error response body. You can add escaped JSON, XML, etc in the string and add a Content-Type."
+  secResErrorStatusToolTip = "Returned status on violated policy"
+  secResPoliciesToolTip = "Policy. Example: !isEmpty(resp_data.message)"
+  secErrorContentToolTip = "The Content-Type header you'd like to send with the error response. When unset, uses text/plain by default."
+  secErrorBodyToolTip = "Empty string to return the validation error, or write a string with the error response body. You can add escaped JSON, XML, etc in the string and add a Content-Type."
+  secErrorStatusCodeToolTip = "Returned status on violated policy"
+  securityReqpolicies_tooltip = "Policy. Example: hasQuerystring('q')"
+  responseSchemaValidatorToolTip = "The response schema validator plugin adds a schema validation before the gateway returns the response to the end-user or before it's merged in the endpoint with the rest of the backends."
+  requestSchemaValidatorToolTip = "The policies engine lets you write custom rules validated on runtime during requests, responses, and token validation. The policies allow you to implement all sorts of validations and user access control, from parameter compliance, to RBAC (Role-Based Access Control) and ABAC (Attribute-Based Access Control) strategies."
+  securityPoliciesToolTip = "Implement all sorts of validations and user access control, from parameter compliance, to RBAC (Role-Based Access Control) and ABAC (Attribute-Based Access Control) strategies."
   securityPolTooltip = "Implement all sorts of validations and user access control, from parameter compliance, to RBAC (Role-Based Access Control) and ABAC (Attribute-Based Access Control) strategies."
   secReqPolicyToolTip = "Policy. Example: hasQuerystring('q')"
   errorMessageTooltip = "The error message you want to show<br> when the validation fails. Leave it  empty to show the JSON-schema validation error. "

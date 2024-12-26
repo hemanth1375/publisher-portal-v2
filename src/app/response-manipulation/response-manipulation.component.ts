@@ -14,7 +14,15 @@ import { CustomValidators } from '../shared/validators/custom-validators';
 })
 export class ResponseManipulationComponent implements OnInit {
 
-
+  responseManipulationPathToolTip = "You can load the response from an external file instead of editing the template."
+  regexpModeToolTip = "Check if you want to use regular expression instead of a literal string (faster)"
+  replaceToolTip = "The literal string or expression you want to use as a replacement. You can use capture groups with $1, $2, etc."
+  findInToolTip = "The find expression or literal you want to use"
+  keyToReplaceToolTip = "Write the key of the object you would like to replace content."
+  resManipulationToolTip = "The response body generator lets you write a whole new payload using a template that has access to all the response data. In addition to the payload from the backend, you can incorporate other information such as headers, status codes, query strings, or URL parameters."
+  regexContentReplacerToolTip = "The content replacer plugin allows you to modify the response of your services by doing literal replacements or more sophisticated replacements with regular expressions."
+  advancedResponseToolTip = "Manipulate the response dataset after the aggregation layer using a JSON Query language."
+  staticResonseToolTip = "When the backend fails you can still return the static data provided below to the user. The data is merged with any existing partial responses. If you still don't have a backend and want to have this data, add a fake one that cannot be resolved."
   responseToolTip = "Provide the JSON object you want to return (ensure to start and end with curly braces)."
   expressionToolTip = "JMESpath query to execute on returned results of  /v1/huge-fountain/&#123;id_fountain&#125;"
   serverResponseToolTip = "Example of how JMESpath works"

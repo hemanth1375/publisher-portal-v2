@@ -52,7 +52,7 @@
                     <span *ngIf="!isCollapsed" class="anchor-head">Gateways</span>
                 </div>
             </a>
-              <a mat-list-item routerLink="security" routerLinkActive="active">
+              <a mat-list-item routerLink="authsecurity" routerLinkActive="active">
                 <div class="d-flex align-items-center">
                     <span class="mat-icon-styles">
                         <mat-icon aria-hidden="false" aria-label="Example home icon" class="material-symbols-outlined " fontIcon="add_moderator"></mat-icon>
@@ -66,6 +66,14 @@
                         <mat-icon aria-hidden="false" aria-label="Example home icon" class="material-symbols-outlined " fontIcon="extension"></mat-icon>
                     </span>
                     <span *ngIf="!isCollapsed" class="anchor-head">Policies</span>
+                </div>
+              </a>
+              <a mat-list-item routerLink="consumers">
+                <div class="d-flex align-items-center">
+                    <span class="mat-icon-styles">
+                        <mat-icon aria-hidden="false" aria-label="Example home icon" class="material-symbols-outlined " fontIcon="extension"></mat-icon>
+                    </span>
+                    <span *ngIf="!isCollapsed" class="anchor-head">consumers</span>
                 </div>
               </a>
           </mat-nav-list>

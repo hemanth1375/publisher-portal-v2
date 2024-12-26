@@ -1,0 +1,683 @@
+<div class="container">
+    <!-- <form [formGroup]="formGroup1"> -->
+    <div class="row mt-2">
+        <h2>Auth</h2>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-accordion [multi]="true">
+                <form [formGroup]="formTokenValidationGroup">
+                    <mat-expansion-panel (opened)="formTokenValidationGroup.value?.isTokenValidationActive">
+
+                        <mat-expansion-panel-header collapsedHeight="70px">
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>
+                                        Token Validation &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=tokenValidationToolTip></i>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                            formControlName="isTokenValidationActive">
+                                    </div>
+                                </div>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <!-- Conditional Content -->
+                        <!-- <div *ngIf="!formTokenValidationGroup.get('isTokenValidationActive')?.value">
+                            <p>
+                                Enables validation of JWT tokens (OAuth) that have been issued by a third-party identity
+                                provider (e.g., OpenID Connect).
+                            </p>
+                        </div> -->
+
+                        <div *ngIf="formTokenValidationGroup.get('isTokenValidationActive')?.value">
+                            <p>
+                                KrakenD is now in charge of token validation, but if you'd like to keep passing the JWT
+                                tokens to the backend, add the Authorization header in the endpoint's parameter
+                                forwarding.
+                            </p>
+                            <p>
+                                Only the algorithm and the location of your JWK are mandatory fields.
+                            </p>
+
+                            <!-- Algorithm and JWK URI -->
+                            <div class="col-sm-12 d-flex gap-3 p-3">
+                                <div class="mb-3 col-sm-4">
+                                    <label for="algorithmselect" class="form-label">
+                                        Algorithm
+                                        <i class="bi bi-info-circle" [matTooltip]="algorithmselectToolTip"></i>
+                                    </label>
+                                    <select class="form-select" id="algorithmselect" formControlName="algorithm">
+                                        <!-- <option value="" disabled>Select Algorithm</option>
+                                        <option value="1">Algorithm 1</option>
+                                        <option value="2">Algorithm 2</option>
+                                        <option value="3">Algorithm 3</option> -->
+                                        <option *ngFor="let item of constants.algorithms" [value]="item.alg">
+                                            {{ item.desc }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 col-sm-4">
+                                    <label for="jwkUri" class="form-label">
+                                        JWK URI
+                                        <i class="bi bi-info-circle" [matTooltip]="audienceToolTip"></i>
+                                    </label>
+                                    <input type="text" class="form-control" id="jwkUri" formControlName="jwkUri">
+                                </div>
+                            </div>
+
+                            <!-- Scopes -->
+                            <div class="col-sm-12 d-flex gap-3 p-3">
+                                <div class="col-sm-6">
+                                    <div class="input-con d-flex gap-2 flex-column">
+                                        <div class="row align-items-end">
+                                            <div class="col-sm-6">
+                                                <label for="scopes" class="form-label">Scopes to validate &nbsp; <i
+                                                        class="bi bi-info-circle"
+                                                        [matTooltip]=scopesToolTip></i></label>
+                                                <input type="text" class="form-control" id="scopes"
+                                                    placeholder="https://example.com"
+                                                    formControlName="scopesToValidate">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <button class="btn btn-primary"
+                                                    style="border-radius: 50%; height: 40px; width: 40px;" type="button"
+                                                    (click)="addParameter('scopesToValidate')"><svg
+                                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd"
+                                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                                    </svg></button>
+                                            </div>
+                                            <div class="col-sm-12 d-flex mt-3">
+                                                <button *ngFor="let scope of scopesArray; let i = index"
+                                                    class="parameter-item">
+                                                    {{ scope }}<mat-icon (click)="removeParameter(i,'scopesToValidate')"
+                                                        class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-sm-3">
+                                    <label for="matcherselect" class="form-label">Matcher</label>
+                                    <div>
+                                        <select class="form-select" aria-label="Default select example"
+                                            id="matcherselect" formControlName="selectedMatcher">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-sm-3">
+                                    <label for="scopesKey" class="form-label">
+                                        Scopes Key
+                                        <i class="bi bi-info-circle" [matTooltip]="scopesKeyToolTip"></i>
+                                    </label>
+                                    <input type="text" class="form-control" id="scopesKey" formControlName="scopesKey">
+                                </div>
+
+                            </div>
+
+                            <!-- Issuer -->
+                            <div class="col-sm-12 p-3">
+                                <div class="mb-3 col-sm-8">
+                                    <label for="issuer" class="form-label">
+                                        Issuer
+                                        <i class="bi bi-info-circle" [matTooltip]="issuerToolTip"></i>
+                                    </label>
+                                    <input type="text" class="form-control" id="issuer" formControlName="issuer">
+                                </div>
+                            </div>
+
+                            <!-- audience and roles (audience and roles added)-->
+                            <div class="col-sm-12 p-3 d-flex gap-5">
+                                <div class="col-sm-6">
+                                    <div class="input-con d-flex gap-2 flex-column">
+                                        <div class="row align-items-end">
+                                            <div class="col-sm-6">
+                                                <label for="audience" class="form-label">Audience &nbsp; <i
+                                                        class="bi bi-info-circle"
+                                                        [matTooltip]=audienceToolTip></i></label>
+                                                <input type="text" class="form-control" id="audience"
+                                                    placeholder="https://example.com" formControlName="audience">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <button class="btn btn-primary"
+                                                    style="border-radius: 50%; height: 40px; width: 40px;" type="submit"
+                                                    (click)="addParameter('audience')"><svg
+                                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd"
+                                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                                    </svg></button>
+                                            </div>
+                                            <div class="col-sm-12 d-flex mt-3">
+                                                <button *ngFor="let audience of audienceArray; let i = index"
+                                                    class="parameter-item">
+                                                    {{ audience }}<mat-icon (click)="removeParameter(i,'audience')"
+                                                        class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="input-con d-flex gap-2 flex-column">
+                                        <div class="row align-items-end">
+                                            <div class="col-sm-6">
+                                                <label for="exampleInputEmail1" class="form-label">Roles &nbsp; <i
+                                                        class="bi bi-info-circle"
+                                                        [matTooltip]=exampleInputEmail1ToolTip></i></label>
+                                                <input type="text" id="exampleInputEmail1" class="form-control"
+                                                    formControlName="roles">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <button class="btn btn-primary"
+                                                    style="border-radius: 50%; height: 40px; width: 40px;" type="submit"
+                                                    (click)="addParameter('roles')"><svg
+                                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd"
+                                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                                    </svg></button>
+                                            </div>
+                                            <div class="col-sm-12 d-flex mt-3">
+                                                <button *ngFor="let role of rolesArray; let i = index"
+                                                    class="parameter-item">
+                                                    {{ role }}<mat-icon (click)="removeParameter(i, 'roles')"
+                                                        class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- roleskey 111and cookie -->
+                            <div class="col-sm-12 d-flex gap-3 p-3">
+                                <div class="mb-3 col-sm-4">
+                                    <label for="rolesKey" class="form-label">Roles Key &nbsp; <i
+                                            class="bi bi-info-circle" [matTooltip]=rolesKeyToolTip></i></label>
+                                    <input type="text" class="form-control" id="rolesKey" aria-describedby="emailHelp"
+                                        formControlName="rolesKey">
+                                    <!-- <div class="form-text">Key name where the roles are stored</div> -->
+                                </div>
+                                <div class="mb-3 col-sm-4">
+                                    <label for="cookieName" class="form-label">Cookie name &nbsp; <i
+                                            class="bi bi-info-circle" [matTooltip]=cookieNameToolTip></i></label>
+                                    <input type="text" class="form-control" id="cookieName" aria-describedby="emailHelp"
+                                        formControlName="cookieName">
+                                    <!-- <div class="form-text">The key name of the cookie</div> -->
+                                </div>
+                            </div>
+                            <!-- roleskey checkbox-->
+                            <div class="col-sm-12 heading-with-toggle gap-2 flex-column p-3">
+                                <mat-checkbox class="example-margin" formControlName="rolesKeyCheckBox">Roles key is
+                                    nested
+                                    &nbsp; <i class="bi bi-info-circle" [matTooltip]=roleKeysToolTip></i></mat-checkbox>
+                                <!-- <div class="form-text">If the roles key is using a nested object using the . dot
+                                            notation, must be checked in order to traverse the object.</div> -->
+                            </div>
+
+                            <!-- this is figureprints(added newly) -->
+                            <div class="col-sm-12 p-3 d-flex gap-3">
+                                <div class="mb-3 col-sm-8 ">
+                                    <label for="exampleFormControlTextarea1" class="form-label">Fingerprints &nbsp; <i
+                                            class="bi bi-info-circle"
+                                            [matTooltip]=exampleFormControlTextarea1ToolTip></i></label>
+                                    <textarea class="form-control fingerprint" id="exampleFormControlTextarea1" rows="3"
+                                        formControlName="vFigurePrint"></textarea>
+                                    <!-- <div class="form-text">All fingerprints must be in base64</div> -->
+                                </div>
+                                <div class="col-sm-4 d-flex align-items-center">
+                                    <button type="button" class="btn btn-outline-primary"
+                                        (click)="addParameter('vFigurePrint')">Add Fingerprint</button>
+                                </div>
+                            </div>
+                            <div class="mt-3 d-flex">
+                                <button *ngFor="let fingerprint of vFigurePrintArray; let i = index"
+                                    class="parameter-item">
+                                    {{ fingerprint }} <mat-icon (click)="removeParameter(i,'vFigurePrint')"
+                                        class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                </button>
+                            </div>
+                            <!--(added) isCustomChiperSuiteActive -->
+                            <div class="col-sm-12 p-3">
+                                <div class="col-sm-12 heading-with-toggle gap-2 flex-column mb-2">
+                                    <mat-checkbox (change)="changeStatus()" class="example-margin">Custom Chiper
+                                        Suite</mat-checkbox>
+                                </div>
+                                <div class="mb-3 col-sm-8"
+                                    *ngIf="formTokenValidationGroup.get('isCustomChiperSuiteActive')?.value">
+                                    <!-- <textarea class="form-control fingerprint" id="exampleFormControlTextarea1" rows="3"
+                                        formControlName="customChiperSuite"></textarea> -->
+                                    <select class="form-control" formControlName="authValidatorCChiperSuiteArrayValues"
+                                        multiple>
+                                        <option *ngFor="let suite of constants.customCipherSuites; let val = index"
+                                            [value]="suite.value">
+                                            {{ suite.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-12 d-flex mt-3">
+                                    <button *ngFor="let attr of selectedCChiperSuitesValuesArray ; let i = index"
+                                        class="parameter-item" (click)="removeAttribute(i,'auth')">
+                                        {{ attr }}<mat-icon
+                                            class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                    </button>
+                                </div>
+                                <div class="form-text">Overrides the default cipher suites. Unless you have your
+                                    own legacy JWK you don't need to choose anything here</div>
+                            </div>
+                            <!-- Caching and Security -->
+                            <div class="col-sm-12 d-flex gap-3 p-3">
+                                <mat-checkbox formControlName="enableCaching">Enable Caching</mat-checkbox>
+                                <mat-checkbox formControlName="disableJwkSecurity">Disable JWK Security</mat-checkbox>
+                            </div>
+
+                            <!-- Save Button -->
+                            <div class="col-sm-12 p-3">
+                                <button mat-raised-button color="primary" type="submit"
+                                    (click)="onSubmitTokenValidationInfo()">
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-container">
+                            <div class="card" *ngFor="let item of authValidatorArrayResult">
+                                <h3>Card ID: {{ item.id }}</h3>
+                                <p><strong>Algorithm:</strong> {{ item.alg }}</p>
+                                <p><strong>JWK URL:</strong> {{ item.jwk_url }}</p>
+                                <!-- <p><strong>Audience:</strong> {{ item.audience.join(', ') }}</p>
+                                <p><strong>Roles:</strong> {{ item.roles.join(', ') }}</p>
+                                <p><strong>Disable JWK Security:</strong> {{ item.disable_jwk_security }}</p>
+                                <p><strong>Scopes:</strong> {{ item.scopes.join(', ') }}</p>
+                                <p><strong>Roles Key Nested:</strong> {{ item.roles_key_is_nested }}</p>
+                                <p><strong>JWK Finger Prints:</strong> {{ item.jwk_finger_prints.join(', ') }}</p>
+                                <p><strong>Cipher Suites:</strong> {{ item.cipher_suites.join(', ') }}</p> -->
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </form>
+
+                <!-- <mat-expansion-panel>
+                    <mat-expansion-panel-header collapsedHeight="70px">
+                        <mat-panel-title>
+                            <div class="d-flex justify-content-between toggle-header">
+                                <div>
+                                    Api key authentication
+                                </div>
+                            </div>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <p>Api keys are not enabled yet</p>
+                </mat-expansion-panel> -->
+            </mat-accordion>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 
+        <div class="row mt-2">
+            <div class="col-sm-12 d-flex flex-column gap-2 main-con">
+                <h2>Auth</h2>
+
+                <div class="col-sm-12 heading-with-toggle d-flex align-items-center gap-2">
+                    <div>
+                        <h3>Token Validation</h3>
+                    </div>
+                    <div>
+                        <mat-slide-toggle #tokenValidation id="isTokenValidationActive"
+                            (change)="onToggleChangeStaticResponse($event, tokenValidation.id)"></mat-slide-toggle>
+                    </div>
+                </div>
+
+                @if (!isTokenValidationActive) {
+                <p>Enables validation of JWT tokens (OAuth) that have been issued by a third party identity provider
+                    (e.g.:
+                    OpenID Connect)</p>
+                }
+                @else {
+                <p>KrakenD is now in charge of token validation, but if you'd like to keep passing the JWT tokens to the
+                    backend, add the Authorization header in the endpoint's parameter forwarding.</p>
+                <p>Only the algorithm and the location of your jwk are mandatory fields.</p>
+
+                <div class="col-sm-12 d-flex gap-3 p-3">
+                    <div class="mb-3 col-sm-4">
+                        <label for="algorithmselect" class="form-label">Algorithm</label>
+                        <div>
+                            <select class="form-select" aria-label="Default select example" id="algorithmselect"
+                                formControlName="algorithm">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="form-text">Digital signatures and MACs algorithm</div>
+                    </div>
+                    <div class="mb-3 col-sm-4">
+                        <label for="exampleInputEmail1" class="form-label">JWK URI</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                            formControlName="jwkUri">
+                        <div class="form-text">The URL to your JWK endpoint with the set of public keys
+                            used to
+                            verify the authenticity of JWT</div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 d-flex gap-3 p-3">
+                    <div class="col-sm-6">
+                        <div class="mb-3">
+                            <label for="audience" class="form-label">Scopes to validate</label>
+                            <div class="d-flex gap-2">
+                                <input type="text" class="form-control" formControlName="scopesToValidate" id="audience"
+                                    aria-describedby="audience">
+                                <button type="button" class="btn btn-outline-primary"
+                                    (click)="addParameter('scopesToValidate')">Add</button>
+                            </div>
+                            <div class="form-text">List of all the audiences supported by this endpoint
+                            </div>
+                        </div>
+                        <div class="mt-3 d-flex">
+                            <button *ngFor="let scope of scopesArray; let i = index" class="parameter-item">
+                                {{ scope }}<mat-icon (click)="removeParameter(i,'scopesToValidate')"
+                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-3 col-sm-4">
+                        <label for="exampleInputEmail1" class="form-label">Scopes key</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                            formControlName="scopesKey">
+                        <div class="form-text">The key name where the scopes can be found. The key can be
+                            a nested
+                            object using the . dot notation, e.g.: data.data2.scopes</div>
+                    </div>
+                    <div class="mb-3 col-sm-2">
+                        <label for="matcherselect" class="form-label">Matcher</label>
+                        <div>
+                            <select class="form-select" aria-label="Default select example" id="matcherselect"
+                                formControlName="selectedMatcher">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-12 p-3">
+                    <div class="mb-3 col-sm-8">
+                        <label for="exampleInputEmail1" class="form-label">Issuer</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                            formControlName="issuer">
+                        <div class="form-text">Who is the expected issuer of the claim</div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 p-3 d-flex gap-5">
+                    <div class="col-sm-5">
+                        <div class="mb-3">
+                            <label for="audience" class="form-label">Audience</label>
+                            <div class="d-flex gap-2">
+                                <input type="text" class="form-control" formControlName="audience" id="audience"
+                                    aria-describedby="audience">
+                                <button type="button" class="btn btn-outline-primary"
+                                    (click)="addParameter('audience')">Add</button>
+                            </div>
+                            <div class="form-text">List of all the audiences supported by this endpoint
+                            </div>
+                        </div>
+                        <div class="mt-3 d-flex">
+                            <button *ngFor="let audience of audienceArray; let i = index" class="parameter-item">
+                                {{ audience }} <mat-icon (click)="removeParameter(i,'audience')"
+                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Roles</label>
+                            <div class="d-flex gap-2">
+                                <input type="text" class="form-control" formControlName="roles" id="exampleInputEmail1"
+                                    aria-describedby="emailHelp">
+                                <button type="button" class="btn btn-outline-primary"
+                                    (click)="addParameter('roles')">Add</button>
+                            </div>
+                            <div class="form-text">List of all the roles allowed to access this endpoint
+                            </div>
+                        </div>
+                        <div class="mt-3 d-flex">
+                            <button *ngFor="let role of rolesArray; let i = index" class="parameter-item">
+                                {{ role }}<mat-icon (click)="removeParameter(i, 'roles')"
+                                    class="d-flex align-items-center justify-content-end">close</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 d-flex gap-3 p-3">
+                    <div class="mb-3 col-sm-4">
+                        <label for="exampleInputEmail1" class="form-label">Roles Key</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                            formControlName="rolesKey">
+                        <div class="form-text">Key name where the roles are stored</div>
+                    </div>
+                    <div class="mb-3 col-sm-4">
+                        <label for="cookieName" class="form-label">Cookie name</label>
+                        <input type="text" class="form-control" id="cookieName" aria-describedby="emailHelp"
+                            formControlName="cookieName">
+                        <div class="form-text">The key name of the cookie</div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 heading-with-toggle gap-2 flex-column p-3">
+                    <mat-checkbox class="example-margin">Roles key is nested</mat-checkbox>
+                    <div class="form-text">If the roles key is using a nested object using the . dot
+                        notation, must be checked in order to traverse the object.</div>
+                </div>
+
+                <div class="col-sm-12 p-3 d-flex gap-3">
+                    <div class="mb-3 col-sm-8 ">
+                        <label for="exampleFormControlTextarea1" class="form-label">Fingerprints</label>
+                        <textarea class="form-control fingerprint" id="exampleFormControlTextarea1" rows="3"
+                            formControlName="fingerprint"></textarea>
+                        <div class="form-text">All fingerprints must be in base64</div>
+                    </div>
+                    <div class="col-sm-4 d-flex align-items-center">
+                        <button type="button" class="btn btn-outline-primary" (click)="addParameter('fingerprint')">Add
+                            Fingerprint</button>
+                    </div>
+                </div>
+                <div class="mt-3 d-flex">
+                    <button *ngFor="let fingerprint of fingerprintsArray; let i = index" class="parameter-item">
+                        {{ fingerprint }} <mat-icon (click)="removeParameter(i,'fingerprint')"
+                            class="d-flex align-items-center justify-content-end">close</mat-icon>
+                    </button>
+                </div>
+
+                <div class="col-sm-12 p-3">
+                    <div class="col-sm-12 heading-with-toggle gap-2 flex-column mb-2">
+                        <mat-checkbox (change)="changeStatus()" class="example-margin">Custom Chiper
+                            Suite</mat-checkbox>
+                    </div>
+                    <div class="mb-3 col-sm-8" *ngIf="isCustomChiperSuiteActive">
+                        <textarea class="form-control fingerprint" id="exampleFormControlTextarea1" rows="3"
+                            formControlName="customChiperSuite"></textarea>
+                    </div>
+                    <div class="form-text">Overrides the default cipher suites. Unless you have your
+                        own legacy JWK you don't need to choose anything here</div>
+                </div>
+
+                <div class="col-sm-12 heading-with-toggle gap-2 d-flex p-3">
+                    <div class="col-sm-5">
+                        <mat-checkbox class="example-margin">Enable Caching</mat-checkbox>
+                        <div class="form-text">If this value is set to true validated tokens will be
+                            stored in-memory for repeated validations</div>
+                    </div>
+                    <div class="col-sm-5">
+                        <mat-checkbox class="example-margin">Disable JWK Security</mat-checkbox>
+                        <div class="form-text">When you are using an insecure connection (plain http)
+                        </div>
+                    </div>
+
+                </div>
+
+                }
+            </div>
+        </div>
+
+        <hr> -->
+    <!-- 
+        <div class="row mt-2">
+
+            <div class="col-sm-12 heading-with-toggle d-flex align-items-center gap-2">
+                <div>
+                    <h3>Token Signing</h3>
+                </div>
+                <div>
+                    <mat-slide-toggle #tokenSigning id="isTokenSigningActive"
+                        (change)="onToggleChangeStaticResponse($event, tokenSigning.id)"></mat-slide-toggle>
+                </div>
+            </div>
+
+            @if (!isTokenSigningActive) {
+            <p>Enables validation of JWT tokens (OAuth) that have been issued by a third party identity provider (e.g.:
+                OpenID Connect)</p>
+            }
+            @else {
+            <div class="col-sm-12 d-flex p-3 gap-3">
+                <div class="mb-3 col-sm-4">
+                    <label for="tokenSignJwkUri" class="form-label">JWK URI</label>
+                    <input type="text" class="form-control" id="tokenSignJwkUri" aria-describedby="emailHelp"
+                        formControlName="tokenSignJwkUri">
+                    <div class="form-text">Key name where the roles are storedThe URL to your JWK
+                        endpoint with
+                        the set of private keys used to sign the token</div>
+                </div>
+                <div class="mb-3 col-sm-4">
+                    <label for="tokenSignAlgorithmselect" class="form-label">Algorithm</label>
+                    <div>
+                        <select class="form-select" aria-label="Default select example" id="tokenSignAlgorithmselect"
+                            formControlName="tokenSignAlgorithm">
+                            <option selected>Open this select menu</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                    <div class="form-text">Digital signatures and MACs algorithm</div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 d-flex p-3 gap-3">
+                <div class="col-sm-5">
+                    <div class="mb-3">
+                        <label for="keyToSign" class="form-label">Keys to sign</label>
+                        <div class="d-flex gap-2">
+                            <input type="text" class="form-control" formControlName="keysToSign" id="keyToSign"
+                                aria-describedby="emailHelp">
+                            <button type="button" class="btn btn-outline-primary"
+                                (click)="addParameter('keysToSign')">Add</button>
+                        </div>
+                        <div class="form-text">List of specific keys needing signing</div>
+                    </div>
+                    <div class="mt-3 d-flex">
+                        <button *ngFor="let key of keysToSignArray; let i = index" class="parameter-item">
+                            {{ key }}<mat-icon (click)="removeParameter(i,'keysToSign')"
+                                class="d-flex align-items-center justify-content-end">close</mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3 col-sm-5">
+                    <label for="keyId" class="form-label">Key ID</label>
+                    <input type="text" class="form-control" id="keyId" formControlName="keyId"
+                        aria-describedby="emailHelp">
+                </div>
+            </div>
+
+            <div class="col-sm-12 heading-with-toggle gap-2 d-flex p-3">
+                <div class="col-sm-5">
+                    <mat-checkbox class="example-margin">Full Serialization</mat-checkbox>
+                    <div class="form-text">Use JSON format instead of the compact form JWT is giving
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <mat-checkbox class="example-margin">Disable JWK Security</mat-checkbox>
+                    <div class="form-text">When you are using an insecure connection (plain http)
+                    </div>
+                </div>
+
+            </div>
+            }
+        </div>
+
+        <hr> -->
+
+    <!-- <div class="row mt-2">
+            <div class="col-sm-12">
+                <div class="col-sm-12 heading-with-toggle d-flex align-items-center gap-2">
+                    <div>
+                        <h3>Basic Authentication</h3>
+                    </div>
+                    <div>
+                        <mat-slide-toggle #basicAuth id="isBasicAuthActive"
+                            (change)="onToggleChangeStaticResponse($event , basicAuth.id)"></mat-slide-toggle>
+                    </div>
+                </div>
+
+                @if (!isBasicAuthActive) {
+                <p>The Basic Authentication plugin protects the access to selected endpoints using basic username and
+                    password credentials via htpasswd.</p>
+                }
+                @else {
+                Basic authentication is now required by this endpoint. You can change the path of the .htpasswd file
+                under HTTP Security
+                }
+            </div>
+        </div> -->
+
+
+    <!-- <hr>
+        <div class="row mt-2">
+            <div class="col-sm-12 d-flex flex-column gap-2">
+                <div>
+                    <h3 class="m-0">Api key authentication</h3>
+                </div>
+                <div>
+                    <p>Api keys are not enabled yet</p>
+                </div>
+            </div>
+        </div> -->
+    <!-- <div class="row">
+        <div class="col-sm-12 d-flex justify-content-end">
+            <button mat-raised-button color="primary" (click)="saveForm()">Save</button>
+        </div>
+    </div> -->
+    <!-- </form> -->
+</div>

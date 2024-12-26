@@ -11,7 +11,8 @@
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <div class="d-flex justify-content-between toggle-header">
-                                    <div>Logging</div>
+                                    <div>Logging &nbsp; <i class="bi bi-info-circle" [matTooltip]=loggingToolTip></i>
+                                    </div>
                                     <!-- <mat-slide-toggle formControlName="isLoggingActive"></mat-slide-toggle> -->
                                     <!-- <div class="form-check form-switch">
                                         <input class="form-check-input custom-switch" type="checkbox" role="switch"
@@ -24,9 +25,9 @@
                                 </div>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
-                        @if(!TelemertyFormGroup.value.isLoggingActive){
+                        <!-- @if(!TelemertyFormGroup.value.isLoggingActive){
                         <p>Extend the default logging behaviour</p>
-                        }
+                        } -->
                         @if (TelemertyFormGroup.value.isLoggingActive) {
                         <div class="row">
                             <div class="col-sm-4">
@@ -165,7 +166,8 @@
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <div class="d-flex justify-content-between toggle-header">
-                                    <div>OpenTelemetry</div>
+                                    <div>OpenTelemetry &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=openTelementryToolTip></i></div>
                                     <!-- <mat-slide-toggle formControlName="isOpenTelActive"></mat-slide-toggle> -->
                                     <!-- <div class="form-check form-switch">
                                         <input class="form-check-input custom-switch" type="checkbox" role="switch"
@@ -178,10 +180,10 @@
                                 </div>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
-                        @if(!TelemertyFormGroup.value.isOpenTelActive){
+                        <!-- @if(!TelemertyFormGroup.value.isOpenTelActive){
                         <p>The OpenTelemetry middleware provides several integrations to export tracing and metrics to
                             different third party systems.</p>
-                        }
+                        } -->
                         @if (TelemertyFormGroup.value.isOpenTelActive) {
                         <div class="row gap-2">
                             <div class="col-sm-4">
@@ -305,7 +307,8 @@
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <div class="d-flex justify-content-between toggle-header">
-                                    <div>Metrics API</div>
+                                    <div>Metrics API &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=metricsApiToolTip></i></div>
                                     <div>
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
@@ -378,11 +381,12 @@
                                 </div> -->
                             </div>
                         </div>
-                        }@else {
+                        }
+                        <!-- @else {
                         <p>The metrics API listens in a new address and exposes a /__stats/ endpoint with all the
                             KrakenD
                             metrics.</p>
-                        }
+                        } -->
                     </mat-expansion-panel>
 
                     <mat-expansion-panel (opened)="TelemertyFormGroup.value.openCensusActive">
@@ -390,7 +394,8 @@
                             <mat-panel-title>
                                 <div class="d-flex justify-content-between toggle-header">
                                     <div>
-                                        Opencensus
+                                        Opencensus &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=opencensusToolTip></i>
                                     </div>
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
@@ -400,7 +405,6 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         @if (TelemertyFormGroup.value.openCensusActive) {
-
                         <div class="row">
                             <div class="col-sm-12 d-flex align-items-center gap-1">
                                 <div>
@@ -957,11 +961,12 @@
 
                         }
 
-                        }@else {
+                        }
+                        <!-- @else {
                         <p>The metrics API listens in a new address and exposes a /__stats/ endpoint with all the
                             KrakenD
                             metrics.</p>
-                        }
+                        } -->
                     </mat-expansion-panel>
 
                     <mat-expansion-panel (opened)="TelemertyFormGroup.value.newRelicNativeSDKActive">
@@ -969,7 +974,8 @@
                             <mat-panel-title>
                                 <div class="d-flex justify-content-between toggle-header">
                                     <div>
-                                        New Relic(Native SDK)
+                                        New Relic(Native SDK) &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=newRelicToolTip></i>
                                     </div>
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
@@ -978,9 +984,9 @@
                                 </div>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
-                        @if(!TelemertyFormGroup.value.newRelicNativeSDKActive){
+                        <!-- @if(!TelemertyFormGroup.value.newRelicNativeSDKActive){
                         <p>Push KrakenD metrics and distributed traces to your New Relic dashboard.</p>
-                        }
+                        } -->
                         @if (TelemertyFormGroup.value.newRelicNativeSDKActive) {
                         <div class="row">
                             <div class="col-sm-4">

@@ -1,0 +1,59 @@
+<!-- <p>createconsumers works!</p> -->
+<div class="container-fluid full-height">
+    <div class=" d-flex justify-content-center align-items-center full-height">
+        <div class="row create-card">
+            <div class="col-sm-12">
+                <h2>Create Consumer</h2>
+                <p>create an consumer</p>
+            </div>
+            <div class="col-sm-12">
+                <form [formGroup]="creatConsumerFormGroup">
+                    <!-- <div class="row"> -->
+                        <div class="row gy-2">
+                            <div class="col-sm-12 gap-2">
+                                <label for="username" class="form-label">Username</label>
+                                <input id="username" class="form-control input-field-width" formControlName="username">
+                                <!-- <div>
+                                    <label>Username</label>
+                                </div>
+                                <div>
+                                    <input formControlName="username">
+                                </div> -->
+                            </div>
+                            <div class="col-sm-12">
+                                <label for="password">password</label>
+                                <input id="password" class="form-control input-field-width" formControlName="password">
+                            </div>
+    
+                            <!-- <div class="col-sm-12">
+                                <label for="confirmPassword" class="form-lable">Confirm Password</label>
+                                <input id="confirmPassword" class="form-control input-field-width"
+                                    formControlName="confirmPassword">
+                            </div> -->
+                            <div class="col-sm-12">
+                                <label for="email" class="form-lable">Email</label>
+                                <input id="email" class="form-control input-field-width" formControlName="email">
+                            </div>
+                            <div class="col-sm-12">
+                                <label for="firstName" class="form-lable">First Name</label>
+                                <input id="firstName" class="form-control input-field-width" formControlName="firstName">
+                            </div>
+                            <div class="col-sm-12">
+                                <label for="lastName" class="form-lable">Last Name</label>
+                                <input id="lastName" class="form-control input-field-width" formControlName="lastName">
+                            </div>
+                        </div>
+                </form>
+            </div>
+            <div class="col-sm-12 mt-3">
+                <div class="d-flex justify-content-center align-items-center">
+                    <button (click)="onSubmitCreatConsumerFormGroup()" class="btn btn-outline-primary">
+                        Create
+                    </button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,7 +11,8 @@
                             <mat-panel-title>
                                 <div class="d-flex justify-content-between toggle-header">
                                     <div>
-                                        Security Policies
+                                        Security Policies &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=securityPoliciesToolTip></i>
                                     </div>
                                     <!-- <mat-slide-toggle class="example-margin" color="blue"
                                             formControlName="isSpFilterActive">
@@ -60,7 +61,7 @@
                                             <div class="col-sm-6">
                                                 <label for="secReqPol" class="form-label">Request Policies &nbsp;
                                                     &nbsp; <i class="bi bi-info-circle"
-                                                        [matTooltip]=securityPolTooltip></i></label>
+                                                        [matTooltip]=securityReqpolicies_tooltip></i></label>
                                                 <input type="text" class="form-control" id="secReqPol"
                                                     placeholder="req_params.DocId.starswith('EU')"
                                                     formControlName="securityReqPolicy">
@@ -94,14 +95,15 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-md-4">
                                         <label for="errorStCode1" class="form-label">Error status code &nbsp; <i
-                                                class="bi bi-info-circle" [matTooltip]=securityPolTooltip></i></label>
+                                                class="bi bi-info-circle"
+                                                [matTooltip]=secErrorStatusCodeToolTip></i></label>
                                         <input id="errorStCode1" type="number" class="input-size form-control"
                                             formControlName="secReqErrorStCode" placeholder="400" />
                                     </div>
                                     <div class="col-sm-12 col-md-4">
                                         <!-- <p>Error body</p> -->
                                         <label for="errorBody1" class="form-label">Error body &nbsp; <i
-                                                class="bi bi-info-circle" [matTooltip]=securityPolTooltip></i></label>
+                                                class="bi bi-info-circle" [matTooltip]=secErrorBodyToolTip></i></label>
                                         <input id="errorBody1" type="text" class="input-size form-control"
                                             formControlName="secReqErrorBody" placeholder="Policies violated" />
                                     </div>
@@ -146,7 +148,7 @@
                                             <div class="col-sm-6">
                                                 <label for="resP" class="form-label">Response Policies &nbsp; &nbsp; <i
                                                         class="bi bi-info-circle"
-                                                        [matTooltip]=securityPolTooltip></i></label>
+                                                        [matTooltip]=secResPoliciesToolTip></i></label>
                                                 <input type="text" class="form-control" id="resP"
                                                     placeholder="isEmpty(resp_data.message)"
                                                     formControlName="securityResPolicy">
@@ -174,21 +176,22 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-md-4">
                                         <label for="errorStCode2" class="form-label">Error status code &nbsp; <i
-                                                class="bi bi-info-circle" [matTooltip]=securityPolTooltip></i> </label>
+                                                class="bi bi-info-circle" [matTooltip]=secResErrorStatusToolTip></i>
+                                        </label>
                                         <input id="errorStCode2" type="number" class="input-size form-control"
                                             formControlName="secResErrorStCode" placeholder="400" />
                                     </div>
 
                                     <div class="col-sm-12 col-md-4">
                                         <label for="errorBody2" class="form-label">Error body &nbsp; <i
-                                                class="bi bi-info-circle" [matTooltip]=securityPolTooltip></i></label>
+                                                class="bi bi-info-circle" [matTooltip]=secResErrorBodyToolTip></i></label>
                                         <input id="errorBody2" type="text" class="input-size form-control"
                                             formControlName="secResErrorBody" placeholder="Policies violated" />
                                     </div>
 
                                     <div class="col-sm-12 col-md-4">
                                         <label for="errorContentType2" class="form-label">Error content type &nbsp; <i
-                                                class="bi bi-info-circle" [matTooltip]=securityPolTooltip></i></label>
+                                                class="bi bi-info-circle" [matTooltip]=secResErrorContentToolTip></i></label>
                                         <input id="errorContentType2" type="text" class="input-size form-control"
                                             formControlName="secResErrorContentType" placeholder="Text/Plain" />
                                     </div>
@@ -224,7 +227,7 @@
                                         <div class="col-sm-6">
                                             <label for="JWT" class="form-label">JWT Policies &nbsp; &nbsp; <i
                                                     class="bi bi-info-circle"
-                                                    [matTooltip]=securityPolTooltip></i></label>
+                                                    [matTooltip]=jwtValidationToolTip></i></label>
                                             <input type="text" class="form-control" id="JWT"
                                                 placeholder="req_params.DocId.starswith('EU')"
                                                 formControlName="jwtReqPolicy">
@@ -259,7 +262,7 @@
                                                 formControlName="enableDebug">
                                             <label class="form-check-label" for="secPolicies">
                                                 Enable Debug &nbsp; <i class="bi bi-info-circle"
-                                                    [matTooltip]=securityPolTooltip></i>
+                                                    [matTooltip]=enableDebugToolTip></i>
                                             </label>
                                         </div>
                                     </div>
@@ -270,7 +273,7 @@
                                                 formControlName="autoJoinPolicies">
                                             <label class="form-check-label" for="autoJoin">
                                                 Auto Join Policies &nbsp; &nbsp; <i class="bi bi-info-circle"
-                                                    [matTooltip]=securityPolTooltip></i>
+                                                    [matTooltip]=autoJoinPoliciesTip></i>
                                             </label>
                                         </div>
                                     </div>
@@ -281,7 +284,7 @@
                                                 formControlName="disableMacros">
                                             <label class="form-check-label" for="macros">
                                                 Disable macros &nbsp; &nbsp; <i class="bi bi-info-circle"
-                                                    [matTooltip]=securityPolTooltip></i>
+                                                    [matTooltip]=disableMacrosToolTip></i>
                                             </label>
                                         </div>
                                     </div>
@@ -297,7 +300,8 @@
                             <mat-panel-title>
                                 <div class="d-flex justify-content-between toggle-header">
                                     <div>
-                                        Request schema validator
+                                        Request schema validator &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=requestSchemaValidatorToolTip></i>
                                     </div>
                                     <!-- <div>
                                         <mat-slide-toggle class="example-margin" color="blue"
@@ -314,7 +318,7 @@
                         @if (formGroupPolicies.value.isRequestSchValidatorActive) {
                         <div class="col-sm-12 col-md-9">
                             <label for="reqJSON" class="form-label">JSON schema &nbsp; <i class="bi bi-info-circle"
-                                    [matTooltip]=securityPolTooltip></i></label>
+                                    [matTooltip]=jsonSchemaToolTIp></i></label>
                             <!-- <textarea json-formatter id="reqJSON" class="static-text-area form-control" formControlName="reqJSONSchema"></textarea> -->
                             <textarea class="form-control custom-textarea" formControlName="reqJSONSchema"
                                 style="width: 422px; height: 238px;">
@@ -331,7 +335,8 @@
                             <mat-panel-title>
                                 <div class="d-flex justify-content-between toggle-header">
                                     <div>
-                                        Response schema validator
+                                        Response schema validator &nbsp; <i class="bi bi-info-circle"
+                                            [matTooltip]=responseSchemaValidatorToolTip></i>
                                     </div>
                                     <!-- <div>
                                         <mat-slide-toggle class="example-margin" color="blue"
@@ -348,7 +353,7 @@
                         @if(formGroupPolicies.value.isResponseSchValidatorActive){
                         <div class="col-sm-12 col-md-9 mb-1">
                             <label for="reqJSON" class="form-label">JSON schema &nbsp; <i class="bi bi-info-circle"
-                                    [matTooltip]=securityPolTooltip></i></label>
+                                    [matTooltip]=resonseJsonSchemaToolTip></i></label>
                             <!-- <textarea json-formatter id="reqJSON" class="static-text-area form-control" formControlName="reqJSONSchema"></textarea> -->
                             <textarea class="form-control custom-textarea" formControlName="resJSONSchema"
                                 style="width: 422px; height: 238px;">
