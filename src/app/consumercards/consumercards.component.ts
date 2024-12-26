@@ -48,8 +48,9 @@ export class ConsumercardsComponent {
   }
 
 
-  goToApplicationPage() {
-    this.router.navigate(['application'], { relativeTo: this.route })
+  goToApplicationPage(consumerId:any) {
+    // this.router.navigate([`viewgateway/${id}/dashboard`], { relativeTo: this.route })
+    this.router.navigate([`${consumerId}/application`], { relativeTo: this.route })
     this.isShowParent = false
   }
   constructor(private router: Router, private route: ActivatedRoute, private communucationSer: CommunicationService, private cconsumersrv: CreateconsumerService) {

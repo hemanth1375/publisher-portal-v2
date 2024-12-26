@@ -20,13 +20,20 @@ export class CommunicationService {
     this.gatewayCreatedSource.next(data);
   }
 
-   //show consumercards
+  //show consumercards
   private consumercreatedSource = new Subject<any>();
-  consumercreat$= this.consumercreatedSource.asObservable()
-  emitConsumerCreated(data:any){
+  consumercreat$ = this.consumercreatedSource.asObservable()
+  emitConsumerCreated(data: any) {
     this.consumercreatedSource.next(data)
-}
- 
+  }
+
+  //show applications
+  private applicationCreatedSource = new Subject<any>
+  applicationCreated$ = this.applicationCreatedSource.asObservable()
+  emitApplicationCreated(data: any) {
+    this.applicationCreatedSource.next(data)
+  }
+
 
   // showparent
   private showParentSource = new BehaviorSubject<boolean>(true); // Initial state is true

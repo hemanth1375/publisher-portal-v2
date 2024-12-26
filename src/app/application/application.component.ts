@@ -1,47 +1,12 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { SecurityAuthService } from '../services/security-auth.service';
+import { Subscription } from 'rxjs';
+import { CommunicationService } from '../services/communication.service';
+import { ApplicationService } from '../services/application.service';
 
-interface application {
-  id: number,
-  applicationName: string,
-  sharedQuota: string,
-  description: string
-}
-interface PeriodicElement {
-  name: string;
-  owner: string;
-  policy: string;
-  workstatus: string;
-  subscriptions: string;
-  actions: string;
-}
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    name: 'Resource 1',
-    owner: 'Owner A',
-    policy: 'Policy X',
-    workstatus: 'Active',
-    subscriptions: 'Subscription A',
-    actions: 'Edit/Delete',
-  },
-  {
-    name: 'Resource 2',
-    owner: 'Owner B',
-    policy: 'Policy Y',
-    workstatus: 'Inactive',
-    subscriptions: 'Subscription B',
-    actions: 'Edit/Delete',
-  },
-  {
-    name: 'Resource 3',
-    owner: 'Owner C',
-    policy: 'Policy Z',
-    workstatus: 'Active',
-    subscriptions: 'Subscription C',
-    actions: 'Edit/Delete',
-  },
-];
+
+
 
 @Component({
   selector: 'app-application',
@@ -50,15 +15,20 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class ApplicationComponent {
 
-  displayedColumns: string[] = ['name', 'owner', 'policy', 'workstatus', 'subscriptions', 'actions'];
-  dataSource = ELEMENT_DATA;
+  // displayedColumns: string[] = ['name', 'owner', 'policy', 'workstatus', 'subscriptions', 'actions'];
+  displayedColumns: string[] = ['clientId', 'name', 'protocol', 'description', 'baseUrl','action'];
 
+  // dataSource = this.applicationResults;
+  private subscription: Subscription
+  consumerId: any
 
-  navigateToDetails(name: string): void {
-    // this.router.navigate(['/details', name]); // Navigates to a "details" route with the name as a parameter
-    this.router.navigate(['viewapplication/1/overview'], { relativeTo: this.route })
-    this.isShowApplication=false
+  navigateToDetails(applicationId: string): void {
+
+    // this.router.navigate([`viewgateway/${id}/dashboard`], { relativeTo: this.route })
+    this.router.navigate([`viewapplication/${applicationId}/overview`], { relativeTo: this.route })
+    this.isShowApplication = false
   }
+  applicationId:any
   isShowApplication: boolean = true
   // isShowParent: boolean = true
   entireJsonData: any
@@ -68,51 +38,111 @@ export class ApplicationComponent {
     this.isShowApplication = false
   }
 
-  goToviewApplication(item:any) {
+deleteApplication(applicationId:any){
+
+  this.applicationSrv.deleteApplications(applicationId).subscribe({
+    next:(res:any)=>{
+      console.log("result",res)
+      this.getApplications()
+
+    },
+    error:(err:any)=>{
+      console.log("error",err)  
+    }
+  })
+
+
+}
+
+  goToviewApplication(item: any) {
     this.router.navigate(['viewapplication'], {
       relativeTo: this.route, // Set relative navigation
       state: { data: item } // Pass state
-    });    this.isShowApplication = false
+    }); this.isShowApplication = false
   }
 
-  applicationdata: application[] = [{
-    id: 1,
-    applicationName: "massilapp",
-    sharedQuota: "10PerMin",
-    description: "this is the massilapp"
-  }]
+  // applicationdata: application[] = [{
+  //   id: 1,
+  //   applicationName: "massilapp",
+  //   sharedQuota: "10PerMin",
+  //   description: "this is the massilapp"
+  // }]
 
-  constructor(private router: Router, private route: ActivatedRoute, private securityAuthService: SecurityAuthService) {
+  constructor(private router: Router, private route: ActivatedRoute, private securityAuthService: SecurityAuthService, private communicationSer: CommunicationService, private applicationSrv: ApplicationService) {
     this.router.events.subscribe((event) => {
-
       if (event instanceof NavigationEnd) {
         console.log(this.router.url);
-
-        if (this.router.url === '/consumer/application') {
+        if (this.router.url === `/consumers/${this.consumerId}/application`) {
           this.isShowApplication = true;
-        } else if (this.router.url === '/consumer/application/createapplication') {
+        } else if (this.router.url === `/consumers/${this.consumerId}/application/createapplication`) {
           this.isShowApplication = false;
-        } else if (this.router.url === '/consumer/application/viewapplication') {
+        } else if (this.router.url === `/consumers/${this.consumerId}/application/viewapplication`) {
           this.isShowApplication = false
         }
       }
     });
+
+    this.subscription = this.communicationSer.applicationCreated$.subscribe(
+      (updatedData: any) => {
+        console.log('Updated data received from child component!', updatedData);
+        this.getApplications()
+      }
+    )
+  }
+
+  applicationResults: any[] = []
+  getApplications() {
+    this.applicationSrv.getApplication(this.consumerId).subscribe({
+      next: (res) => {
+        console.log("result", res);
+        this.applicationResults = res.applications
+        console.log("applicationResults", this.applicationResults);
+      },
+      error: (err) => {
+        console.log("error", err);
+
+      }
+    })
   }
 
   ngOnInit() {
-    this.securityAuthService.getSecurityAuth().subscribe({
-      next: (result) => {
-        console.log("*********************securityAuthServiceresult", result);
-        this.entireJsonData = result
-        this.savedAuthApiKeysResults = result?.['auth/api-keys']
-        console.log("authValidatorArrayResult", this.savedAuthApiKeysResults);
-      },
-      error: (err) => {
-        console.log("securityAuthService error", err);
+
+    // this.route.parent?.paramMap.subscribe(params => {
+    //   console.log(params);
+      
+    //   this.consumerId = params.get('consumerId');
+    //   console.log('consumerId:', this.consumerId);
+
+    //   if (this.consumerId) {
+    //     this.applicationSrv.getApplication(this.consumerId).subscribe({
+    //       next: (res) => {
+    //         console.log("result", res);
+    //         this.applicationResults = res.applications
+    //         console.log("applicationResults", this.applicationResults);
+    //       },
+    //       error: (err) => {
+    //         console.log("error", err);
+    //       }
+    //     })
+    //   }
+    // });
+
+    this.route.paramMap.subscribe(params => {
+      this.consumerId = params.get('consumerId');
+      console.log('consumerId ID:', this.consumerId);
+          if (this.consumerId) {
+        this.applicationSrv.getApplication(this.consumerId).subscribe({
+          next: (res) => {
+            console.log("result", res);
+            this.applicationResults = res.applications
+            console.log("applicationResults", this.applicationResults);
+          },
+          error: (err) => {
+            console.log("error", err);
+          }
+        })
       }
-
-
-    })
+    });
   }
 
 }

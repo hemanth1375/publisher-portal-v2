@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SecurityAuthService } from '../services/security-auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-viewapplication',
@@ -18,7 +18,7 @@ export class ViewapplicationComponent {
   receivedData: any
   basicAuthenticationToolTip = "The Basic Authentication plugin protects the access to selected endpoints using basic username and password credentials via htpasswd."
   apikeyToolTip = "The API key authentication enables a Role-Based Access Control (RBAC) mechanism by reading the Authorization header of incoming requests. For all your desired endpoints, KrakenD rejects requests from users that do not provide a valid key or are trying to access a resource with insufficient permissions for the user's role."
-  constructor(private formBuilder: FormBuilder, private securityAuthService: SecurityAuthService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private securityAuthService: SecurityAuthService, private router: Router,private route:ActivatedRoute) {
 
     this.apiKeysForm = this.formBuilder.group({
       isAPIKeyAuthActive: [false],
@@ -29,31 +29,32 @@ export class ViewapplicationComponent {
       keysArray: [[]],
       apiKeyAuthId: [null]
     })
+
+
   }
 
   ngOnInit() {
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras?.state) {
-      this.receivedData = navigation.extras.state['data'];
-      console.log("*******88receivedData", this.receivedData);
 
-    } else {
-      console.warn('No data found in navigation state');
-      this.receivedData = null; // Or set a default value
-    }
-    this.securityAuthService.getSecurityAuth().subscribe({
-      next: (result) => {
-        console.log("*********************securityAuthServiceresult", result);
-        this.entireJsonData = result
-        this.backendAuthBasicArry = result?.['auth/basic']
-        // this.authValidatorArrayResult = result?.['auth/validator']
-        // console.log("authValidatorArrayResult", this.authValidatorArrayResult);
 
-      },
-      error: (err) => {
-        console.log("securityAuthService error", err);
-      }
-    })
+    // const navigation = this.router.getCurrentNavigation();
+    // if (navigation?.extras?.state) {
+    //   this.receivedData = navigation.extras.state['data'];
+    //   console.log("*******88receivedData", this.receivedData);
+
+    // } else {
+    //   console.warn('No data found in navigation state');
+    //   this.receivedData = null; // Or set a default value
+    // }
+    // this.securityAuthService.getSecurityAuth().subscribe({
+    //   next: (result) => {
+    //     console.log("*********************securityAuthServiceresult", result);
+    //     this.entireJsonData = result
+    //     this.backendAuthBasicArry = result?.['auth/basic']
+    //   },
+    //   error: (err) => {
+    //     console.log("securityAuthService error", err);
+    //   }
+    // })
   }
   onSubmitApiKeyAuthInfo(): void {
     if (this.apiKeysForm.valid) {

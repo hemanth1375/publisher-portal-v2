@@ -33,5 +33,9 @@ export const urls = {
     saveSecurityAuthApiKey : host + "/globalSecurity/saveAuthApiKeysGlobal",
     createConsumer: host + "/user/createConsumer",
     getConsumer: host + "/user/getConsumers",
-    deleteConsumer:host + "/user/deleteConsumer"
+    deleteConsumer:host + "/user/deleteConsumer",
+    createApplication: host + "/clients/openid/createApplication",
+    getApplications: host + "/clients/openid/getApplications",
+    deleteApplication: host + "/clients/openid/deleteApplication"
+
 }

@@ -78,10 +78,10 @@ const routes: Routes = [
       //   ]
       // },
       {
-        path: "application", component: ApplicationComponent, children: [{
+        path: ":consumerId/application", component: ApplicationComponent, children: [{
           path: "createapplication", component: CreateapplicationComponent
         }, {
-          path: "viewapplication/:id", component: ViewapplicationComponent, children: [
+          path: "viewapplication/:applicationId", component: ViewapplicationComponent, children: [
             { path: "overview", component: ApplicationoverviewComponent },
             { path: "productionkeys", component: ApikeysComponent },
             { path: "oauthtokens", component: ApikeysComponent },

@@ -10,7 +10,7 @@
                     <div class="col-sm-4">
                         <div class=" d-flex flex-column  justify-content-between">
                             <label for="protocol">Protocol</label>
-                            <input type="text" class="form-control " id="protocol" formControlName="protocol"
+                            <input type="text" class="form-control " id="protocol" formControlName="clientType"
                                 value="OpenID Connect" placeholder="Enter protocol" readonly />
                         </div>
                     </div>
@@ -147,7 +147,7 @@
                     Authentication</label> -->
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
-                        formControlName="publicClient">
+                        formControlName="publicClient" readonly>
                     <label class="form-check-label" for="flexSwitchCheckDefault">Client
                         Authentication</label>
                 </div>
@@ -336,3 +336,35 @@
 
     </form>
 </div>
+
+<!-- 
+
+{
+    "id": "string",
+    "protocol": "string",
+    "clientId": "string",
+    "secret": "string",
+    "name": "string",
+    "description": "string",
+    "publicClient": true,
+    "authorizationServicesEnabled": true,
+    "serviceAccountsEnabled": true,
+    "implicitFlowEnabled": true,
+    "directAccessGrantsEnabled": true,
+    "standardFlowEnabled": true,
+    "attributes": {
+      "additionalProp1": {},
+      "additionalProp2": {},
+      "additionalProp3": {}
+    },
+    "alwaysDisplayInConsole": true,
+    "rootUrl": "string",
+    "baseUrl": "string",
+    "redirectUris": [
+      "string"
+    ],
+    "webOrigins": [
+      "string"
+    ],
+    "frontchannelLogout": true
+  } -->
