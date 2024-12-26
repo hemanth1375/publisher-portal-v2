@@ -63,6 +63,7 @@ import { ApikeysComponent } from './apikeys/apikeys.component';
 import { SubscriptionsComponent } from './subscriptions/subscriptions.component';
 
 
+
 // keycloak
 function initializeKeycloak(keycloak: KeycloakService){
   return () =>{
@@ -152,6 +153,7 @@ function initializeKeycloak(keycloak: KeycloakService){
     MatSlideToggleModule,
     NgbToastModule,
     MatRadioModule
+    
     
   ],
   providers: [KeycloakService,
