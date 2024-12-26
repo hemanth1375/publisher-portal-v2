@@ -64,6 +64,7 @@ import { SubscriptionsComponent } from './subscriptions/subscriptions.component'
 
 
 
+
 // keycloak
 function initializeKeycloak(keycloak: KeycloakService){
   return () =>{
