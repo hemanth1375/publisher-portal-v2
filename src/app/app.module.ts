@@ -60,7 +60,7 @@ import { CreateapplicationComponent } from './createapplication/createapplicatio
 import { ViewapplicationComponent } from './viewapplication/viewapplication.component';
 import { ApplicationoverviewComponent } from './applicationoverview/applicationoverview.component';
 import { ApikeysComponent } from './apikeys/apikeys.component';
-import { SubscriptionsComponent } from './subscriptions/subscriptions.component';
+import { SubscriptionDialog, SubscriptionsComponent } from './subscriptions/subscriptions.component';
 
 
 
@@ -128,7 +128,8 @@ function initializeKeycloak(keycloak: KeycloakService){
     ViewapplicationComponent,
     ApplicationoverviewComponent,
     ApikeysComponent,
-    SubscriptionsComponent
+    SubscriptionsComponent,
+    SubscriptionDialog
 
   ],
   imports: [

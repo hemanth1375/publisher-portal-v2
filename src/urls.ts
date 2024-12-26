@@ -36,6 +36,8 @@ export const urls = {
     deleteConsumer:host + "/user/deleteConsumer",
     createApplication: host + "/clients/openid/createApplication",
     getApplications: host + "/clients/openid/getApplications",
-    deleteApplication: host + "/clients/openid/deleteApplication"
+    deleteApplication: host + "/clients/openid/deleteApplication",
 
+    checkContextPath:host+"/krakend/endpoint/checkEndpointContext",
+    subscribeToApplication:host+"/clients/openid/subscribeToApplication"
 }

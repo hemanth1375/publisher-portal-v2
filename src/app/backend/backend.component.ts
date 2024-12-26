@@ -2040,9 +2040,9 @@ if (isValid && this.getFormGroup(index).valid) {
 
       // Create a new FormGroup with find, replace, and regexp
       const nestedFormGroup = this.fb.group({
-        find: [''],    // Default empty value for find
-        replace: [''], // Default empty value for replace
-        regexp: [false] // Default checkbox unchecked
+        find: [''],    
+        replace: [''], 
+        regexp: [false] 
       });
 
       // Add the new group to contentReplacer with the entered key

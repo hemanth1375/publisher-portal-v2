@@ -12,6 +12,9 @@
                     <div class="mt-3">
                         <label for="contextpath" class="form-label">context path</label>
                         <input type="text" class="form-control" id="contextpath" formControlName="endpoint" placeholder="/test/{var}">
+                        <div *ngIf="contextPathError" class="text-danger">
+                            {{ errorMessage }}
+                          </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-sm-6">

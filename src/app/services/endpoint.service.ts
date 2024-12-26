@@ -50,4 +50,8 @@ export class EndpointService {
     return this.http.post(url, body);
   }
 
+  checkContextPath(path:any){
+    const url=urls.checkContextPath+`?endpointContext=${path}`;
+    return this.http.post(url,null)
+  }
 }

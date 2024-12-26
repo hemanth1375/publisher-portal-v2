@@ -38,5 +38,9 @@ export class ApplicationService {
    return this.http.post(deleteAppUrl, null, options)
   }
 
+  subscribeToApp(endpointId:any,applicationId:any){
+    const url=urls.subscribeToApplication+`?endpointId=${endpointId}&applicationId=${applicationId}`;
+    return this.http.post(url,null)
+  }
 
 }
