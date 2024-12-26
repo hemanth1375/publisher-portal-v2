@@ -113,7 +113,6 @@ export class SubscriptionDialog {
     })
   }
   unsubscribeToApi(endpointId:any){
-    alert("okk")
     this.applicationSer.unsubscribeToApp(endpointId).subscribe({
       next:(res)=>{
         console.log(res);
