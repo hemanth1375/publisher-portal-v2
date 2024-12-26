@@ -46,7 +46,7 @@
                   </button>
                   <button 
                     *ngIf="element?.isSubscribed === true" 
-                    class="btn btn-outline-danger">
+                    class="btn btn-outline-danger" (click)="unsubscribeToApi(element.id)">
                     Unsubscribe
                   </button>    
                 </td>

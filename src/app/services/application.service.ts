@@ -42,5 +42,9 @@ export class ApplicationService {
     const url=urls.subscribeToApplication+`?endpointId=${endpointId}&applicationId=${applicationId}`;
     return this.http.post(url,null)
   }
+  unsubscribeToApp(endpointId:any){
+    const url=urls.unsubscribeToApplication+`?endpointId=${endpointId}`;
+    return this.http.post(url,null)
+  }
 
 }
