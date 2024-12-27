@@ -86,16 +86,6 @@ export class ThrottlingComponent implements OnInit {
     this.toastService.show(message , {type:"error"})
   }
 
-
-
-  closeAlert(type: 'success' | 'error') {
-    if (type === 'success') {
-      this.successMessage = '';
-    } else {
-      this.errorMessage = '';
-    }
-  }
-
   showSuccessAlert(message: string) {
     this.successMessage = message;
     this.errorMessage = ''; // Clear any previous error message

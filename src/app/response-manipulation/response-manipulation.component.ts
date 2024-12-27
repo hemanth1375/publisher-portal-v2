@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EndpointService } from '../services/endpoint.service';
 import { ToastService } from '../services/toast.service';
@@ -75,10 +75,12 @@ export class ResponseManipulationComponent implements OnInit {
       // response: [null, [this.jsonValidator()]],
       response: [null, [CustomValidators.jsonValidator()]],
       strategy: [null],
+
       expression: [null],
 
       contentReplacerKey: [''],
       contentReplacer: this.formBuilder.group({}),
+
       regexConReplacerActive: [false],
 
       isStaticResponseActive: [false],
@@ -87,26 +89,11 @@ export class ResponseManipulationComponent implements OnInit {
       isAdvanceResponseGoActive: [false],
 
       bodyEditor: ['bodyeditor'],
-      template: ['', [CustomValidators.jsonValidator()]],
+      template: [''],
       contentType: [''],
       debug: [false],
       path: [''],
     })
-  }
-
-
-  jsonValidator() {
-    return (control: any) => {
-      if (!control.value) {
-        return null; // No value, validation is not applied
-      }
-      try {
-        JSON.parse(control.value); // Attempt to parse JSON
-        return null; // Valid JSON
-      } catch (e) {
-        return { invalidJson: true }; // Invalid JSON
-      }
-    };
   }
 
   showSuccess(message: string) {
@@ -140,7 +127,7 @@ export class ResponseManipulationComponent implements OnInit {
 
           isAdvanceResponseGoActive: !!this.endPointData?.extra_config?.["modifier/response-body-generator"],
 
-          template: JSON.stringify(this.endPointData?.extra_config?.["modifier/response-body-generator"]?.template, null, 2),
+          template: this.endPointData?.extra_config?.["modifier/response-body-generator"]?.template,
           contentType: this.endPointData?.extra_config?.["modifier/response-body-generator"]?.content_type,
           debug: this.endPointData?.extra_config?.["modifier/response-body-generator"]?.debug,
           path: this.endPointData?.extra_config?.["modifier/response-body-generator"]?.path
@@ -148,13 +135,13 @@ export class ResponseManipulationComponent implements OnInit {
 
         const obj = this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["content-replacer"];
 
-        const contentep = Object.keys(obj);
+        // const contentep = Object?.keys(obj);
 
-        if (contentep.length != 0) {
-          this.formGroupResponseManipulation.get("contentReplacerKey")?.setValue(contentep[0]);
-          console.log(this.formGroupResponseManipulation.get("contentReplacerKey")?.value);
-          this.createContentReplacerKeyWithValues();
-        }
+        // if (contentep.length != 0) {
+        //   this.formGroupResponseManipulation.get("contentReplacerKey")?.setValue(contentep[0]);
+        //   console.log(this.formGroupResponseManipulation.get("contentReplacerKey")?.value);
+        //   this.createContentReplacerKeyWithValues();
+        // }
 
 
 
@@ -187,8 +174,47 @@ export class ResponseManipulationComponent implements OnInit {
       }
     })
 
+
+
     this.getEndpoint();
 
+    this.formGroupResponseManipulation.get("isStaticResponseActive")?.valueChanges.subscribe(value => {
+      const responseControl = this.formGroupResponseManipulation.get('response');
+      const strategyControl = this.formGroupResponseManipulation.get('strategy');
+
+      if (value) {
+        responseControl?.setValidators([Validators.required, CustomValidators.jsonValidator()]);
+        strategyControl?.setValidators([Validators.required]);
+
+      } else {
+        strategyControl?.clearValidators();
+        responseControl?.clearValidators();
+      }
+      responseControl?.updateValueAndValidity();
+      strategyControl?.updateValueAndValidity();
+    })
+
+  
+    this.formGroupResponseManipulation.get("isAdvanceResponseActive")?.valueChanges.subscribe(value => {
+      const expControl = this.formGroupResponseManipulation.get('expression');
+      if (value) {
+        expControl?.setValidators([Validators.required]);
+      } else {
+        expControl?.clearValidators();
+      }
+      expControl?.updateValueAndValidity();
+    })
+
+    this.formGroupResponseManipulation.get('isAdvanceResponseGoActive')?.valueChanges.subscribe((isActive: boolean) => {
+      if (isActive) {
+        this.formGroupResponseManipulation.setValidators(
+          CustomValidators.oneOfValidator('path', 'template')
+        );
+      } else {
+        this.formGroupResponseManipulation.clearValidators();
+      }
+      this.formGroupResponseManipulation.updateValueAndValidity();
+    });
 
   }
 
@@ -198,8 +224,8 @@ export class ResponseManipulationComponent implements OnInit {
 
       // Create a new FormGroup with find, replace, and regexp
       const nestedFormGroup = this.formBuilder.group({
-        find: [''],    // Default empty value for find
-        replace: [''], // Default empty value for replace
+        find: ['', [Validators.required]],    // Default empty value for find
+        replace: ['', [Validators.required]], // Default empty value for replace
         regexp: [false] // Default checkbox unchecked
       });
 
@@ -251,12 +277,33 @@ export class ResponseManipulationComponent implements OnInit {
     }
   }
 
+  successMessage: string = '';
+  errorMessage: string = '';
+
+  showSuccessAlert(message: string) {
+    this.successMessage = message;
+    this.errorMessage = ''; // Clear any previous error message
+    setTimeout(() => {
+      this.successMessage = ''; // Clear success message after 5 seconds
+    }, 5000);
+  }
+
+  showErrorAlert(message: string) {
+    this.errorMessage = message;
+    this.successMessage = ''; // Clear any previous success message
+    setTimeout(() => {
+      this.errorMessage = ''; // Clear error message after 5 seconds
+    }, 5000);
+  }
+
   submit() {
 
     if (this.formGroupResponseManipulation.valid) {
       console.log(this.formGroupResponseManipulation.value);
 
       const body = {
+
+        ...(this.formGroupResponseManipulation.value?.isStaticResponseActive && { 
         "proxy": {
           ...((!!this.endPointData?.extra_config?.["proxy"]) && { "id": this.endPointData?.extra_config?.["proxy"]?.id }),
           ...(this.formGroupResponseManipulation.value?.isStaticResponseActive && {
@@ -266,8 +313,8 @@ export class ResponseManipulationComponent implements OnInit {
               "strategy": this.formGroupResponseManipulation.value?.strategy
             }
           })
-        },
-
+        }
+      }),
         ...(this.formGroupResponseManipulation.value?.isAdvanceResponseActive && {
           "modifier/jmespath": {
             ...((!!this.endPointData?.extra_config?.["modifier/jmespath"]) && { "id": this.endPointData?.extra_config?.["modifier/jmespath"]?.id }),
@@ -279,7 +326,7 @@ export class ResponseManipulationComponent implements OnInit {
         ...(this.formGroupResponseManipulation.value?.isAdvanceResponseGoActive && {
           "modifier/response-body-generator": {
             ...((!!this.endPointData?.extra_config?.["modifier/response-body-generator"]) && { "id": this.endPointData?.extra_config?.["modifier/response-body-generator"]?.id }),
-            ...(this.formGroupResponseManipulation.value?.bodyEditor === "bodyeditor" && { "template": this.formGroupResponseManipulation.value?.template ? JSON.parse(this.formGroupResponseManipulation.value?.template) : null }),
+            ...(this.formGroupResponseManipulation.value?.bodyEditor === "bodyeditor" && { "template": this.formGroupResponseManipulation.value?.template }),
             "content_type": this.formGroupResponseManipulation.value?.contentType,
             "debug": this.formGroupResponseManipulation.value?.debug,
             ...(this.formGroupResponseManipulation.value?.bodyEditor === "external" && { "path": this.formGroupResponseManipulation.value?.path }),
@@ -316,8 +363,8 @@ export class ResponseManipulationComponent implements OnInit {
 
     } else {
       console.error('Form Invalid:', this.formGroupResponseManipulation.errors);
-    }
-
+      this.showErrorAlert(" Please fill the required fields or fill them properly");
   }
+}
 
 }

@@ -6,8 +6,8 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <mat-accordion>
-                    <mat-expansion-panel (opened)="TelemertyFormGroup.value.isLoggingActive">
+                <mat-accordion [multi]="true">
+                    <mat-expansion-panel (opened)="TelemertyFormGroup.value.isLoggingActive" >
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <div class="d-flex justify-content-between toggle-header">
@@ -38,6 +38,7 @@
                                     <option value="DEBUG">DEBUG</option>
                                     <option value="WARNING">WARNING</option>
                                     <option value="INFO">INFO</option>
+                                    <option value="ERROR">ERROR</option>
                                     <option value="CRITICAL">CRITICAL</option>
                                 </select>
                                 <!-- <div class="form-text">The reporting level, from more to less verbosity
@@ -269,7 +270,7 @@
 
                         <div class="row" formArrayName="prometheus">
                             <div class="row align-items-center gap-2"
-                                *ngFor="let config of prometheusArray.controls; let i = index" [formGroupName]="i">
+                                *ngFor="let config of prometheusArray?.controls; let i = index" [formGroupName]="i">
                                 <div class="col-sm-4">
                                     <label for="prometheusName" class="form-label">Name &nbsp; <i
                                             class="bi bi-info-circle" [matTooltip]=prometheusNameToolTip></i></label>
@@ -295,7 +296,7 @@
                                 <div class="col-sm-4">
                                     <button type="button" class="btn btn-dark btn-sm"
                                         (click)="removePromethusConfig(i)">Remove
-                                        OTLP</button>
+                                        Prometheus</button>
                                 </div>
                             </div>
                         </div>

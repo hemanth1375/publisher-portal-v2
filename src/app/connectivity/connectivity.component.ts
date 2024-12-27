@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EndpointService } from '../services/endpoint.service';
 import { ToastService } from '../services/toast.service';
+import { max } from 'rxjs';
 
 @Component({
   selector: 'app-connectivity',
@@ -39,16 +40,16 @@ export class ConnectivityComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private endpointService: EndpointService, private toastService: ToastService) {
     this.formGroup1 = this.formBuilder.group({
       inputHeader: [null],
-      concurrentCalls: [""],
+      concurrentCalls: [[1], [Validators.min(1), Validators.max(5)]],
       backoffStrategy: [null],
-      readBufferSize: ['', Validators.required],
+      readBufferSize: [''],
       writeWait: ['', Validators.pattern("^[0-9]+(ns|ms|us|µs|s|m|h)$")],
-      maxRetries: ['', Validators.required],
-      messageBufferSize: ['', Validators.required],
-      writeBufferSize: ['', Validators.required],
-      maxWriteBufferSize: ['', Validators.required],
+      maxRetries: [''],
+      messageBufferSize: [''],
+      writeBufferSize: [''],
+      maxWriteBufferSize: [''],
       pongWait: ['', Validators.pattern("^[0-9]+(ns|ms|us|µs|s|m|h)$")],
-      inputHeaderArray: [[]],
+      inputHeaderArray: [[[]]],
       connectEvent: [false],
       disconnectEvent: [false],
       returnErr: [false],
@@ -134,6 +135,25 @@ export class ConnectivityComponent implements OnInit {
     this.formGroup1.get('inputHeaderArray')?.setValue([...this.parameterArray]);
   }
 
+  successMessage: string = '';
+  errorMessage: string = '';
+  
+  showSuccessAlert(message: string) {
+    this.successMessage = message;
+    this.errorMessage = ''; // Clear any previous error message
+    setTimeout(() => {
+      this.successMessage = ''; // Clear success message after 5 seconds
+    }, 5000);
+  }
+
+  showErrorAlert(message: string) {
+    this.errorMessage = message;
+    this.successMessage = ''; // Clear any previous success message
+    setTimeout(() => {
+      this.errorMessage = ''; // Clear error message after 5 seconds
+    }, 5000);
+  }
+
 
   submit() {
     const body = {
@@ -145,7 +165,7 @@ export class ConnectivityComponent implements OnInit {
         ...(this.formGroup1.value?.isWebSocketActive && {
           "websocket": {
             ...((!!this.endPointData?.extra_config?.["websocket"]) && { "id": this.endPointData?.extra_config?.["websocket"]?.id }),
-            ...(this.formGroup1.value?.inputHeaderArray.length != 0 && { "input_headers": this.formGroup1.value?.inputHeaderArray }),
+            ...(this.formGroup1.value?.inputHeaderArray?.length != 0 && { "input_headers": this.formGroup1.value?.inputHeaderArray }),
             ...(this.formGroup1.value?.connectEvent && { "connect_event": this.formGroup1.value?.connectEvent }),
             ...(this.formGroup1.value?.disconnectEvent && { "disconnect_event": this.formGroup1.value?.disconnectEvent }),
             ...(this.formGroup1.value?.readBufferSize && { "read_buffer_size": this.formGroup1.value?.readBufferSize }),
@@ -168,18 +188,25 @@ export class ConnectivityComponent implements OnInit {
 
     console.log(body);
 
-    this.endpointService.addConnectivity(this.endpointId, body).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.showSuccess(res?.message);
-        this.getEndpoint();
-      },
-      error: (err) => {
-        console.error(err);
-        this.showError(err?.message);
-        this.getEndpoint();
-      }
-    })
+    if (this.formGroup1.valid) {
+      this.endpointService.addConnectivity(this.endpointId, body).subscribe({
+        next: (res: any) => {
+          console.log(res);
+          this.showSuccess(res?.message);
+          this.getEndpoint();
+        },
+        error: (err) => {
+          console.error(err);
+          this.showError(err?.message);
+          this.getEndpoint();
+        }
+      })
+    }else{
+      console.log(this.formGroup1.errors);
+      
+      this.showErrorAlert(" Please fill the required fields or fill them properly");
+    }
+
 
   }
 
