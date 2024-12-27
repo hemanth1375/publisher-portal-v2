@@ -37,12 +37,17 @@
               <div class="col-sm-6">
                 <label for="response" class="form-label">Response &nbsp; <i class="bi bi-info-circle"
                     [matTooltip]=responseToolTip></i></label>
-                <textarea class="static-text-area form-control" formControlName="response"></textarea>
+                <textarea class="static-text-area form-control" formControlName="response" ></textarea>
                 <!-- <div class="form-text">
                                     Provide the JSON object you want to return (ensure to start and end with curly braces).
                                     </div> -->
-                <div *ngIf="formGroupResponseManipulation.get('response')?.hasError('invalidJson')"><span
-                    class="error-message">Please enter a valid JSON.</span></div>
+                <div *ngIf="formGroupResponseManipulation.get('response')?.hasError('invalidJson')"><span class="error-message">Please
+                    enter a valid JSON.</span></div>
+                
+                <div
+                  *ngIf="formGroupResponseManipulation.get('response')?.hasError('required')">
+                  <span class="error-message"> Json Schema is Required</span>
+                </div>
 
               </div>
               <div class="col-sm-6">
@@ -58,6 +63,10 @@
                   <option value="incomplete" selected="selected">Incomplete - Present in incomplete responses
                   </option>
                 </select>
+                <div
+                *ngIf="formGroupResponseManipulation.get('strategy')?.hasError('required')">
+                <span class="error-message">Strategy is Required</span>
+              </div>
               </div>
             </div>
             }
@@ -99,10 +108,13 @@
               <div class="row">
                 <div class="col-sm-6">
                   <input class="input-size form-control" type="text" formControlName="expression"
-                    placeholder="people[?age > `20`].[name, age]" />
-                  <!-- <div class="form-text">JMESpath query to execute on returned results of
-                                      /v1/huge-fountain/&#123;id_fountain&#125;</div> -->
+                    placeholder="people[?age > `20`].[name, age]" [class.is-invalid]="formGroupResponseManipulation.get('expression')?.invalid && formGroupResponseManipulation.get('expression')?.touched"/>
                 </div>
+
+                <div
+                *ngIf="formGroupResponseManipulation.get('expression')?.hasError('required') && formGroupResponseManipulation.get('expression')?.touched">
+                <span class="error-message">Expression is Required</span>
+              </div>
               </div>
             </div>
 
@@ -321,9 +333,29 @@
                 The Content-Type that you are coding in the template. Defaults to application/json
               </div> -->
             </div>
+
+            <div class="error-message" *ngIf="formGroupResponseManipulation.errors?.['oneOf']">
+               <span class="error">{{ formGroupResponseManipulation.errors?.['oneOf'] }}</span>
+          </div>
+
+
             }
           </mat-expansion-panel>
-        </mat-accordion>
+        </mat-accordion> 
+
+
+        
+        <div class="row mt-2 p-2" >
+          <ngb-alert [type]="'success'" *ngIf="successMessage" >
+              {{ successMessage }}
+          </ngb-alert>
+      </div>
+    
+      <div class="row mt-2 p-2" >
+          <ngb-alert [type]="'danger'" *ngIf="errorMessage">
+              {{ errorMessage }}
+          </ngb-alert>
+      </div>
 
         <div class="col-sm-12 mt-3">
           <button class="btn btn-primary" (click)="submit()">Save</button>

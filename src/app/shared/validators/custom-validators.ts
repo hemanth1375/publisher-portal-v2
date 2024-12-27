@@ -41,4 +41,20 @@ export class CustomValidators {
     };
   }
 
+  static oneOfValidator(field1: string, field2: string): (group: AbstractControl) => ValidationErrors | null {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const field1Value = group.get(field1)?.value;
+      const field2Value = group.get(field2)?.value;
+
+      if (!field1Value && !field2Value) {
+        return { oneOf: `Either ${field1} or ${field2} must be provided.` };
+      }
+      if (field1Value && field2Value) {
+        return { oneOf: `Only one of ${field1} or ${field2} can be provided.` };
+      }
+      return null; // Validation passes
+    };
+  }
+  
+
 }

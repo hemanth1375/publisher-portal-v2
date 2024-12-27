@@ -320,11 +320,10 @@
                             <label for="reqJSON" class="form-label">JSON schema &nbsp; <i class="bi bi-info-circle"
                                     [matTooltip]=jsonSchemaToolTIp></i></label>
                             <!-- <textarea json-formatter id="reqJSON" class="static-text-area form-control" formControlName="reqJSONSchema"></textarea> -->
-                            <textarea class="form-control custom-textarea" formControlName="reqJSONSchema"
-                                style="width: 422px; height: 238px;">
-                  </textarea>
-                            <div *ngIf="formGroupPolicies.get('reqJSONSchema')?.hasError('invalidJson')"><span
-                                    class="error-message">Please enter a valid JSON.</span></div>
+                            <textarea class="form-control custom-textarea" formControlName="reqJSONSchema" style="width: 422px; height: 238px;">
+                                          </textarea>
+                            <div *ngIf="formGroupPolicies.get('reqJSONSchema')?.hasError('invalidJson')"><span class="error-message">Please
+                                    enter a valid JSON.</span></div>
                         </div>
                         }
                     </mat-expansion-panel>
@@ -355,12 +354,15 @@
                             <label for="reqJSON" class="form-label">JSON schema &nbsp; <i class="bi bi-info-circle"
                                     [matTooltip]=resonseJsonSchemaToolTip></i></label>
                             <!-- <textarea json-formatter id="reqJSON" class="static-text-area form-control" formControlName="reqJSONSchema"></textarea> -->
-                            <textarea class="form-control custom-textarea" formControlName="resJSONSchema"
-                                style="width: 422px; height: 238px;">
-                        change
-                    </textarea>
-                            <div *ngIf="formGroupPolicies.get('resJSONSchema')?.hasError('invalidJson')"><span
-                                    class="error-message">Please enter a valid JSON.</span></div>
+                            <textarea class="form-control custom-textarea" formControlName="resJSONSchema" style="width: 422px; height: 238px;">
+                                                change
+                                            </textarea>
+                            <div *ngIf="formGroupPolicies.get('resJSONSchema')?.hasError('invalidJson')"><span class="error-message">Please
+                                    enter a
+                                    valid JSON.</span>
+                            </div>
+                            <div *ngIf="formGroupPolicies.get('resJSONSchema')?.hasError('required') && formGroupPolicies.get('resJSONSchema')?.touched" ><span class="error-message">Response Json Schema is Required</span>
+                        </div>
                         </div>
 
                         <div class="row">

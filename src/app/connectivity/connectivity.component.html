@@ -18,9 +18,13 @@
                                     class="bi bi-info-circle" [matTooltip]=concurrentCallsToolTip></i></label>
                             <input type="number" min="1" max="5" class="form-control" id="concurrentCalls"
                                 formControlName="concurrentCalls">
-                            <!-- <div class="form-text">Number of parallel requests you want to send to the backend for the same
-                                request. Fastest request is
-                                taken and the rest are discarded. Recommended values 1-3</div> -->
+
+                                <div *ngIf="formGroup1.get('concurrentCalls')?.hasError('min') && formGroup1.get('concurrentCalls')?.touched">
+                                    <span class="error-message">Value must be at least 1</span>
+                                  </div>
+                                  <div *ngIf="formGroup1.get('concurrentCalls')?.hasError('max') && formGroup1.get('concurrentCalls')?.touched">
+                                    <span class="error-message">Value must be no greater than 5</span>
+                                  </div>
                         </div>
                     </mat-expansion-panel>
 
@@ -261,6 +265,18 @@
                         }
                     </mat-expansion-panel>
                 </mat-accordion>
+                
+                <div class="row mt-2 p-2" >
+                    <ngb-alert [type]="'success'" *ngIf="successMessage" >
+                        {{ successMessage }}
+                    </ngb-alert>
+                </div>
+              
+                <div class="row mt-2 p-2" >
+                    <ngb-alert [type]="'danger'" *ngIf="errorMessage">
+                        {{ errorMessage }}
+                    </ngb-alert>
+                </div>
 
                 <div class="col-sm-12 mt-3">
                     <button class="btn btn-primary" (click)="submit()">Save</button>

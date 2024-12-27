@@ -5,6 +5,7 @@ import { EndpointService } from '../services/endpoint.service';
 import { ActivatedRoute } from '@angular/router';
 import { ToastService } from '../services/toast.service';
 import { CustomValidators } from '../shared/validators/custom-validators';
+import { CdkVirtualForOf } from '@angular/cdk/scrolling';
 @Component({
   selector: 'app-policies',
   templateUrl: './policies.component.html',
@@ -70,7 +71,7 @@ export class PoliciesComponent implements OnInit {
       isResponseSchValidatorActive: [false],
 
       reqJSONSchema: [JSON.stringify(this.jsonDataForReq, null, 2),[CustomValidators.jsonValidator()]],
-      resJSONSchema: [JSON.stringify(this.jsonDataForRes, null, 2),[CustomValidators.jsonValidator()]]
+      resJSONSchema: [JSON.stringify(this.jsonDataForRes, null, 2)]
 
     })
   }
@@ -195,8 +196,6 @@ export class PoliciesComponent implements OnInit {
           resJSONSchema: JSON.stringify(this.endPointData?.extra_config?.["plugin/req-resp-modifier"]?.["response-schema-validator"]?.schema, null, 2)
         })
 
-
-
       },
       error: (err) => {
         console.error(err);
@@ -214,8 +213,17 @@ export class PoliciesComponent implements OnInit {
 
     this.getEndpoint();
 
-    this.formGroupPolicies.value.get("isResponseSchValidatorActive")?.valueChanges.subscribe((value: any) =>{
-      
+    
+
+    this.formGroupPolicies.get("isResponseSchValidatorActive")?.valueChanges.subscribe(value =>{
+      const schemaControl = this.formGroupPolicies.get('resJSONSchema'); 
+        console.log(value);
+        if(value){
+          schemaControl?.setValidators([Validators.required, CustomValidators.jsonValidator()]);
+        }else {
+          schemaControl?.clearValidators();
+        }
+        schemaControl?.updateValueAndValidity();
     })
 
   }
@@ -253,16 +261,16 @@ export class PoliciesComponent implements OnInit {
       ...(this.formGroupPolicies.value?.isSpFilterActive && {
         "security/policies": {
           ...(!!this.endPointData?.extra_config?.["security/policies"] && { "id": this.endPointData?.extra_config?.["security/policies"]?.id }),
-          ...((this.formGroupPolicies.value?.secReqPolicyArrayValue.length>0 || this.formGroupPolicies.value?.secReqErrorStCode ||this.formGroupPolicies.value?.secReqErrorBody || this.formGroupPolicies.value?.secReqErrorContentType) &&{"req": {
-            ...(this.formGroupPolicies.value?.secReqPolicyArrayValue.length>0 &&{"policies": this.formGroupPolicies.value?.secReqPolicyArrayValue}),
+          ...((this.formGroupPolicies.value?.secReqPolicyArrayValue?.length>0 || this.formGroupPolicies.value?.secReqErrorStCode ||this.formGroupPolicies.value?.secReqErrorBody || this.formGroupPolicies.value?.secReqErrorContentType) &&{"req": {
+            ...(this.formGroupPolicies.value?.secReqPolicyArrayValue?.length>0 &&{"policies": this.formGroupPolicies.value?.secReqPolicyArrayValue}),
             ...((this.formGroupPolicies.value?.secReqErrorStCode ||this.formGroupPolicies.value?.secReqErrorBody || this.formGroupPolicies.value?.secReqErrorContentType)&& {"error": {
               ...(this.formGroupPolicies.value?.secReqErrorStCode &&{"status": this.formGroupPolicies.value?.secReqErrorStCode}),
               ...(this.formGroupPolicies.value?.secReqErrorBody &&{"body": this.formGroupPolicies.value?.secReqErrorBody}),
               ...(this.formGroupPolicies.value?.secReqErrorContentType &&{"content_type": this.formGroupPolicies.value?.secReqErrorContentType})
             }})
           }}),
-          ...((this.formGroupPolicies.value?.secResPolicyArrayValue.length>0 || this.formGroupPolicies.value?.secResErrorStCode || this.formGroupPolicies.value?.secResErrorBody || this.formGroupPolicies.value?.secResErrorContentType)&&{"resp": {
-            ...(this.formGroupPolicies.value?.secResPolicyArrayValue.length>0 &&{"policies": this.formGroupPolicies.value?.secResPolicyArrayValue}),
+          ...((this.formGroupPolicies.value?.secResPolicyArrayValue?.length>0 || this.formGroupPolicies.value?.secResErrorStCode || this.formGroupPolicies.value?.secResErrorBody || this.formGroupPolicies.value?.secResErrorContentType)&&{"resp": {
+            ...(this.formGroupPolicies.value?.secResPolicyArrayValue?.length>0 &&{"policies": this.formGroupPolicies.value?.secResPolicyArrayValue}),
             ...((this.formGroupPolicies.value?.secResErrorStCode || this.formGroupPolicies.value?.secResErrorBody || this.formGroupPolicies.value?.secResErrorContentType)&&{"error": {
               ...(this.formGroupPolicies.value?.secResErrorStCode &&{"status": this.formGroupPolicies.value?.secResErrorStCode}),
               ...(this.formGroupPolicies.value?.secResErrorBody &&{"body": this.formGroupPolicies.value?.secResErrorBody}),
@@ -302,18 +310,44 @@ export class PoliciesComponent implements OnInit {
 
     console.log(body);
 
-    this.endpointService.addPolicies(this.endpointId, body).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.showSuccess(res?.message)
-        this.getEndpoint();
-      },
-      error: (err) => {
-        console.error(err);
-        this.showError(err?.message)
-        this.getEndpoint();
+    console.log(Object.keys(body?.['security/policies']).includes('req'));
+    
+
+    if(Object.keys(body?.['security/policies']).includes('req') || Object.keys(body?.['security/policies']).includes('resp') || Object.keys(body?.['security/policies']).includes('jwt')){
+      if(!Object.keys(body?.['security/policies']?.req)?.includes('policies')){
+        this.showError("ploicies in req is required");
+      }else if(Object.keys(body?.['security/policies']?.resp && !Object.keys(body?.['security/policies']?.resp)?.includes('policies'))){
+        this.showError("ploicies in response is required");
+      }else if(!Object.keys(body?.['security/policies']?.jwt)?.includes('policies')){
+        this.showError("ploicies in jwt is required");
+      }else {
+        this.endpointService.addPolicies(this.endpointId, body).subscribe({
+          next: (res: any) => {
+            console.log(res);
+            this.showSuccess(res?.message)
+            this.getEndpoint();
+          },
+          error: (err) => {
+            console.error(err);
+            this.showError(err?.message)
+            this.getEndpoint();
+          }
+        })
       }
-    })
+    }
+
+    // this.endpointService.addPolicies(this.endpointId, body).subscribe({
+    //   next: (res: any) => {
+    //     console.log(res);
+    //     this.showSuccess(res?.message)
+    //     this.getEndpoint();
+    //   },
+    //   error: (err) => {
+    //     console.error(err);
+    //     this.showError(err?.message)
+    //     this.getEndpoint();
+    //   }
+    // })
   }
 
 }
