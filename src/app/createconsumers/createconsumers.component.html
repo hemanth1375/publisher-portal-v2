@@ -9,28 +9,16 @@
             <div class="col-sm-12">
                 <form [formGroup]="creatConsumerFormGroup">
                     <!-- <div class="row"> -->
-                        <div class="row gy-2">
-                            <div class="col-sm-12 gap-2">
-                                <label for="username" class="form-label">Username</label>
-                                <input id="username" class="form-control input-field-width" formControlName="username">
-                                <!-- <div>
-                                    <label>Username</label>
-                                </div>
-                                <div>
-                                    <input formControlName="username">
-                                </div> -->
-                            </div>
-                            <div class="col-sm-12">
-                                <label for="password">password</label>
-                                <input id="password" class="form-control input-field-width" formControlName="password">
-                            </div>
-    
-                            <!-- <div class="col-sm-12">
-                                <label for="confirmPassword" class="form-lable">Confirm Password</label>
-                                <input id="confirmPassword" class="form-control input-field-width"
-                                    formControlName="confirmPassword">
-                            </div> -->
-                            <div class="col-sm-12">
+                    <div class="row my-2 ">
+                        <div class="col-sm-6">
+                            <label for="username" class="form-label">Username</label>
+                            <input id="username" class="form-control input-field-width" formControlName="username">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="password" class="form-label">password</label>
+                            <input id="password" class="form-control input-field-width" formControlName="password">
+                        </div>
+                        <!-- <div class="col-sm-12">
                                 <label for="email" class="form-lable">Email</label>
                                 <input id="email" class="form-control input-field-width" formControlName="email">
                             </div>
@@ -41,8 +29,28 @@
                             <div class="col-sm-12">
                                 <label for="lastName" class="form-lable">Last Name</label>
                                 <input id="lastName" class="form-control input-field-width" formControlName="lastName">
+                            </div> -->
+                    </div>
+
+                    <div class="row my-2 ">
+                        <div class="col-sm-6">
+                            <label for="email" class="form-label">Email</label>
+                            <input id="email" class="form-control input-field-width" formControlName="email">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="firstName" class="form-label">First Name</label>
+                            <input id="firstName" class="form-control input-field-width" formControlName="firstName">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="col-sm-12">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input id="lastName" class="form-control input-field-width" formControlName="lastName">
                             </div>
                         </div>
+                    </div>
                 </form>
             </div>
             <div class="col-sm-12 mt-3">

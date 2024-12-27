@@ -1,6 +1,7 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {MatTableModule} from '@angular/material/table';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -135,6 +136,8 @@ function initializeKeycloak(keycloak: KeycloakService){
   imports: [
     BrowserModule,
     MatTableModule,
+    MatPaginatorModule,
+    MatPaginator,
     AppRoutingModule,MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule,
     FormsModule,
     MatFormFieldModule,

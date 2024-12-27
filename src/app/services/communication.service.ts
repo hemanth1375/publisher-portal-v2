@@ -42,4 +42,15 @@ export class CommunicationService {
   updateShowParent(value: boolean) {
     this.showParentSource.next(value);
   }
+
+
+  // showSubscriptionApplications
+  private showSubscriptionApplications = new Subject<any>
+  showSubscriptionApplications$ = this.showSubscriptionApplications.asObservable()
+
+  emitSubscriptions(value: boolean) {
+    this.showSubscriptionApplications.next(value)
+  }
+
+
 }

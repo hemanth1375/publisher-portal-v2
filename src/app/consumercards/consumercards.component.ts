@@ -48,7 +48,7 @@ export class ConsumercardsComponent {
   }
 
 
-  goToApplicationPage(consumerId:any) {
+  goToApplicationPage(consumerId: any) {
     // this.router.navigate([`viewgateway/${id}/dashboard`], { relativeTo: this.route })
     this.router.navigate([`${consumerId}/application`], { relativeTo: this.route })
     this.isShowParent = false
@@ -110,6 +110,7 @@ export class ConsumercardsComponent {
       },
       error: (err) => {
         console.log("error", err);
+        this.consumerCards = []
 
       }
     })

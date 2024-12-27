@@ -3,62 +3,75 @@
 @if(isShowApplication){
 <div class="container-fluid">
     <div class="row mt-3">
-        <div class="col-sm-12 d-flex justify-content-end">
+        <div class="col-sm-12 d-flex justify-content-between">
+            <div>
+                  <h1>Api Products</h1>
+            </div>
+          <div>
             <button class="btn btn-outline-primary" (click)="goToCreateApplication()">
-                Create Application
+                Create Api Product
             </button>
+          </div>
         </div>
     </div>
-    <div class="row mt-3">
-        <div class="col-sm-12">
-            <table mat-table [dataSource]="applicationResults" class="mat-elevation-z8">
-                <!-- Name Column -->
-                <ng-container matColumnDef="clientId">
-                    <th mat-header-cell *matHeaderCellDef> Client ID </th>
-                    <td mat-cell *matCellDef="let element">
-                        <a (click)="navigateToDetails(element.id)" class="name-link cursorPointer">{{ element.clientId}}</a>
-                    </td>
-                </ng-container>
-
-                <!-- Owner Column -->
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef> Name </th>
-                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                </ng-container>
-
-                <!-- Policy Column -->
-                <ng-container matColumnDef="protocol">
-                    <th mat-header-cell *matHeaderCellDef> Type </th>
-                    <td mat-cell *matCellDef="let element"> {{element.protocol}} </td>
-                </ng-container>
-
-                <!-- Workstatus Column -->
-                <ng-container matColumnDef="description">
-                    <th mat-header-cell *matHeaderCellDef> Description </th>
-                    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-                </ng-container>
-
-                <!-- Subscriptions Column -->
-                <ng-container matColumnDef="baseUrl">
-                    <th mat-header-cell *matHeaderCellDef> Home </th>
-                    <td mat-cell *matCellDef="let element"> {{element.baseUrl}} </td>
-                </ng-container>
-
-                <!-- Actions Column -->
-                <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef> Action </th>
-                    <td mat-cell *matCellDef="let element">
-                     <div>
-                        <button type="button" class="btn btn-sm btn-outline-primary" (click)="deleteApplication(element.id)">Delete</button>
-                     </div>    
-                    </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
+    @if(applicationResults.length && applicationResults.length>0){
+        <div class="row mt-3">
+            <div class="col-sm-12">
+                <table mat-table [dataSource]="applicationResults" class="mat-elevation-z8">
+                    <!-- clientId Column -->
+                    <ng-container matColumnDef="clientId">
+                        <th mat-header-cell *matHeaderCellDef> Client ID </th>
+                        <td mat-cell *matCellDef="let element">
+                            <a (click)="navigateToDetails(element.id)" class="name-link cursorPointer">{{ element.clientId}}</a>
+                        </td>
+                    </ng-container>
+    
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef> Name </th>
+                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                    </ng-container>
+    
+                    <!-- protocol Column -->
+                    <ng-container matColumnDef="protocol">
+                        <th mat-header-cell *matHeaderCellDef> Type </th>
+                        <td mat-cell *matCellDef="let element"> {{element.protocol}} </td>
+                    </ng-container>
+    
+                    <!-- Description Column -->
+                    <ng-container matColumnDef="description">
+                        <th mat-header-cell *matHeaderCellDef> Description </th>
+                        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                    </ng-container>
+    
+                    <!-- baseUrl Column -->
+                    <ng-container matColumnDef="baseUrl">
+                        <th mat-header-cell *matHeaderCellDef> Home </th>
+                        <td mat-cell *matCellDef="let element"> {{element.baseUrl}} </td>
+                    </ng-container>
+    
+                    <!-- Actions Column -->
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef> Action </th>
+                        <td mat-cell *matCellDef="let element">
+                         <div>
+                            <button type="button" class="btn btn-sm btn-outline-primary" (click)="deleteApplication(element.id)">Delete</button>
+                         </div>    
+                        </td>
+                    </ng-container>
+    
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
         </div>
-    </div>
+    }@else {
+        <div class="row">
+            <div class="col-sm-12 d-flex justify-content-center align-items-center">
+                <h1>Applications are not available.Create Applications</h1>
+            </div>
+        </div>
+    }
 
 </div>
 }

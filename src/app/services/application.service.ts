@@ -28,23 +28,37 @@ export class ApplicationService {
     return this.http.post(getAppUrls, null, options)
   }
 
-  deleteApplications(applicationId: any):Observable<any> {
+  deleteApplications(applicationId: any): Observable<any> {
 
     const deleteAppUrl = urls.deleteApplication
     const headers = {
       applicationId: applicationId
     }
     const options: any = { headers: headers }
-   return this.http.post(deleteAppUrl, null, options)
+    return this.http.post(deleteAppUrl, null, options)
   }
 
-  subscribeToApp(endpointId:any,applicationId:any){
-    const url=urls.subscribeToApplication+`?endpointId=${endpointId}&applicationId=${applicationId}`;
-    return this.http.post(url,null)
+  subscribeToOAuth(endpointId: any, applicationId: any): Observable<any> {
+    const url = urls.subscribeToOAuth + `?endpointId=${endpointId}&applicationId=${applicationId}`;
+    return this.http.post(url, null)
   }
-  unsubscribeToApp(endpointId:any){
-    const url=urls.unsubscribeToApplication+`?endpointId=${endpointId}`;
-    return this.http.post(url,null)
+
+  unsubscribeToOAuth(endpointId: any): Observable<any> {
+    const url = urls.unsubscribeToOAuth + `?endpointId=${endpointId}`;
+    return this.http.post(url, null)
+  }
+
+
+
+  subscribeToBasic(endpointId: any, applicationId: any) {
+    const basicUrl = urls.subscribeToBasic + `?endpointId=${endpointId} & applicationId=${applicationId}`
+    return this.http.post(basicUrl, null)
+  }
+
+  unsubscribeToBasic(endpointId: any):Observable<any> {
+    const unsubscribeBasicUrl = urls.unsubscribeToBasic + `?endpointId=${endpointId}`;
+    return this.http.post(unsubscribeBasicUrl, null)
+
   }
 
 }
