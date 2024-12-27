@@ -322,8 +322,8 @@
                     </svg></label>
                   <textarea class="form-control fingerprint" id="templateTest{{i}}" rows="3"
                     formControlName="template"></textarea>
-                    <div *ngIf="getFormGroup(i).get('template')?.hasError('invalidJson')"><span
-                      class="error-message">Please enter a valid JSON.</span></div>
+                    <!-- <div *ngIf="getFormGroup(i).get('template')?.hasError('invalidJson')"><span
+                      class="error-message">Please enter a valid JSON.</span></div> -->
                   <!-- <div class="form-text">The response body you will return to the end-user. You can introduce the variables
                               .resp_headers.xxx, .resp_headers.xxx (with no-op), .resp_status.xxx (with no-op), .resp_body.xxx,
                               .req_params.Xxx, .req_headers.xxx, .req_querystring.xxx, .req_path</div> -->
@@ -775,8 +775,8 @@
                     </svg></label>
                   <textarea class="form-control fingerprint" id="templateResponse{{i}}" rows="3"
                     formControlName="templateResponse"></textarea>
-                    <div *ngIf="getFormGroup(i).get('templateResponse')?.hasError('invalidJson')"><span
-                      class="error-message">Please enter a valid JSON.</span></div>
+                    <!-- <div *ngIf="getFormGroup(i).get('templateResponse')?.hasError('invalidJson')"><span
+                      class="error-message">Please enter a valid JSON.</span></div> -->
                 </div>
 
                 <div class="row">
@@ -1678,8 +1678,8 @@
                       [matTooltip]=bodyEditConn_tooltip></i></label>
                   <textarea class="form-control fingerprint" id="templateConnect{{i}}" rows="3"
                     formControlName="templateConnect"></textarea>
-                    <div *ngIf="getFormGroup(i).get('templateConnect')?.hasError('invalidJson')"><span
-                      class="error-message">Please enter a valid JSON.</span></div>
+                    <!-- <div *ngIf="getFormGroup(i).get('templateConnect')?.hasError('invalidJson')"><span
+                      class="error-message">Please enter a valid JSON.</span></div> -->
 
                 </div>
 

@@ -87,7 +87,7 @@ export class ResponseManipulationComponent implements OnInit {
       isAdvanceResponseGoActive: [false],
 
       bodyEditor: ['bodyeditor'],
-      template: ['', [CustomValidators.jsonValidator()]],
+      template: [''],
       contentType: [''],
       debug: [false],
       path: [''],
@@ -125,7 +125,10 @@ export class ResponseManipulationComponent implements OnInit {
         console.log(res)
         this.endPointData = res;
         console.log(this.endPointData);
-
+        let decodedTemplateResponse = '';
+        if (this.endPointData?.extra_config?.["modifier/response-body-generator"]?.template) {
+          decodedTemplateResponse = atob(this.endPointData?.extra_config?.["modifier/response-body-generator"]?.template);
+        }
         this.formGroupResponseManipulation.patchValue({
           response: JSON.stringify(this.endPointData?.extra_config?.proxy?.static?.data, null, 2),
           strategy: this.endPointData?.extra_config?.proxy?.static?.strategy,
@@ -140,7 +143,7 @@ export class ResponseManipulationComponent implements OnInit {
 
           isAdvanceResponseGoActive: !!this.endPointData?.extra_config?.["modifier/response-body-generator"],
 
-          template: JSON.stringify(this.endPointData?.extra_config?.["modifier/response-body-generator"]?.template, null, 2),
+          template: decodedTemplateResponse,
           contentType: this.endPointData?.extra_config?.["modifier/response-body-generator"]?.content_type,
           debug: this.endPointData?.extra_config?.["modifier/response-body-generator"]?.debug,
           path: this.endPointData?.extra_config?.["modifier/response-body-generator"]?.path
@@ -279,7 +282,7 @@ export class ResponseManipulationComponent implements OnInit {
         ...(this.formGroupResponseManipulation.value?.isAdvanceResponseGoActive && {
           "modifier/response-body-generator": {
             ...((!!this.endPointData?.extra_config?.["modifier/response-body-generator"]) && { "id": this.endPointData?.extra_config?.["modifier/response-body-generator"]?.id }),
-            ...(this.formGroupResponseManipulation.value?.bodyEditor === "bodyeditor" && { "template": this.formGroupResponseManipulation.value?.template ? JSON.parse(this.formGroupResponseManipulation.value?.template) : null }),
+            ...(this.formGroupResponseManipulation.value?.bodyEditor === "bodyeditor" && { "template": this.formGroupResponseManipulation.value?.template ? btoa(this.formGroupResponseManipulation.value?.template) : null }),
             "content_type": this.formGroupResponseManipulation.value?.contentType,
             "debug": this.formGroupResponseManipulation.value?.debug,
             ...(this.formGroupResponseManipulation.value?.bodyEditor === "external" && { "path": this.formGroupResponseManipulation.value?.path }),

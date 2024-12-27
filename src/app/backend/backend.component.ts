@@ -251,7 +251,18 @@ export class BackendComponent {
     this.items.forEach((item, index) => {
       console.log(item);
       const flatmapFilters = item.flatmap_filter || [];
-
+      let decodedTemplate = '';
+      if (item?.extra_config?.['modifier/body-generator']?.template) {
+        decodedTemplate = atob(item?.extra_config?.['modifier/body-generator']?.template);
+      }
+      let decodedTemplateResponse = '';
+      if (item?.extra_config?.["modifier/response-body-generator"]?.template) {
+        decodedTemplateResponse = atob(item?.extra_config?.["modifier/response-body-generator"]?.template);
+      }
+      let decodedTemplateConnect = '';
+      if (item?.extra_config?.["backend/soap"]?.template) {
+        decodedTemplateConnect = atob(item?.extra_config?.["backend/soap"]?.template);
+      }
       const group = this.fb.group({
         id: [item.id],
         extraConfigId: [item?.extra_config?.id],
@@ -269,7 +280,7 @@ export class BackendComponent {
         staticUrl: [item?.extra_config?.['backend/static-filesystem']?.path],
         directory_Listing: [item?.extra_config?.['backend/static-filesystem']?.directory_listing],
         bodyEditor: [item?.extra_config?.['modifier/body-generator']?.path ? "external" : "bodyeditor"],
-        template: [item?.extra_config?.['modifier/body-generator']?.template,[CustomValidators.jsonValidator()]],
+        template: [decodedTemplate],
         contentType: [item?.extra_config?.['modifier/body-generator']?.content_type],
         debug: [item?.extra_config?.['modifier/body-generator']?.debug],
         path: [item?.extra_config?.['modifier/body-generator']?.path],
@@ -297,7 +308,7 @@ export class BackendComponent {
 
 
         bodyEditorResponse: [item?.extra_config?.["modifier/response-body-generator"]?.path ? "externalResponse" : "bodyeditorResponse"],
-        templateResponse: [item?.extra_config?.["modifier/response-body-generator"]?.template,[CustomValidators.jsonValidator()]],
+        templateResponse: [decodedTemplateResponse],
         contentTypeResponse: [item?.extra_config?.["modifier/response-body-generator"]?.content_type],
         debugResponse: [item?.extra_config?.["modifier/response-body-generator"]?.debug],
         pathResponse: [item?.extra_config?.["modifier/response-body-generator"]?.path],
@@ -377,7 +388,7 @@ export class BackendComponent {
         isAMQPproducerActive: [!!item.extra_config?.["backend/amqp/producer"]],
 
         bodyEditorConnect: [item?.extra_config?.["backend/soap"]?.path ? "externalConnect" : "bodyeditorConnect"],
-        templateConnect: [item?.extra_config?.["backend/soap"]?.template,[CustomValidators.jsonValidator()]],
+        templateConnect: [decodedTemplateConnect],
         contentTypeConnect: [item?.extra_config?.["backend/soap"]?.content_type],
         debugConnect: [item?.extra_config?.["backend/soap"]?.debug],
         pathConnect: [item?.extra_config?.["backend/soap"]?.path],
@@ -1019,7 +1030,7 @@ export class BackendComponent {
       staticUrl: [null],
       directory_Listing: [false],
       bodyEditor: ['bodyeditor'],
-      template: ['',[CustomValidators.jsonValidator()]],
+      template: [''],
       contentType: [''],
       debug: [false],
       path: [''],
@@ -1047,7 +1058,7 @@ export class BackendComponent {
 
 
       bodyEditorResponse: ['bodyeditorResponse'],
-      templateResponse: ['',[CustomValidators.jsonValidator()]],
+      templateResponse: [''],
       contentTypeResponse: [''],
       debugResponse: [false],
       pathResponse: [''],
@@ -1124,7 +1135,7 @@ export class BackendComponent {
       isAMQPproducerActive: [false],
 
       bodyEditorConnect: ['bodyeditorConnect'],
-      templateConnect: ['',[CustomValidators.jsonValidator()]],
+      templateConnect: [''],
       contentTypeConnect: [''],
       debugConnect: [false],
       pathConnect: [''],
@@ -1365,7 +1376,7 @@ export class BackendComponent {
         ...(data?.isRestToSoapActive && {
           "backend/soap": {
             // "@comment": null,
-            ...(data?.bodyEditorConnect === 'bodyeditorConnect' && { "template": data?.templateConnect }),
+            ...(data?.bodyEditorConnect === 'bodyeditorConnect' && { "template": btoa(data?.templateConnect) }),
             ...(data?.contentTypeConnect && { "content_type": data?.contentTypeConnect }),
             ...(data?.debugConnect && { "debug": data?.debugConnect }),
             ...(data?.bodyEditorConnect === 'externalConnect' && { "path": data?.pathConnect })
@@ -1400,7 +1411,7 @@ export class BackendComponent {
         }),
         ...(data?.isBodymanipulationActive && {
           "modifier/body-generator": {
-            ...(data?.bodyEditor === 'bodyeditor' && { "template": data?.template }),
+            ...(data?.bodyEditor === 'bodyeditor' && { "template": btoa(data?.template) }),
             ...(data?.contentType && { "content_type": data?.contentType }),
             ...(data?.debug && { "debug": data?.debug }),
             ...(data?.bodyEditor === 'external' && { "path": data?.path })
@@ -1417,7 +1428,7 @@ export class BackendComponent {
             ...(data.contentTypeResponse && { "content_type": data.contentTypeResponse }),
             ...(data.debugResponse && { "debug": data.debugResponse }),
             ...(data?.bodyEditorResponse === 'externalResponse' && { "path": data.pathResponse }),
-            ...(data?.bodyEditorResponse === 'bodyeditorResponse' && { "template": data.templateResponse })
+            ...(data?.bodyEditorResponse === 'bodyeditorResponse' && { "template": btoa(data.templateResponse) })
           }
         }),
         ...(data.isPublicSubscriberActive && {
@@ -1499,16 +1510,18 @@ const securityPolicies = backendBody?.extra_config?.['security/policies'];
 let isValid = true;
 
 // Check for invalid JSON in form fields
-if (this.getFormGroup(index).get('template')?.hasError('invalidJson')) {
-  this.showErrorAlert("Invalid JSON in Body Manipulation and Generation");
-  isValid = false;
-} else if (this.getFormGroup(index).get('templateResponse')?.hasError('invalidJson')) {
-  this.showErrorAlert("Invalid JSON in Response Manipulation with Go templates");
-  isValid = false;
-} else if (this.getFormGroup(index).get('templateConnect')?.hasError('invalidJson')) {
-  this.showErrorAlert("Invalid JSON in Rest to SOAP in Connectivity Options");
-  isValid = false;
-} else if (this.getFormGroup(index).get('martianDslTextarea')?.hasError('invalidJson')) {
+// if (this.getFormGroup(index).get('template')?.hasError('invalidJson')) {
+//   this.showErrorAlert("Invalid JSON in Body Manipulation and Generation");
+//   isValid = false;
+// }
+//   if (this.getFormGroup(index).get('templateResponse')?.hasError('invalidJson')) {
+//   this.showErrorAlert("Invalid JSON in Response Manipulation with Go templates");
+//   isValid = false;
+// } else if (this.getFormGroup(index).get('templateConnect')?.hasError('invalidJson')) {
+//   this.showErrorAlert("Invalid JSON in Rest to SOAP in Connectivity Options");
+//   isValid = false;
+// }
+  if (this.getFormGroup(index).get('martianDslTextarea')?.hasError('invalidJson')) {
   this.showErrorAlert("Invalid JSON in Martian DSL");
   isValid = false;
 }
@@ -1698,7 +1711,7 @@ if (isValid && this.getFormGroup(index).valid) {
         ...(data?.isRestToSoapActive && {
           "backend/soap": {
             // "@comment": null,
-            ...(data?.bodyEditorConnect === 'bodyeditorConnect' && { "template": data?.templateConnect }),
+            ...(data?.bodyEditorConnect === 'bodyeditorConnect' && { "template": btoa(data?.templateConnect) }),
             ...(data?.contentTypeConnect && { "content_type": data?.contentTypeConnect }),
             ...(data?.debugConnect && { "debug": data?.debugConnect }),
             ...(data?.bodyEditorConnect === 'externalConnect' && { "path": data?.pathConnect })
@@ -1733,7 +1746,7 @@ if (isValid && this.getFormGroup(index).valid) {
         }),
         ...(data?.isBodymanipulationActive && {
           "modifier/body-generator": {
-            ...(data?.bodyEditor === 'bodyeditor' && { "template": data?.template }),
+            ...(data?.bodyEditor === 'bodyeditor' && { "template": btoa(data?.template) }),
             ...(data?.contentType && { "content_type": data?.contentType }),
             ...(data?.debug && { "debug": data?.debug }),
             ...(data?.bodyEditor === 'external' && { "path": data?.path })
@@ -1750,7 +1763,7 @@ if (isValid && this.getFormGroup(index).valid) {
             ...(data.contentTypeResponse && { "content_type": data.contentTypeResponse }),
             ...(data.debugResponse && { "debug": data.debugResponse }),
             ...(data.bodyEditorResponse === 'bodyeditorResponse' && { "path": data.pathResponse }),
-            ...(data.bodyEditorResponse === 'bodyeditorResponse' && { "template": data.templateResponse })
+            ...(data.bodyEditorResponse === 'bodyeditorResponse' && { "template": btoa(data.templateResponse) })
           }
         }),
         ...(data.isPublicSubscriberActive && {
@@ -1814,16 +1827,17 @@ if (isValid && this.getFormGroup(index).valid) {
 let isValid = true;
 
 // Check for invalid JSON in form fields
-if (this.getFormGroup(index).get('template')?.hasError('invalidJson')) {
-  this.showErrorAlert("Invalid JSON in Body Manipulation and Generation");
-  isValid = false;
-} else if (this.getFormGroup(index).get('templateResponse')?.hasError('invalidJson')) {
-  this.showErrorAlert("Invalid JSON in Response Manipulation with Go templates");
-  isValid = false;
-} else if (this.getFormGroup(index).get('templateConnect')?.hasError('invalidJson')) {
-  this.showErrorAlert("Invalid JSON in Rest to SOAP in Connectivity Options");
-  isValid = false;
-} else if (this.getFormGroup(index).get('martianDslTextarea')?.hasError('invalidJson')) {
+// if (this.getFormGroup(index).get('template')?.hasError('invalidJson')) {
+//   this.showErrorAlert("Invalid JSON in Body Manipulation and Generation");
+//   isValid = false;
+// } else if (this.getFormGroup(index).get('templateResponse')?.hasError('invalidJson')) {
+//   this.showErrorAlert("Invalid JSON in Response Manipulation with Go templates");
+//   isValid = false;
+// } else if (this.getFormGroup(index).get('templateConnect')?.hasError('invalidJson')) {
+//   this.showErrorAlert("Invalid JSON in Rest to SOAP in Connectivity Options");
+//   isValid = false;
+// } 
+if (this.getFormGroup(index).get('martianDslTextarea')?.hasError('invalidJson')) {
   this.showErrorAlert("Invalid JSON in Martian DSL");
   isValid = false;
 }
