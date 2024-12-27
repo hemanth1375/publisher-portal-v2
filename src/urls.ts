@@ -43,4 +43,7 @@ export const urls = {
     unsubscribeApplication:host+"/clients/openid/unsubscribeToApplication",
     subscribeToBasic: host + "/clients/openid/subscribeToBasicAuth",
     // unsubscribeToBasic: host + ""
+
+    addOrUpdateTelemetry: host + "/krakend/extraconfig/telemetry-analytics/addOrUpdateTelemetryAnalytics",
+
 }

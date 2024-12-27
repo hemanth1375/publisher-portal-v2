@@ -315,6 +315,7 @@ export class GatewayServiceSettingsComponent {
   virtualHost : any[] = [];
   staticServerSkip : any[] = [];
   host: any[] = [];
+  
 
 
   ngOnInit() {
@@ -328,6 +329,7 @@ export class GatewayServiceSettingsComponent {
       next:(res)=>{
         console.log(res);
         this.gatewayServiceSettingsData = res;
+
 
         if(this.gatewayServiceSettingsData){
           this.directoryArray = this.gatewayServiceSettingsData?.extra_config?.grpc?.catalog ?? [];
@@ -363,8 +365,8 @@ export class GatewayServiceSettingsComponent {
           publicKey : this.gatewayServiceSettingsData?.tls?.public_key,
           privateKey : this.gatewayServiceSettingsData?.tls?.private_key,
 
-          // literalMatch : this.gatewayServiceSettingsData?.extra_config?.["plugin/http-server"]?.["url-rewrite"],
-          // literalReplacement : this.gatewayServiceSettingsData?.extra_config?.["plugin/http-server"]?.["url-rewrite"],
+          literalMatchObjectMapValue:this.gatewayServiceSettingsData?.extra_config?.["plugin/http-server"]?.["url-rewrite"]?.literal,
+          regExpMatchObjectMapValue:this.gatewayServiceSettingsData?.extra_config?.["plugin/http-server"]?.["url-rewrite"]?.regexp,
           
           databasePath : this.gatewayServiceSettingsData?.extra_config?.["plugin/http-server"]?.geoip?.citydb_path,
           staticServerPath : this.gatewayServiceSettingsData?.extra_config?.["server/static-filesystem"]?.path,
@@ -466,6 +468,8 @@ export class GatewayServiceSettingsComponent {
 
     console.log(this.formGroupService.value);
     const body = {
+     "httpClientSettingAdvancedId": this.gatewayServiceSettingsData?.http_id,
+      "id" : this.gatewayServiceSettingsId,
       "name": this.formGroupService.get('name')?.value,
       "port": this.formGroupService.get('port')?.value,
       "debug_endpoint": this.formGroupService.value?.enableDebug,
@@ -481,8 +485,9 @@ export class GatewayServiceSettingsComponent {
       "sequential_start": this.formGroupService.value?.serverSequential,
       
 
-      ...((this.formGroupService.value?.isgRPCActive || this.formGroupService.value?.isJwkSharedActive || this.formGroupService.value?.disablegZip || this.formGroupService.value?.isVirtualHostActive || this.formGroupService.value?.isStaticServerActive || this.formGroupService.value?.isRateLimitingActive  || this.formGroupService.value?.isGeoIpActive || this.formGroupService.value?.isUrlRewriteActive) && {
+      // ...((this.formGroupService.value?.isgRPCActive || this.formGroupService.value?.isJwkSharedActive || this.formGroupService.value?.disablegZip || this.formGroupService.value?.isVirtualHostActive || this.formGroupService.value?.isStaticServerActive || this.formGroupService.value?.isRateLimitingActive  || this.formGroupService.value?.isGeoIpActive || this.formGroupService.value?.isUrlRewriteActive) && {
         "extra_config":{
+          id: this.gatewayServiceSettingsData?.extra_config?.id,
           ...(this.formGroupService.value?.isgRPCActive && {
             "grpc": {
               ...(!!this.gatewayServiceSettingsData?.extra_config?.grpc && {"id":this.gatewayServiceSettingsData?.extra_config?.grpc?.id}),
@@ -537,14 +542,8 @@ export class GatewayServiceSettingsComponent {
                   ...(this.formGroupService.value?.regExpMatchObjectMapValue?.length>0 && {
                     "regexp": this.formGroupService.value?.regExpMatchObjectMapValue}),
                 }}),
-
-              
-              
             }}),
-        
-  
-
-        }}),
+          },
 
 
   
@@ -562,11 +561,13 @@ export class GatewayServiceSettingsComponent {
       
       ...(this.formGroupService?.value.httpClientSetAdvAllowInsecureConnsForm && {
         "client_tls": {
+      
        "allow_insecure_connections": this.formGroupService?.value.httpClientSetAdvAllowInsecureConnsForm
         }}),
 
       ...(this.formGroupService.value?.isEnableHttpsActive && {
         "tls": {
+        ...(!!this.gatewayServiceSettingsData?.tls && {"id":this.gatewayServiceSettingsData?.tls.id}),
         "public_key": this.formGroupService.value?.publicKey,
         "private_key": this.formGroupService.value?.privateKey,
         }})
