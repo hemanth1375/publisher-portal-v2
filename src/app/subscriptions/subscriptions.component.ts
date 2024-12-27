@@ -7,29 +7,32 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApplicationService } from '../services/application.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { CommunicationService } from '../services/communication.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-subscriptions',
   templateUrl: './subscriptions.component.html',
   styleUrl: './subscriptions.component.css'
 })
-export class SubscriptionsComponent{
+export class SubscriptionsComponent {
 
 
   endpointCards: any[] = []
   // filteredEndpointCards: any[] = []
   // dataSource = new MatTableDataSource<PeriodicElement>([]); // Initially empty
   filteredEndpointCards = new MatTableDataSource<any>([]); // Initially empty
+  applicationId: any;
+  consumerId: any
 
   displayedColumns: string[] = ['Api Name', 'state', 'plan', 'status', 'Action'];
-  constructor(private mainSer: MainService, public dialog: MatDialog, private router: Router, private route: ActivatedRoute, private communicationsrv: CommunicationService
+  constructor(private mainSer: MainService, public dialog: MatDialog, private router: Router,
+    private route: ActivatedRoute, private communicationsrv: CommunicationService,
+    private applicationSer: ApplicationService, private toastService: ToastService
   ) {
 
   }
 
   // @ViewChild(MatPaginator) paginator: MatPaginator;
-
-
   // ngAfterViewInit() {
   //   this.filteredEndpointCards.paginator = this.paginator; // Assign paginator after view initialization
   // }
@@ -39,9 +42,6 @@ export class SubscriptionsComponent{
       next: (res: any) => {
         console.log(res);
         this.endpointCards = res.endpointCards
-        // this.filteredEndpointCards = this.endpointCards.filter(
-        //   (card:any) => card.isSubscribed === true || card.isSubscribed != undefined
-        // );
         this.filteredEndpointCards.data = this.endpointCards.filter(
           (card: any) => card.isSubscribed === true
         );
@@ -55,7 +55,7 @@ export class SubscriptionsComponent{
       }
     })
   }
-  applicationId: any;
+
   ngOnInit() {
     const userId = localStorage.getItem('userid')
     this.loadCards(userId)
@@ -66,31 +66,60 @@ export class SubscriptionsComponent{
 
     this.route?.parent?.paramMap.subscribe(params => {
       this.applicationId = params.get('applicationId');
+      // this.consumerId = params.get('consumerId')
       console.log('Application ID:', this.applicationId);
+    })
+
+    this.route.parent?.parent?.paramMap.subscribe(params => {
+      this.consumerId = params.get('consumerId');
+      console.log('Consumer ID:', this.consumerId);
     });
-    
-
-
-
-
   }
+
+
   openDialog(): void {
     const dialogRef = this.dialog.open(SubscriptionDialog, {
-      data: { appId: this.applicationId },
+      data: { appId: this.applicationId, consumerId: this.consumerId },
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('The dialog was closed');
-      // this.animal = result;
     });
   }
 
+  showSuccess(message: string) {
+    this.toastService.show(message, { type: 'success' });
+  }
+  showError(message: string) {
+    this.toastService.show(message, { type: "error" })
+  }
+
+  unsubscribeApplication(endpointId: any) {
+    this.applicationSer.unsubscribeApplication(endpointId).subscribe({
+      next: (res) => {
+        this.showSuccess(res?.message);
+        const userId = localStorage.getItem('userid')
+        if (userId) {
+          this.loadCards(userId)
+        }
+        console.log(res);
+      },
+      error: (err) => {
+        this.showError(err?.message)
+      }
+    })
+  }
+
+
 }
 export interface DialogData {
-  // animal: string;
-  // name: string;
+
   appId: string;
+  consumerId: string
 }
+
+
+//////////  SubscriptionDialog    //////////////
 @Component({
   selector: 'subscription-dialog',
   templateUrl: 'subscription-dialog.html',
@@ -102,27 +131,31 @@ export class SubscriptionDialog {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private mainSer: MainService,
     private applicationSer: ApplicationService,
-    private communicationsrv: CommunicationService
+    private communicationsrv: CommunicationService,
+    private toastService: ToastService
   ) { }
-  apiCards: any = []
+  // apiCards: any = []
+  apiCards = new MatTableDataSource<any>([]);
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  ngAfterViewInit() {
+    this.apiCards.paginator = this.paginator;
+  }
+
   displayedColumns: string[] = ['No', 'Name', 'Version', 'Status', 'Action'];
   ngOnInit() {
     console.log(this.data);
-
     const userId = localStorage.getItem('userid')
     if (userId) {
       this.loadCards(userId)
     }
-
-
-
   }
 
   loadCards(userId: any) {
     this.mainSer.getEndpointCards(userId).subscribe({
       next: (res: any) => {
         console.log(res);
-        this.apiCards = res.endpointCards
+        this.apiCards.data = res.endpointCards
       },
       error: (err) => {
         console.error(err);
@@ -130,20 +163,28 @@ export class SubscriptionDialog {
         if (err?.error?.status == 400) {
           // this.isShowNoApisCard=true
         }
-
       }
     })
   }
-
 
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  subscribeToBasic(endpointId:any){
-    this.applicationSer.subscribeToBasic(endpointId, this.data.appId).subscribe({
+
+  showSuccess(message: string) {
+    this.toastService.show(message, { type: 'success' });
+  }
+  showError(message: string) {
+    this.toastService.show(message, { type: "error" })
+  }
+
+
+  subscribeToBasic(endpointId: any) {
+    this.applicationSer.subscribeToBasic(endpointId, this.data.consumerId).subscribe({
       next: (res) => {
+        this.showSuccess(res?.message);
         this.communicationsrv.emitSubscriptions(true)
         console.log(res);
         const userId = localStorage.getItem('userid')
@@ -151,28 +192,31 @@ export class SubscriptionDialog {
           this.loadCards(userId)
         }
         this.dialogRef.close();
-
+      },
+      error: (err) => {
+        this.showSuccess(err?.message);
       }
     })
   }
 
-  unsubscribeToBasic(endpointId:any){
-    this.applicationSer.unsubscribeToBasic(endpointId).subscribe({
-      next: (res) => {
-        this.communicationsrv.emitSubscriptions(true)
-        const userId = localStorage.getItem('userid')
-        if (userId) {
-          this.loadCards(userId)
-        }
-        console.log(res);
-        this.dialogRef.close();
-      }
-    })
-  }
+  // unsubscribeToBasic(endpointId: any) {
+  //   this.applicationSer.unsubscribeApplication(endpointId).subscribe({
+  //     next: (res) => {
+  //       this.communicationsrv.emitSubscriptions(true)
+  //       const userId = localStorage.getItem('userid')
+  //       if (userId) {
+  //         this.loadCards(userId)
+  //       }
+  //       console.log(res);
+  //       this.dialogRef.close();
+  //     }
+  //   })
+  // }
 
   subscribeToOAuth(endpointId: any) {
     this.applicationSer.subscribeToOAuth(endpointId, this.data.appId).subscribe({
       next: (res) => {
+        this.showSuccess(res?.message);
         this.communicationsrv.emitSubscriptions(true)
         console.log(res);
         const userId = localStorage.getItem('userid')
@@ -180,12 +224,14 @@ export class SubscriptionDialog {
           this.loadCards(userId)
         }
         this.dialogRef.close();
-
+      },
+      error: (error) => {
+        this.showError(error?.message)
       }
     })
   }
-  unsubscribeToOAuth(endpointId: any) {
-    this.applicationSer.unsubscribeToOAuth(endpointId).subscribe({
+  unsubscribeApplication(endpointId: any) {
+    this.applicationSer.unsubscribeApplication(endpointId).subscribe({
       next: (res) => {
         this.communicationsrv.emitSubscriptions(true)
         const userId = localStorage.getItem('userid')
@@ -200,9 +246,7 @@ export class SubscriptionDialog {
   }
 
   // dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-
   // @ViewChild(MatPaginator) paginator: MatPaginator;
-
   // ngAfterViewInit() {
   //   this.dataSource.paginator = this.paginator;
   // }

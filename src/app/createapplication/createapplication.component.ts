@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { ApplicationService } from '../services/application.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommunicationService } from '../services/communication.service';
+import { ToastService } from '../services/toast.service';
 
 
 @Component({
@@ -21,7 +22,8 @@ export class CreateapplicationComponent {
 
 
 
-  constructor(private fb: FormBuilder, private applicationsrv: ApplicationService, private route: ActivatedRoute, private communicationSer: CommunicationService, private router: Router) {
+  constructor(private fb: FormBuilder, private applicationsrv: ApplicationService, private route: ActivatedRoute,
+    private communicationSer: CommunicationService, private router: Router, private toastService: ToastService) {
     this.configForm = this.fb.group({
       clientType: ['openid-connect'],
       clientId: ['democlient'],
@@ -49,6 +51,13 @@ export class CreateapplicationComponent {
       redirectUriFormArrayValue: [[]],
       webOriginsUriFormArrayValue: [[]]
     });
+  }
+
+  showSuccess(message: string) {
+    this.toastService.show(message, { type: 'success' });
+  }
+  showError(message: string) {
+    this.toastService.show(message, { type: "error" })
   }
 
 
@@ -110,10 +119,12 @@ export class CreateapplicationComponent {
     this.applicationsrv.createApplication(this.consumerId, configFormBody).subscribe({
       next: (result) => {
         console.log("createApplication result", result);
+        this.showSuccess(result?.message);
         this.communicationSer.emitApplicationCreated(result)
         this.router.navigate([`consumers/${this.consumerId}/application`], { replaceUrl: true })
       },
       error: (err) => {
+        this.showError(err?.message)
         console.log("createApplicationerror", err);
       }
 

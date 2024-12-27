@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+
 @Component({
   selector: 'app-applicationoverview',
   templateUrl: './applicationoverview.component.html',
@@ -8,27 +10,39 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ApplicationoverviewComponent {
 
   applicationId: any
+  data: any
+  applicationData = history.state;
+  constructor(private router: Router, private route: ActivatedRoute) {
+    // console.log("bbbbbbbbbbbbbbbbb",this.router?.getCurrentNavigation()?.extras.state);
+    // const stateObj = this.router.lastSuccessfulNavigation?.extras.state;
+    // console.log("ccccccccccccccccc", stateObj);
+    // const navigation = this.router.getCurrentNavigation();
+    // this.data = navigation?.extras.state?.['data'];
+    // console.log("11111111111111111111", this.data);
+  }
 
-  constructor(private router: Router,private route:ActivatedRoute) {
+  isPasswordVisible: boolean = false;
 
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
   }
 
   ngOnInit() {
-  //   const navigation = this.router.getCurrentNavigation();
-  //   if (navigation?.extras?.state) {
-  //     this.receivedData = navigation.extras.state['data'];
-  //     console.log("*******88receivedData", this.receivedData);
+    console.log(this.applicationData);
+    // const navigation = this.router.getCurrentNavigation();
+    // if (navigation) {
+    //   console.log('Navigation:', this.router.getCurrentNavigation());
+    //   this.data = navigation?.extras.state?.['data'];
+    // }
+    // const navigation = this.router.getCurrentNavigation();
+    // this.data = navigation?.extras.state?.['data'];
+    // console.log("22222222222222222222", this.data);
 
-  //   } else {
-  //     console.warn('No data found in navigation state');
-  //     this.receivedData = null; // Or set a default value
-  //   }
 
-  
-  this.route?.parent?.paramMap.subscribe(params => {
-    this.applicationId = params.get('applicationId');
-    console.log('Application ID:', this.applicationId);
-  });
+    this.route?.parent?.paramMap.subscribe(params => {
+      this.applicationId = params.get('applicationId');
+      console.log('Application ID:', this.applicationId);
+    });
   }
 }
 

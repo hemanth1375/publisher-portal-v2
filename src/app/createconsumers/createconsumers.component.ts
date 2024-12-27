@@ -4,6 +4,7 @@ import { CreateconsumerService } from '../services/createconsumer.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import JSEncrypt from 'jsencrypt';
 import { CommunicationService } from '../services/communication.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-createconsumers',
@@ -15,7 +16,10 @@ export class CreateconsumersComponent {
   creatConsumerFormGroup: FormGroup
 
   data!: any
-  constructor(private fb: FormBuilder, private cconsumersrv: CreateconsumerService, private router: Router, private route: ActivatedRoute, private communicationSer: CommunicationService) {
+  constructor(private fb: FormBuilder, private cconsumersrv: CreateconsumerService, private router: Router,
+    private route: ActivatedRoute, private communicationSer: CommunicationService,
+    private toastService: ToastService
+  ) {
     this.creatConsumerFormGroup = this.fb.group({
       username: [''],
       password: [''],
@@ -24,6 +28,13 @@ export class CreateconsumersComponent {
       firstName: [''],
       lastName: ['']
     })
+  }
+
+  showSuccess(message: string) {
+    this.toastService.show(message, { type: 'success' });
+  }
+  showError(message: string) {
+    this.toastService.show(message, { type: "error" })
   }
 
   onSubmitCreatConsumerFormGroup() {
@@ -45,10 +56,11 @@ export class CreateconsumersComponent {
     this.cconsumersrv.createConsumer(payload).subscribe({
       next: (res) => {
         console.log("cconsumerpostresults", res);
+        this.showSuccess(res?.message);
         this.communicationSer.emitConsumerCreated(res)
-
       },
       error: (err) => {
+        this.showError(err?.message)
         console.log("consumererrorget", err);
       }
     })

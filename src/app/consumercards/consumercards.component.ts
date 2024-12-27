@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { CommunicationService } from '../services/communication.service';
 import { CreateconsumerService } from '../services/createconsumer.service';
 import { Subscription } from 'rxjs';
+import { ToastService } from '../services/toast.service';
 
 
 interface ConsumerCard {
@@ -38,13 +39,14 @@ export class ConsumercardsComponent {
     console.log("consumerDelete", consumerId);
     this.cconsumersrv.deleteConsumer(consumerId).subscribe({
       next: (result) => {
+        this.showSuccess(result?.message);
         this.loadCards()
       },
       error: (err) => {
+        this.showError(err?.message)
         console.log("error", err);
       }
     })
-
   }
 
 
@@ -53,16 +55,13 @@ export class ConsumercardsComponent {
     this.router.navigate([`${consumerId}/application`], { relativeTo: this.route })
     this.isShowParent = false
   }
-  constructor(private router: Router, private route: ActivatedRoute, private communucationSer: CommunicationService, private cconsumersrv: CreateconsumerService) {
+  constructor(private router: Router, private route: ActivatedRoute, private communucationSer: CommunicationService,
+    private cconsumersrv: CreateconsumerService, private toastService: ToastService) {
     this.router.events.subscribe((event) => {
 
       if (event instanceof NavigationEnd) {
-        console.log(this.router.url);
-
         if (this.router.url === '/consumers') {
           this.isShowParent = true;
-
-
         } else if (this.router.url === '/consumers/createconsumer') {
           this.isShowParent = false;
         }
@@ -73,12 +72,17 @@ export class ConsumercardsComponent {
       (updatedData: any) => {
         console.log('Updated data received from child component!', updatedData);
         this.loadCards();
-
-
       }
     );
 
   }
+  showSuccess(message: string) {
+    this.toastService.show(message, { type: 'success' });
+  }
+  showError(message: string) {
+    this.toastService.show(message, { type: "error" })
+  }
+
   goToCreateConsumer() {
     console.log("*************************this is go to create consumer");
     // this.communucationSer.updateShowParent(false);
