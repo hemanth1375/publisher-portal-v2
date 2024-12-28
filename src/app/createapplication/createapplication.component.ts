@@ -29,15 +29,15 @@ export class CreateapplicationComponent {
       clientId: ['democlient'],
       name: ['demo'],
       description: [''],
-      publicClient: [false],
+      publicClient: [{ value: false, disabled: true }], // Disable the control here
       redirectUriForm: [''],
       webOriginsUriForm: [''],
-      authorizationServicesEnabled: [false],
-      serviceAccountsEnabled: [false],
-      implicitFlowEnabled: [false],
-      directAccessGrantsEnabled: [true],
-      standardFlowEnabled: [true],
-      frontchannelLogout: [true],
+      authorizationServicesEnabled: [{ value: true, disabled: true }],
+      serviceAccountsEnabled:  [{ value: true, disabled: true }],
+      implicitFlowEnabled:  [{ value: true, disabled: true }],
+      directAccessGrantsEnabled:  [{ value: true, disabled: true }],
+      standardFlowEnabled:  [{ value: true, disabled: true }],
+      frontchannelLogout:  [{ value: true, disabled: true }],
       oauth2deviceauthorizationgrantenabled: [false],
       oidccibagrantenabled: [false],
       // attributes: this.fb.group({
@@ -45,7 +45,7 @@ export class CreateapplicationComponent {
       //   'oauth2.device.authorization.grant.enabled': [false],
       //   'oidc.ciba.grant.enabled': [false]
       // }),
-      alwaysDisplayInConsole: [true],
+      alwaysDisplayInConsole:  [{ value: true, disabled: true }],
       rootUrl: ['http://localhost:4200'],
       baseUrl: [''],
       redirectUriFormArrayValue: [[]],
@@ -90,7 +90,6 @@ export class CreateapplicationComponent {
   entireJsonData: any
   onSubmitConfigForm() {
     console.log("*************************configvalue", this.configForm.value);
-
 
     const configFormBody = {
       // "id": this.entireJsonData?.applications?.id 

@@ -233,6 +233,7 @@ export class SubscriptionDialog {
   unsubscribeApplication(endpointId: any) {
     this.applicationSer.unsubscribeApplication(endpointId).subscribe({
       next: (res) => {
+        this.showSuccess(res?.message);
         this.communicationsrv.emitSubscriptions(true)
         const userId = localStorage.getItem('userid')
         if (userId) {
@@ -240,7 +241,9 @@ export class SubscriptionDialog {
         }
         console.log(res);
         this.dialogRef.close();
-
+      },
+      error: (err) => {
+        this.showError(err?.message)
       }
     })
   }

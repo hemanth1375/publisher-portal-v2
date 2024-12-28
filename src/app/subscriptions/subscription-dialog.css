@@ -1,6 +1,13 @@
-.subscription-dialog{
-    padding:20px;
+.subscription-dialog {
+    padding: 20px;
 }
-.close-icon{
+
+.close-icon {
     cursor: pointer;
+}
+
+@media(min-width: 1400px) {
+    .subscription-dialog {
+        max-width: 925px !important;
+    }
 }

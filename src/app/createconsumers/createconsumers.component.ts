@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Form, FormGroup, FormBuilder } from '@angular/forms'
+import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { CreateconsumerService } from '../services/createconsumer.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import JSEncrypt from 'jsencrypt';
@@ -20,14 +20,23 @@ export class CreateconsumersComponent {
     private route: ActivatedRoute, private communicationSer: CommunicationService,
     private toastService: ToastService
   ) {
+    // this.creatConsumerFormGroup = this.fb.group({
+    //   username: [''],
+    //   password: [''],
+    //   // confirmPassword: [''],
+    //   email: [''],
+    //   firstName: [''],
+    //   lastName: ['']
+    // })
     this.creatConsumerFormGroup = this.fb.group({
-      username: [''],
-      password: [''],
-      // confirmPassword: [''],
-      email: [''],
-      firstName: [''],
-      lastName: ['']
-    })
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(3)]],
+      // confirmPassword: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]]
+    });
+    
   }
 
   showSuccess(message: string) {

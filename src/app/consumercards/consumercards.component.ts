@@ -102,7 +102,7 @@ export class ConsumercardsComponent {
         this.loadCards()
       },
       error: (err) => {
-        console.log("error", err);
+        console.log("error ****************8", err);
       }
     })
   }
