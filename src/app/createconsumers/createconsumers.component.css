@@ -1,15 +1,15 @@
-.create-card {
+.create-consumer-card {
     padding: 20px;
     height: auto;
-    max-width: 40%;
+    max-width: 45%;
     border: 1px solid rgba(0, 0, 0, 0.27);
     border-radius: 12px;
     background-color: white;
 }
 
-.full-height {
+/* .full-height {
     height: 100%;
-}
+} */
 
 /* .input-field-width {
     max-width: 50px;

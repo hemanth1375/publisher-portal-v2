@@ -1,5 +1,5 @@
-.form-width{
-    width:65%
+.form-width {
+    width: 65%
 }
 
 .parameter-item {
@@ -15,4 +15,10 @@
 
 .parameter-item mat-icon {
     font-size: 16px;
+}
+
+.checkBox-label {
+    height: 1.2rem;
+    width: 1.2rem;
+    margin-inline-end: 0.5rem;
 }

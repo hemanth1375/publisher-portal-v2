@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ApplicationService } from '../services/application.service';
+
+
 @Component({
   selector: 'app-applicationoverview',
   templateUrl: './applicationoverview.component.html',
@@ -8,27 +11,51 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ApplicationoverviewComponent {
 
   applicationId: any
+  data: any
+  applicationData: any
 
-  constructor(private router: Router,private route:ActivatedRoute) {
+  constructor(private router: Router, private route: ActivatedRoute,private applicationsrv:ApplicationService) {
+    // console.log("bbbbbbbbbbbbbbbbb",this.router?.getCurrentNavigation()?.extras.state);
+    // const stateObj = this.router.lastSuccessfulNavigation?.extras.state;
+    // console.log("ccccccccccccccccc", stateObj);
+    // const navigation = this.router.getCurrentNavigation();
+    // this.data = navigation?.extras.state?.['data'];
+    // console.log("11111111111111111111", this.data);
+    // this.applicationData = history.state;
+    // console.log("*********************", this.applicationData)
+  }
 
+  isPasswordVisible: boolean = false;
+
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
   }
 
   ngOnInit() {
-  //   const navigation = this.router.getCurrentNavigation();
-  //   if (navigation?.extras?.state) {
-  //     this.receivedData = navigation.extras.state['data'];
-  //     console.log("*******88receivedData", this.receivedData);
 
-  //   } else {
-  //     console.warn('No data found in navigation state');
-  //     this.receivedData = null; // Or set a default value
-  //   }
+     this.applicationsrv.getServiceSettingData$().subscribe({
+      next:(data)=>{
+        this.applicationData=data
+      },
+      error:(err)=>{
+        console.log("error",err);
+        
+      }
+     })
 
-  
-  this.route?.parent?.paramMap.subscribe(params => {
-    this.applicationId = params.get('applicationId');
-    console.log('Application ID:', this.applicationId);
-  });
+    // const navigation = this.router.getCurrentNavigation();
+    // if (navigation) {
+    //   console.log('Navigation:', this.router.getCurrentNavigation());
+    //   this.data = navigation?.extras.state?.['data'];
+    // }
+    // const navigation = this.router.getCurrentNavigation();
+    // this.data = navigation?.extras.state?.['data'];
+    // console.log("22222222222222222222", this.data);
+
+    this.route?.parent?.paramMap.subscribe(params => {
+      this.applicationId = params.get('applicationId');
+      console.log('Application ID:', this.applicationId);
+    });
   }
 }
 

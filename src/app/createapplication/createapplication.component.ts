@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { ApplicationService } from '../services/application.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommunicationService } from '../services/communication.service';
+import { ToastService } from '../services/toast.service';
 
 
 @Component({
@@ -21,21 +22,22 @@ export class CreateapplicationComponent {
 
 
 
-  constructor(private fb: FormBuilder, private applicationsrv: ApplicationService, private route: ActivatedRoute, private communicationSer: CommunicationService, private router: Router) {
+  constructor(private fb: FormBuilder, private applicationsrv: ApplicationService, private route: ActivatedRoute,
+    private communicationSer: CommunicationService, private router: Router, private toastService: ToastService) {
     this.configForm = this.fb.group({
       clientType: ['openid-connect'],
       clientId: ['democlient'],
       name: ['demo'],
       description: [''],
-      publicClient: [false],
+      publicClient: [{ value: false, disabled: true }], // Disable the control here
       redirectUriForm: [''],
       webOriginsUriForm: [''],
-      authorizationServicesEnabled: [false],
-      serviceAccountsEnabled: [false],
-      implicitFlowEnabled: [false],
-      directAccessGrantsEnabled: [true],
-      standardFlowEnabled: [true],
-      frontchannelLogout: [true],
+      authorizationServicesEnabled: [{ value: true, disabled: true }],
+      serviceAccountsEnabled:  [{ value: true, disabled: true }],
+      implicitFlowEnabled:  [{ value: true, disabled: true }],
+      directAccessGrantsEnabled:  [{ value: true, disabled: true }],
+      standardFlowEnabled:  [{ value: true, disabled: true }],
+      frontchannelLogout:  [{ value: true, disabled: true }],
       oauth2deviceauthorizationgrantenabled: [false],
       oidccibagrantenabled: [false],
       // attributes: this.fb.group({
@@ -43,12 +45,19 @@ export class CreateapplicationComponent {
       //   'oauth2.device.authorization.grant.enabled': [false],
       //   'oidc.ciba.grant.enabled': [false]
       // }),
-      alwaysDisplayInConsole: [true],
+      alwaysDisplayInConsole:  [{ value: true, disabled: true }],
       rootUrl: ['http://localhost:4200'],
       baseUrl: [''],
       redirectUriFormArrayValue: [[]],
       webOriginsUriFormArrayValue: [[]]
     });
+  }
+
+  showSuccess(message: string) {
+    this.toastService.show(message, { type: 'success' });
+  }
+  showError(message: string) {
+    this.toastService.show(message, { type: "error" })
   }
 
 
@@ -82,7 +91,6 @@ export class CreateapplicationComponent {
   onSubmitConfigForm() {
     console.log("*************************configvalue", this.configForm.value);
 
-
     const configFormBody = {
       // "id": this.entireJsonData?.applications?.id 
       "id": this.entireJsonData?.extra_config?.applications?.id ? this.entireJsonData?.applications?.id : null,
@@ -110,10 +118,12 @@ export class CreateapplicationComponent {
     this.applicationsrv.createApplication(this.consumerId, configFormBody).subscribe({
       next: (result) => {
         console.log("createApplication result", result);
+        this.showSuccess(result?.message);
         this.communicationSer.emitApplicationCreated(result)
         this.router.navigate([`consumers/${this.consumerId}/application`], { replaceUrl: true })
       },
       error: (err) => {
+        this.showError(err?.message)
         console.log("createApplicationerror", err);
       }
 

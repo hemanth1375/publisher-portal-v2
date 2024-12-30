@@ -1,67 +1,106 @@
 <!-- <p>createconsumers works!</p> -->
 <div class="container-fluid full-height">
-    <div class=" d-flex justify-content-center align-items-center full-height">
-        <div class="row create-card">
+    <div class=" d-flex justify-content-center align-items-center full-height pt-4">
+        <div class="row create-consumer-card mt-4">
             <div class="col-sm-12">
                 <h2>Create Consumer</h2>
-                <p>create an consumer</p>
+                <!-- <p>create an consumer</p> -->
             </div>
             <div class="col-sm-12">
                 <form [formGroup]="creatConsumerFormGroup">
-                    <!-- <div class="row"> -->
-                    <div class="row my-2 ">
+                    <div class="row my-1">
                         <div class="col-sm-6">
-                            <label for="username" class="form-label">Username</label>
-                            <input id="username" class="form-control input-field-width" formControlName="username">
+                            <div class="form-group">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" id="username" formControlName="username" class="form-control">
+                                <!-- Error: Required -->
+                                <div *ngIf="creatConsumerFormGroup.get('username')?.hasError('required') && creatConsumerFormGroup.get('username')?.touched"
+                                    class="text-danger">
+                                    Username is required.
+                                </div>
+                                <!-- Error: Min length -->
+                                <div *ngIf="creatConsumerFormGroup.get('username')?.hasError('minlength') && creatConsumerFormGroup.get('username')?.touched"
+                                    class="text-danger">
+                                    Username must be at least 3 characters long.
+                                </div>
+                            </div>
                         </div>
                         <div class="col-sm-6">
-                            <label for="password" class="form-label">password</label>
-                            <input id="password" class="form-control input-field-width" formControlName="password">
+                            <div class="form-group">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" id="password" formControlName="password" class="form-control">
+                                <!-- Error: Required -->
+                                <div *ngIf="creatConsumerFormGroup.get('password')?.hasError('required') && creatConsumerFormGroup.get('password')?.touched"
+                                    class="text-danger">
+                                    Password is required.
+                                </div>
+                                <!-- Error: Min length -->
+                                <div *ngIf="creatConsumerFormGroup.get('password')?.hasError('minlength') && creatConsumerFormGroup.get('password')?.touched"
+                                    class="text-danger">
+                                    Password must be at least 8 characters long.
+                                </div>
+                            </div>
                         </div>
-                        <!-- <div class="col-sm-12">
-                                <label for="email" class="form-lable">Email</label>
-                                <input id="email" class="form-control input-field-width" formControlName="email">
+                    </div>
+                    <div class="row my-1">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" id="email" formControlName="email" class="form-control">
+
+                                <!-- Error: Required -->
+                                <div *ngIf="creatConsumerFormGroup.get('email')?.hasError('required') && creatConsumerFormGroup.get('email')?.touched"
+                                    class="text-danger">
+                                    Email is required.
+                                </div>
+
+                                <!-- Error: Invalid email -->
+                                <div *ngIf="creatConsumerFormGroup.get('email')?.hasError('email') && creatConsumerFormGroup.get('email')?.touched"
+                                    class="text-danger">
+                                    Please enter a valid email address.
+                                </div>
                             </div>
-                            <div class="col-sm-12">
-                                <label for="firstName" class="form-lable">First Name</label>
-                                <input id="firstName" class="form-control input-field-width" formControlName="firstName">
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" id="firstName" formControlName="firstName" class="form-control">
+                                <!-- Error: Required -->
+                                <div *ngIf="creatConsumerFormGroup.get('firstName')?.hasError('required') && creatConsumerFormGroup.get('firstName')?.touched"
+                                    class="text-danger">
+                                    First Name is required.
+                                </div>
                             </div>
-                            <div class="col-sm-12">
-                                <label for="lastName" class="form-lable">Last Name</label>
-                                <input id="lastName" class="form-control input-field-width" formControlName="lastName">
-                            </div> -->
+                        </div>
                     </div>
 
-                    <div class="row my-2 ">
+                    <div class="row my-1">
                         <div class="col-sm-6">
-                            <label for="email" class="form-label">Email</label>
-                            <input id="email" class="form-control input-field-width" formControlName="email">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="firstName" class="form-label">First Name</label>
-                            <input id="firstName" class="form-control input-field-width" formControlName="firstName">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="col-sm-12">
+                            <div class="form-group">
                                 <label for="lastName" class="form-label">Last Name</label>
-                                <input id="lastName" class="form-control input-field-width" formControlName="lastName">
+                                <input type="text" id="lastName" formControlName="lastName" class="form-control">
+                                <!-- Error: Required -->
+                                <div *ngIf="creatConsumerFormGroup.get('lastName')?.hasError('required') && creatConsumerFormGroup.get('lastName')?.touched"
+                                    class="text-danger">
+                                    Last Name is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row ">
+                        <div class="col-sm-12 mt-3">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <button (click)="onSubmitCreatConsumerFormGroup()" class="btn btn-outline-primary">
+                                    Create
+                                </button>
                             </div>
                         </div>
                     </div>
                 </form>
-            </div>
-            <div class="col-sm-12 mt-3">
-                <div class="d-flex justify-content-center align-items-center">
-                    <button (click)="onSubmitCreatConsumerFormGroup()" class="btn btn-outline-primary">
-                        Create
-                    </button>
-                </div>
-
 
             </div>
+
         </div>
     </div>
 </div>

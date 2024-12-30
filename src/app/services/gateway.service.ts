@@ -29,6 +29,11 @@ export class GatewayService {
     return this.http.get(url);
   }
 
+  addTelemetry(gatewayTelemetryId: any, body: any) {
+    const url = urls.addOrUpdateTelemetry + `?krakendId=${gatewayTelemetryId}`;
+    return this.http.post(url, body);
+  }
+
   
 
 }

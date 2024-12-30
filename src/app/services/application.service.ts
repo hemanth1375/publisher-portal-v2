@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { urls } from '../../urls';
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,16 @@ export class ApplicationService {
 
   constructor(private http: HttpClient) { }
 
+
+  private serviceSettingsData: ReplaySubject<string> = new ReplaySubject<string>(1);
+ 
+  setServiceSettingData(data: any): void {
+    this.serviceSettingsData.next(data);
+  }
+
+  getServiceSettingData$(): Observable<any> {
+    return this.serviceSettingsData.asObservable();
+  }
 
   createApplication(consumerId: any, data: any): Observable<any> {
     const creatAppUrl = urls.createApplication
@@ -43,22 +53,21 @@ export class ApplicationService {
     return this.http.post(url, null)
   }
 
-  unsubscribeToOAuth(endpointId: any): Observable<any> {
-    const url = urls.unsubscribeToOAuth + `?endpointId=${endpointId}`;
+  unsubscribeApplication(endpointId: any): Observable<any> {
+    const url = urls.unsubscribeApplication + `?endpointId=${endpointId}`;
     return this.http.post(url, null)
   }
 
 
 
-  subscribeToBasic(endpointId: any, applicationId: any) {
-    const basicUrl = urls.subscribeToBasic + `?endpointId=${endpointId} & applicationId=${applicationId}`
+  subscribeToBasic(endpointId: any, consumerId: any):Observable<any> {
+    const basicUrl = urls.subscribeToBasic + `?endpointId=${endpointId}&consumerId=${consumerId}`
     return this.http.post(basicUrl, null)
   }
 
-  unsubscribeToBasic(endpointId: any):Observable<any> {
-    const unsubscribeBasicUrl = urls.unsubscribeToBasic + `?endpointId=${endpointId}`;
-    return this.http.post(unsubscribeBasicUrl, null)
-
-  }
+  // unsubscribeToBasic(endpointId: any):Observable<any> {
+  //   const unsubscribeBasicUrl = urls.unsubscribeApplication + `?endpointId=${endpointId}`;
+  //   return this.http.post(unsubscribeBasicUrl, null)
+  // }
 
 }

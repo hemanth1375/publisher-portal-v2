@@ -40,7 +40,10 @@ export const urls = {
 
     checkContextPath:host+"/krakend/endpoint/checkEndpointContext",
     subscribeToOAuth:host+"/clients/openid/subscribeToApplication",
-    unsubscribeToOAuth:host+"/clients/openid/unsubscribeToApplication",
-    subscribeToBasic: host + "",
-    unsubscribeToBasic: host + ""
+    unsubscribeApplication:host+"/clients/openid/unsubscribeToApplication",
+    subscribeToBasic: host + "/clients/openid/subscribeToBasicAuth",
+    // unsubscribeToBasic: host + ""
+
+    addOrUpdateTelemetry: host + "/krakend/extraconfig/telemetry-analytics/addOrUpdateTelemetryAnalytics",
+
 }

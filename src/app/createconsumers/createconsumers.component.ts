@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { Form, FormGroup, FormBuilder } from '@angular/forms'
+import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { CreateconsumerService } from '../services/createconsumer.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import JSEncrypt from 'jsencrypt';
 import { CommunicationService } from '../services/communication.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-createconsumers',
@@ -15,15 +16,34 @@ export class CreateconsumersComponent {
   creatConsumerFormGroup: FormGroup
 
   data!: any
-  constructor(private fb: FormBuilder, private cconsumersrv: CreateconsumerService, private router: Router, private route: ActivatedRoute, private communicationSer: CommunicationService) {
+  constructor(private fb: FormBuilder, private cconsumersrv: CreateconsumerService, private router: Router,
+    private route: ActivatedRoute, private communicationSer: CommunicationService,
+    private toastService: ToastService
+  ) {
+    // this.creatConsumerFormGroup = this.fb.group({
+    //   username: [''],
+    //   password: [''],
+    //   // confirmPassword: [''],
+    //   email: [''],
+    //   firstName: [''],
+    //   lastName: ['']
+    // })
     this.creatConsumerFormGroup = this.fb.group({
-      username: [''],
-      password: [''],
-      // confirmPassword: [''],
-      email: [''],
-      firstName: [''],
-      lastName: ['']
-    })
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(3)]],
+      // confirmPassword: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]]
+    });
+    
+  }
+
+  showSuccess(message: string) {
+    this.toastService.show(message, { type: 'success' });
+  }
+  showError(message: string) {
+    this.toastService.show(message, { type: "error" })
   }
 
   onSubmitCreatConsumerFormGroup() {
@@ -45,10 +65,11 @@ export class CreateconsumersComponent {
     this.cconsumersrv.createConsumer(payload).subscribe({
       next: (res) => {
         console.log("cconsumerpostresults", res);
+        this.showSuccess(res?.message);
         this.communicationSer.emitConsumerCreated(res)
-
       },
       error: (err) => {
+        this.showError(err?.message)
         console.log("consumererrorget", err);
       }
     })

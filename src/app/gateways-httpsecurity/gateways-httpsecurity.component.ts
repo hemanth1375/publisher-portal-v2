@@ -561,57 +561,24 @@ export class GatewaysHttpsecurityComponent {
       ...(this.formGroupHttpSecurity.get('isHttpSecurityActive')?.value && {
         "security/http":
         {
-          // ...(this.formGroupHttpSecurity?.httpSecurityAllowedHostsFormArray.length!=0 &&{"allowed_hosts": this.formGroupHttpSecurity?.httpSecurityAllowedHostsFormArray}),
-          // "allowed_hosts_are_regex": true,
-          // ...(this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value?.length != 0 && {
           "id": this.entireJsonData?.extra_config?.["security/http"]?.id ? this.entireJsonData?.extra_config?.["security/http"]?.id : null,
-          // "allowed_hosts": this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value,
-          // "C": (this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value?.length != 0 ? this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value : null),
-          // }),
           ...(this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value?.length && {
             "allowed_hosts": (this.formGroupHttpSecurity.get('httpSecurityAllowedHostsFormArray')?.value)
           }),
           ...(this.formGroupHttpSecurity.get('httpSecurityXSSProtectionForm')?.value && { "browser_xss_filter": this.formGroupHttpSecurity.get('httpSecurityXSSProtectionForm')?.value }),
-          // ...(this.formGroupHttpSecurity?.httpSecurityConSecPolicyForm &&{"content_security_policy": this.formGroupHttpSecurity?.httpSecurityConSecPolicyForm}),
           ...(this.formGroupHttpSecurity.get('httpSecurityConSecPolicyForm')?.value && { "content_security_policy": this.formGroupHttpSecurity.get('httpSecurityConSecPolicyForm')?.value }),
-          // ...(this.formGroupHttpSecurity?.httpSecuritySniffingForm &&{"content_type_nosniff": this.formGroupHttpSecurity?.httpSecuritySniffingForm}),
           ...(this.formGroupHttpSecurity.get('httpSecuritySniffingForm')?.value && { "content_type_nosniff": this.formGroupHttpSecurity.get('httpSecuritySniffingForm')?.value }),
 
-          // ...(this.formGroupHttpSecurity?.frameOptions &&{"custom_frame_options_value": this.formGroupHttpSecurity?.frameOptions}),
           ...(this.formGroupHttpSecurity.get('httpSecurityClickjackProtectForm')?.value && {
             ...(this.formGroupHttpSecurity.get('frameOptions')?.value && {
               "custom_frame_options_value": this.formGroupHttpSecurity.get('frameOptions')?.value
             }),
           }),
-          // ...(this.formGroupHttpSecurity.get('frameOptions')?.value && { "custom_frame_options_value": this.formGroupHttpSecurity.get('frameOptions')?.value }),
-
-          // "force_sts_header": true,
-
-          // ...(this.formGroupHttpSecurity?.httpSecurityClickjackProtectForm &&{"frame_deny": this.formGroupHttpSecurity?.httpSecurityClickjackProtectForm}),
           ...(this.formGroupHttpSecurity.get('httpSecurityClickjackProtectForm')?.value && { "frame_deny": this.formGroupHttpSecurity.get('httpSecurityClickjackProtectForm')?.value }),
-
-          // ...(this.formGroupHttpSecurity?.httpSecurityXSSProtectionForm &&{"host_proxy_headers": [
-          //   ''
-          // ]}),
-          // ...(this.formGroupHttpSecurity.get('httpSecurityXSSProtectionForm')?.value?.length != 0 && {
-          //   // "host_proxy_headers": this.formGroupHttpSecurity.get('httpSecurityXSSProtectionForm')?.value,
-          //   "host_proxy_headers": '',
-          // }),
-          // ...(this.formGroupHttpSecurity?.httpSecurityHPKPForm &&{"hpkp_public_key": this.formGroupHttpSecurity?.httpSecurityHPKPForm}),
           ...(this.formGroupHttpSecurity.get('httpSecurityHPKPForm')?.value && { "hpkp_public_key": this.formGroupHttpSecurity.get('httpSecurityHPKPForm')?.value }),
-          // "is_development": true,
-          // "referrer_policy": null,
-          // ...(this.formGroupHttpSecurity?.httpSecuritySSLOptForm &&{"ssl_host": this.formGroupHttpSecurity?.httpSecuritySSLOptForm}),
           ...(this.formGroupHttpSecurity.get('httpSecuritySSLOptForm')?.value && { "ssl_host": this.formGroupHttpSecurity.get('httpSecuritySSLOptForm')?.value }),
           ...(this.formGroupHttpSecurity.get('httpSecuritySSLOptPortForm')?.value && { "ssl_port": this.formGroupHttpSecurity.get('httpSecuritySSLOptPortForm')?.value }),
-
-
-          // ...(this.formGroupHttpSecurity?.sslProxyHeadersObj &&{"ssl_proxy_headers": sslProxyHeadersObj}),
-          // "ssl_proxy_headers": this.formGroupHttpSecurity.get('httpSecuritySSLProxyHeaderForm')?.value,
           "ssl_proxy_headers": ssl_proxy_headers_values,
-
-
-          // ...(this.formGroupHttpSecurity?.httpSecuritySSLOptForceSSLForm &&{"ssl_redirect": this.formGroupHttpSecurity?.httpSecuritySSLOptForceSSLForm}),
           ...(this.formGroupHttpSecurity.get('httpSecuritySSLOptForceSSLForm')?.value && { "ssl_redirect": this.formGroupHttpSecurity.get('httpSecuritySSLOptForceSSLForm')?.value }),
 
           // ...(this.formGroupHttpSecurity?.httpSecurityIncSubdomainForm &&{"sts_include_subdomains": this.formGroupHttpSecurity?.httpSecurityIncSubdomainForm}),

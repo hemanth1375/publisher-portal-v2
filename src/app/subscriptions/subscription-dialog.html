@@ -5,7 +5,7 @@
       <i class="bi bi-x-lg close-icon" (click)="onNoClick()"></i>
     </div>
   </div>
-  <div class="row">
+  <div class="row mat-elevation-z8">
     <table mat-table [dataSource]="apiCards" class="mat-elevation-z8">
 
       <!--- Note that these columns can be defined in any order.
@@ -39,8 +39,16 @@
       <ng-container matColumnDef="Action">
         <th mat-header-cell *matHeaderCellDef> Action </th>
         <td mat-cell *matCellDef="let element">
+          <!-- <button *ngIf="element?.isSubscribed === undefined || !element?.isSubscribed" class="btn btn-outline-primary"
+            (click)="subscribeToOAuth(element.id)">
+            Subscribe
+          </button>
+          <button *ngIf="element?.isSubscribed === true" class="btn btn-outline-danger"
+            (click)="unsubscribeToOAuth(element.id)">
+            Unsubscribe
+          </button> -->
           <div *ngIf="element?.isSubscribed === undefined || !element?.isSubscribed"
-            class="d-flex justify-content-between align-items-center">
+            class="d-flex justify-content-start align-items-center">
             <div class="me-2">
               <button class="btn btn-sm btn-outline-primary" (click)="subscribeToOAuth(element.id)">
                 Subscribe OAuth2
@@ -54,21 +62,16 @@
           </div>
 
           <div *ngIf="element?.isSubscribed === true">
-            <button class="btn  btn-sm btn-outline-danger" (click)="unsubscribeToOAuth(element.id)">
+            <button class="btn  btn-sm btn-outline-danger" (click)="unsubscribeApplication(element.id)">
               Unsubscribe
             </button>
           </div>
-
         </td>
       </ng-container>
-
-
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-    <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                 showFirstLastButtons
-                 aria-label="Select page of periodic elements">
-  </mat-paginator> -->
+    <mat-paginator [pageSizeOptions]="[1, 2, 3]" showFirstLastButtons aria-label="Select page of periodic elements">
+    </mat-paginator>
   </div>
 </div>
