@@ -35,7 +35,8 @@ export class ApplicationComponent {
       secret: item.secret
     }
     // this.router.navigate([`viewgateway/${id}/dashboard`], { relativeTo: this.route })
-    this.router.navigate([`viewapplication/${id}/overview`], { relativeTo: this.route, state: { data: sendData } })
+    this.router.navigate([`viewapplication/${id}/overview`], { relativeTo: this.route, state: { data: item } })
+    this.applicationSrv.setServiceSettingData(item)
     this.isShowApplication = false
   }
 

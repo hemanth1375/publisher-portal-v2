@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { urls } from '../../urls';
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,16 @@ export class ApplicationService {
 
   constructor(private http: HttpClient) { }
 
+
+  private serviceSettingsData: ReplaySubject<string> = new ReplaySubject<string>(1);
+ 
+  setServiceSettingData(data: any): void {
+    this.serviceSettingsData.next(data);
+  }
+
+  getServiceSettingData$(): Observable<any> {
+    return this.serviceSettingsData.asObservable();
+  }
 
   createApplication(consumerId: any, data: any): Observable<any> {
     const creatAppUrl = urls.createApplication
