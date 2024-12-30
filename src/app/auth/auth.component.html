@@ -11,7 +11,7 @@
                         <input class="form-check-input" type="checkbox" value="" id="OAuth"
                             formControlName="isOAuthActive">
                         <label class="form-check-label" for="OAuth">
-                            OAuth &nbsp; <svg
+                            Token Validation &nbsp; <svg
                             [matTooltip]=OAuthTooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                             fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
@@ -20,29 +20,20 @@
                         </svg>
                         </label>
                     </div>
-                    <div>
-
-                    </div>
                 </div>
                 @if (authForm.value.isOAuthActive) {
-                <div class="row">
-                    <div class="col-sm-4">
-                        <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Color selection">
-                            @for (chip of availableColors; track chip) {
-                            <mat-chip-option selected [color]="chip.color">{{chip.name}}</mat-chip-option>
-                            }
-                        </mat-chip-listbox>
-                    </div>
-
-                </div>
-                <div class="col-sm-12 d-flex justify-content-end">
-                    <button class="btn btn-primary">Create New</button>
-                </div>
+                    <h4>Algorithm used : {{authValidator?.alg}}</h4>
+                    <h4>JWK url : {{authValidator?.jwk_url}}</h4>
+                    <h4>issuer : {{authValidator?.issuer}}</h4>
+                    <h4>Is JWK_Security disabled : {{authValidator?.disable_jwk_security}}</h4>
+                    <h4>socpes matcher : {{authValidator?.scopes_matcher}}</h4>
+                    <h4>scopes scopes : {{authValidator?.scopes}}</h4>
+                    <h4>scopes key : {{authValidator?.scopes_key}}</h4>        
                 }
 
             </div>
         </div>
-        <div class="row p-2">
+        <!-- <div class="row p-2">
             <div class="input-con d-flex gap-2 flex-column">
                 <div class="col-sm-12 ">
                     <div class="form-check">
@@ -105,10 +96,10 @@
                 </div>
                 }
             </div>
-        </div>
+        </div> -->
 
 
-        <div class="row p-2">
+        <!-- <div class="row p-2">
             <div class="input-con d-flex gap-1 flex-column">
                 <div class="api-key-heading">
                     <h4>API key Authentication</h4> 
@@ -120,7 +111,7 @@
                     <a href="#">Enable and configure API keys</a>
                 </div>
             </div>
-        </div>
+        </div> -->
 
     </form>
 </div>

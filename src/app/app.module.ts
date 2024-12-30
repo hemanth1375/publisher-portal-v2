@@ -66,6 +66,7 @@ import { SubscriptionDialog, SubscriptionsComponent } from './subscriptions/subs
 
 
 
+
 // keycloak
 function initializeKeycloak(keycloak: KeycloakService){
   return () =>{
@@ -131,7 +132,6 @@ function initializeKeycloak(keycloak: KeycloakService){
     ApikeysComponent,
     SubscriptionsComponent,
     SubscriptionDialog
-
   ],
   imports: [
     BrowserModule,
