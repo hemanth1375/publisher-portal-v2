@@ -844,58 +844,94 @@
                 </div>
                 @if (getFormGroup(i).value.regexConReplacerActive) {
 
-                <div class="row align-items-center">
-                  <div class="col-sm-4">
-                    <label for="findkey{{i}}" class="form-label">Enter Key Name for Content Replacer <i
-                        class="bi bi-info-circle" [matTooltip]=contentReplacer_tooltip></i></label>
-
-                    <div class="input-group mb-3">
-                      <input type="text" id="findkey{{i}}" class="form-control" formControlName="contentReplacerKey"
-                        placeholder="e.g., 'hem'">
-                      <button class="btn btn-primary" type="button" id="button-addonConRep{{i}}"
-                        (click)="createContentReplacerKey(i)">Create Key</button>
+                  <div class="row align-items-center">
+                    <!-- Input field for creating a new Content Replacer key -->
+                    <div class="col-sm-4">
+                      <label for="findkey{{i}}" class="form-label">
+                        Enter Key Name for Content Replacer
+                        <i class="bi bi-info-circle" [matTooltip]="contentReplacer_tooltip"></i>
+                      </label>
+                      <div class="input-group mb-3">
+                        <input
+                          type="text"
+                          id="findkey{{i}}"
+                          class="form-control"
+                          formControlName="contentReplacerKey"
+                          placeholder="e.g., 'hem'"
+                        />
+                        <button
+                          class="btn btn-primary"
+                          type="button"
+                          id="button-addonConRep{{i}}"
+                          (click)="createContentReplacerKey(i)"
+                        >
+                          Create Key
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <!-- <div class="col-sm-4">
-                                <button type="button" class="btn btn-dark" (click)="createContentReplacerKey(i)">Create Key</button>
-                              </div> -->
-                </div>
-
-                <!-- Step 2: Display find, replace, and regexp controls for the created key -->
-                <div *ngIf="isKeyCreated">
-
+                  
+                  <!-- Dynamically display controls for each created key -->
                   <div [formGroupName]="'contentReplacer'">
-                    <div class="row align-items-center gap-2"
-                      [formGroupName]="getFormGroup(i).value.contentReplacerKey">
-
-
+                    <div
+                      *ngFor="let key of getContentReplacerKeys(i); let j = index"
+                      [formGroupName]="key"
+                      class="row align-items-center gap-2"
+                    >
+                      <!-- Key to replace -->
                       <div class="col-sm-3">
-                        <label for="find{{i}}" class="form-label">Key to replace <i class="bi bi-info-circle"
-                            [matTooltip]=keyToReplace_tooltip></i></label>
-                        <input type="text" id="find{{i}}" class="form-control" formControlName="find">
-
+                        <label for="find{{i}}{{j}}" class="form-label">
+                          Key to Replace
+                          <i class="bi bi-info-circle" [matTooltip]="keyToReplace_tooltip"></i>
+                        </label>
+                        <input
+                          type="text"
+                          id="find{{i}}{{j}}"
+                          class="form-control"
+                          formControlName="find"
+                          placeholder="Enter text to find"
+                        />
                       </div>
-
+                  
+                      <!-- Replace by -->
                       <div class="col-sm-3">
-                        <label for="replace{{i}}" class="form-label">Replace by <i class="bi bi-info-circle"
-                            [matTooltip]=replaceBy_tooltip></i></label>
-                        <input type="text" id="replace{{i}}" class="form-control" formControlName="replace">
-
+                        <label for="replace{{i}}{{j}}" class="form-label">
+                          Replace By
+                          <i class="bi bi-info-circle" [matTooltip]="replaceBy_tooltip"></i>
+                        </label>
+                        <input
+                          type="text"
+                          id="replace{{i}}{{j}}"
+                          class="form-control"
+                          formControlName="replace"
+                          placeholder="Enter replacement text"
+                        />
                       </div>
-
+                  
+                      <!-- Regexp mode -->
                       <div class="col-sm-3">
-                        <mat-checkbox class="example-margin" formControlName="regexp">Regexp mode <i
-                            class="bi bi-info-circle" [matTooltip]=regexMode_tooltip></i></mat-checkbox>
-
+                        <mat-checkbox
+                          class="example-margin"
+                          formControlName="regexp"
+                        >
+                          Regexp Mode
+                          <i class="bi bi-info-circle" [matTooltip]="regexMode_tooltip"></i>
+                        </mat-checkbox>
                       </div>
-
+                  
+                      <!-- Delete button -->
                       <div class="col-sm-12">
-                        <button type="button" class="btn btn-primary" (click)="resetFields(i)">Delete</button>
+                        <button
+                          type="button"
+                          class="btn btn-danger"
+                          (click)="resetFields(i, key)"
+                        >
+                          Delete Key
+                        </button>
                       </div>
-
                     </div>
                   </div>
-                </div>
+                  
                 }@else {
                 <p>The content replacer plugin allows you to modify the response of your services by doing literal
                   replacements or

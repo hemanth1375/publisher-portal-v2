@@ -452,6 +452,21 @@ export class BackendComponent {
           validators: [this.securityPoliciesValidator()],
       }
     );
+
+    // patch contentreplacer
+    const contentReplacer = item.extra_config?.['plugin/req-resp-modifier']?.['content-replacer'] || {};
+    const contentReplacerGroup = group.get('contentReplacer') as FormGroup;
+    Object.keys(contentReplacer).forEach((key) => {
+      contentReplacerGroup.addControl(
+        key,
+        this.fb.group({
+          find: [contentReplacer[key].find],
+          replace: [contentReplacer[key].replace],
+          regexp: [contentReplacer[key].regexp],
+        })
+      );
+    });
+    // patch
       this.subscribeToValueChanges(group, index);
       this.applyDynamicLogic(group, index);
       this.formArray.push(group);
@@ -1265,7 +1280,13 @@ export class BackendComponent {
       return acc;
     }, {});
     console.log(data?.objectMapValue);
-    
+    const contentReplacer:any = {};
+    const contentReplacerGroup = formGroup.get('contentReplacer') as FormGroup;
+  
+    Object.keys(contentReplacerGroup.controls).forEach((key) => {
+      const nestedGroup = contentReplacerGroup.get(key) as FormGroup;
+      contentReplacer[key] = nestedGroup.value;
+    });
     const backendBody =
     {
       "id": null,
@@ -1294,7 +1315,7 @@ export class BackendComponent {
               data.regexConReplacerActive && 'content-replacer',
               data?.isResSchValidatorActive && 'response-schema-validator'
             ].filter(Boolean),
-            ...(data.regexConReplacerActive && { "content-replacer": data.contentReplacer }),
+            ...(data.regexConReplacerActive && { "content-replacer": contentReplacer }),
             ...(data?.isResSchValidatorActive && {
               "response-schema-validator": {
                 ...(data?.responseSchema &&{"schema": data?.responseSchema}),
@@ -1509,18 +1530,6 @@ export class BackendComponent {
 const securityPolicies = backendBody?.extra_config?.['security/policies'];
 let isValid = true;
 
-// Check for invalid JSON in form fields
-// if (this.getFormGroup(index).get('template')?.hasError('invalidJson')) {
-//   this.showErrorAlert("Invalid JSON in Body Manipulation and Generation");
-//   isValid = false;
-// }
-//   if (this.getFormGroup(index).get('templateResponse')?.hasError('invalidJson')) {
-//   this.showErrorAlert("Invalid JSON in Response Manipulation with Go templates");
-//   isValid = false;
-// } else if (this.getFormGroup(index).get('templateConnect')?.hasError('invalidJson')) {
-//   this.showErrorAlert("Invalid JSON in Rest to SOAP in Connectivity Options");
-//   isValid = false;
-// }
   if (this.getFormGroup(index).get('martianDslTextarea')?.hasError('invalidJson')) {
   this.showErrorAlert("Invalid JSON in Martian DSL");
   isValid = false;
@@ -1567,9 +1576,10 @@ if (isValid && this.getFormGroup(index).valid) {
 
     }
   })
-}else{
-  this.showErrorAlert('Please fill required fields')
 }
+// else{
+//   this.showErrorAlert('Please fill required fields')
+// }
 
     // this.http.post('https://api.example.com/items', data).subscribe((response: any) => {
     //   this.items[index] = { ...data, id: response.id, isNew: false }; // Update item with ID and mark as not new
@@ -1602,6 +1612,13 @@ if (isValid && this.getFormGroup(index).valid) {
     }, {});
     console.log(endpointMapObj);
     console.log(data.objectMapValueAuth);
+    const contentReplacer:any = {};
+  const contentReplacerGroup = formGroup.get('contentReplacer') as FormGroup;
+
+  Object.keys(contentReplacerGroup.controls).forEach((key) => {
+    const nestedGroup = contentReplacerGroup.get(key) as FormGroup;
+    contentReplacer[key] = nestedGroup.value;
+  });
     const backendBody = {
       "id": data?.id,
       ...(data?.hostArrayValue?.length > 0 && { "host": data?.hostArrayValue }),
@@ -1629,7 +1646,7 @@ if (isValid && this.getFormGroup(index).valid) {
               data.regexConReplacerActive && 'content-replacer',
               data?.isResSchValidatorActive && 'response-schema-validator'
             ].filter(Boolean),
-            ...(data?.regexConReplacerActive && { "content-replacer": data?.contentReplacer }),
+            ...(data?.regexConReplacerActive && { "content-replacer": contentReplacer }),
             ...(data?.isResSchValidatorActive && {
               "response-schema-validator": {
                 ...(data?.responseSchema &&{"schema": data?.responseSchema}),
@@ -1881,9 +1898,10 @@ if (isValid && this.getFormGroup(index).valid) {
       this.showError(err?.message);
     }
   });
-}else{
-  this.showErrorAlert('Please fill required fields')
 }
+// else{
+//   this.showErrorAlert('Please fill required fields')
+// }
 
     
   // else{
@@ -2047,35 +2065,55 @@ if (isValid && this.getFormGroup(index).valid) {
     }
 
   }
-
-  createContentReplacerKey(formGroupIndex: any) {
-    if (this.getFormGroup(formGroupIndex).get('contentReplacerKey')?.value) {
-      const contentReplacerGroup = this.getFormGroup(formGroupIndex).get('contentReplacer') as FormGroup;
-
-      // Create a new FormGroup with find, replace, and regexp
-      const nestedFormGroup = this.fb.group({
-        find: [''],    
-        replace: [''], 
-        regexp: [false] 
-      });
-
-      // Add the new group to contentReplacer with the entered key
-      contentReplacerGroup.addControl(this.getFormGroup(formGroupIndex).get('contentReplacerKey')?.value, nestedFormGroup);
-
-      // Reset the key input and set flag to show nested controls
-      this.isKeyCreated = true;
+  createContentReplacerKey(index: number) {
+    const formGroup = this.getFormGroup(index);
+    const contentReplacerKey = formGroup.get('contentReplacerKey')?.value;
+  
+    if (contentReplacerKey) {
+      const contentReplacerGroup = formGroup.get('contentReplacer') as FormGroup;
+  
+      // Check if the key already exists
+      if (!contentReplacerGroup.contains(contentReplacerKey)) {
+        // Add a new nested form group for the key
+        contentReplacerGroup.addControl(
+          contentReplacerKey,
+          this.fb.group({
+            find: [''],      // Input for 'find'
+            replace: [''],   // Input for 'replace'
+            regexp: [false], // Checkbox for 'regexp'
+          })
+        );
+      } else {
+        console.log(`Key "${contentReplacerKey}" already exists.`);
+      }
+  
+      // Reset the content replacer key input field
+      formGroup.get('contentReplacerKey')?.reset();
+    } else {
+      console.error('Content Replacer Key is empty');
     }
   }
-
-  resetFields(formGroupIndex: any) {
-    const key = this.getFormGroup(formGroupIndex).get('contentReplacerKey')?.value;
-    if (key) {
-      const contentReplacerGroup = this.getFormGroup(formGroupIndex).get('contentReplacer') as FormGroup;
-      contentReplacerGroup.removeControl(key);
-      this.getFormGroup(formGroupIndex).get('contentReplacerKey')?.reset();
-      this.isKeyCreated = false;
-    }
+  getContentReplacerKeys(formGroupIndex: number): string[] {
+    const formGroup = this.getFormGroup(formGroupIndex);
+    const contentReplacerGroup = formGroup.get('contentReplacer') as FormGroup;
+    return Object.keys(contentReplacerGroup.controls);
   }
+  resetFields(formGroupIndex: number, keyToDelete: string) {
+    const formGroup = this.getFormGroup(formGroupIndex);
+    const contentReplacerGroup = formGroup.get('contentReplacer') as FormGroup;
+  
+    if (contentReplacerGroup.contains(keyToDelete)) {
+      contentReplacerGroup.removeControl(keyToDelete); // Remove the key
+      console.log(`Key "${keyToDelete}" has been removed.`);
+    } else {
+      console.error(`Key "${keyToDelete}" does not exist.`);
+    }
+  
+    // Reset the input field and flag (optional)
+    formGroup.get('contentReplacerKey')?.reset();
+    this.isKeyCreated = false; // Optional flag reset
+  }
+      
 
   // authentication 
 
